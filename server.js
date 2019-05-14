@@ -1,7 +1,7 @@
 const timeDay = require('d3-time').timeDay
 const express = require('express');
 const app = express();
-const metrics = ['MAU', 'DAU', 'Rtention', 'revenue', 'etc.']
+const metrics = ['MAU', 'DAU', 'Retention', 'Revenue', 'etc.']
 const timeRange = timeDay.range(new Date('2018-12-01'), new Date('2019-03-25'))
 
 const fakeData = () => {
