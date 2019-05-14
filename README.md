@@ -11,7 +11,7 @@ Dependencies:
 To install / run:
 
 - Make sure you nave Node / npm.
-- run `npm install` in this directory.
+- run `npm install` in the directory where you cloned this repository.
 - to run the server, run `node server.js` which starts a tiny web server on port 3000 (go to `localhost:3000` in your browser)
 - to build / update the frontend, type `npm run dev`, which spins up another web server (that we're not going to use, sorry for the redundancy) and builds the little dev version of the frontend.
 
