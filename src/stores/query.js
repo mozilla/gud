@@ -4,7 +4,7 @@ import { allOptions, allStores } from './stores'
 export const queryParameters = derived(allStores, (stores) => {
     const outs = {}
     stores.forEach(($store,i) => {
-        outs[allOptions[i][1].key] = $store;
+        outs[allOptions[i].key] = $store;
     })
     return outs
 })
@@ -14,7 +14,7 @@ const queryString = derived(
         (stores) => {
     const outs = []
     stores.forEach(($store,i) => {
-        outs.push(`${allOptions[i][1].key}=${$store}`)
+        outs.push(`${allOptions[i].key}=${$store}`)
     })
     const currentQuery = outs.join('&')
     return currentQuery

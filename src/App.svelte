@@ -4,7 +4,7 @@
 	import ControlModes from './components/ControlModes.svelte';
 	import GraphicBody from './components/GraphicBody.svelte';
 	import {
-		optionSet, mode
+		menuOptions, allOptions, mode
 	} from './stores/stores'
 	import cache, { queryIsCached } from './stores/cache'
 	import currentQuery from './stores/query'
@@ -16,9 +16,22 @@
 
 	let visible = false;
 
+	function extractAllParams(str) {
+		const params = new URLSearchParams(window.location.search);
+		allOptions.forEach((opt) => {
+			let $thisOpt = opt.setter;
+			$thisOpt = params.get(opt.key);
+		})
+	}
+
 	onMount(() => {
 		visible = true;
+		extractAllParams(window.location.search);
 	})
+
+	$: if (visible) { 
+		updateQueryString($currentQuery);
+	}
 
 	function updateQueryString(value) {
 		if (history.pushState) {
@@ -33,9 +46,7 @@
 		cacheValue = v;
 	})
 
-	$: { 
-		updateQueryString($currentQuery);
-	}
+
 </script>
 
 <main>
@@ -45,7 +56,7 @@
 		</section>
 		{#if $mode === 'explore'}
 			<section class=control-selectors>
-				{#each optionSet as selector, i}
+				{#each menuOptions as selector, i}
 					<NavMenu smaller D={i * 20} label={selector.label} options={selector.values} setter={selector.setter} />
 				{/each}
 			</section>

@@ -7,10 +7,12 @@ export let label;
 export let smaller = false;
 export let D = 0;
 
-let currentlySelected = 0;
+let currentlySelected = $setter ? options.findIndex(o => o.key === $setter) : 0;
 $: currentlySelectedText = options[currentlySelected].label;
 $: $setter = options[currentlySelected].key;
+
 let visible = false;
+
 onMount(() => {
     visible = true;
 })

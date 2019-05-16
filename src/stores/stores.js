@@ -1,4 +1,3 @@
-import { derived } from 'svelte/store'
 import createListStore from './list-store-creator'
 
 const modeOptions = {
@@ -73,36 +72,31 @@ const channelOptions = {
     {label: 'Nighty', key: 'nightly'},
 ]}
 
-
-
-const mode =  createListStore(modeOptions.values)()
-const usageCriteria = createListStore(usageCriteriaOptions.values)()
-const platform = createListStore(platformOptions.values)()
-const country = createListStore(countryOptions.values)()
-const channel = createListStore(channelOptions.values)()
-
-modeOptions.setter = mode;
-usageCriteriaOptions.setter = usageCriteria;
-platformOptions.setter = platform;
-countryOptions.setter = country;
-channelOptions.setter = channel;
-
-const allOptions = [
-    [mode, modeOptions], 
-    [usageCriteria, usageCriteriaOptions],
-    [platform, platformOptions],
-    [country, countryOptions],
-    [channel, channelOptions]
+const menuOptions = [
+    usageCriteriaOptions,
+    platformOptions,
+    countryOptions,
+    channelOptions
 ]
 
-const optionSet = allOptions.map(([_,o]) => o)
+const allOptions =   [
+    modeOptions, ...menuOptions
+]
 
-const allStores = [mode, usageCriteria, platform, country, channel];
+const params = new URLSearchParams(window.location.search);
+
+allOptions.forEach(opt => {
+    let queryValue = params.get(opt.key) || undefined;
+    opt.setter = createListStore(opt.values)(queryValue);
+})
+
+const mode = modeOptions.setter;
+
+const allStores = allOptions.map(option => option.setter)
 
 export {
-    optionSet,
     allOptions,
+    menuOptions,
     allStores,
-    modeOptions, usageCriteriaOptions, platformOptions, countryOptions, channelOptions,
-    mode, usageCriteria, platform, country, channel
+    mode, modeOptions
 }
