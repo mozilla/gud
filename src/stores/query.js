@@ -20,4 +20,16 @@ const queryString = derived(
     return currentQuery
 })
 
+export const isNotDefaultQueryset = derived(allStores, stores => {
+    return !stores.every(($store, i) => {
+        return $store === allOptions[i].values[0].key
+    })
+})
+
+export const resetQuery = () => {
+    allStores.forEach((store, i) => {
+        store.set(allOptions[i].values[0].key);
+    })
+}
+
 export default queryString

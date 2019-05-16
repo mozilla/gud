@@ -1,37 +1,29 @@
 <script>
 	import { onMount } from 'svelte';
+	import { fly, fade } from 'svelte/transition';
+
+	// components
 	import NavMenu from './components/NavMenu.svelte';
 	import ControlModes from './components/ControlModes.svelte';
 	import GraphicBody from './components/GraphicBody.svelte';
+
+	// stores
 	import {
 		menuOptions, allOptions, mode
 	} from './stores/stores'
 	import cache, { queryIsCached } from './stores/cache'
-	import currentQuery from './stores/query'
+	import currentQuery, { isNotDefaultQueryset, resetQuery } from './stores/query'
 
-	import { fly, fade } from 'svelte/transition';
-
+	// props
 	export let metrics;
 	export let name;
 
 	let visible = false;
-
-	function extractAllParams(str) {
-		const params = new URLSearchParams(window.location.search);
-		allOptions.forEach((opt) => {
-			let $thisOpt = opt.setter;
-			$thisOpt = params.get(opt.key);
-		})
-	}
+	let cacheValue;
 
 	onMount(() => {
 		visible = true;
-		extractAllParams(window.location.search);
 	})
-
-	$: if (visible) { 
-		updateQueryString($currentQuery);
-	}
 
 	function updateQueryString(value) {
 		if (history.pushState) {
@@ -40,12 +32,13 @@
 		}
 	}
 
-	let cacheValue;
-
 	$: $cache.then(v => {
 		cacheValue = v;
 	})
 
+	$: if (visible) { 
+		updateQueryString($currentQuery);
+	}
 
 </script>
 
@@ -54,6 +47,13 @@
 		<section class=control-modes>
 			<ControlModes />
 		</section>
+		{#if $isNotDefaultQueryset}
+			<section class=control-reset transition:fly={{x: -30, duration: 300}}>
+				<button on:click={() => {
+					resetQuery()
+				}}>reset selections <span>✖</span></button>
+			</section>
+		{/if}
 		{#if $mode === 'explore'}
 			<section class=control-selectors>
 				{#each menuOptions as selector, i}
@@ -62,16 +62,11 @@
 			</section>
 		{/if}
 		{#if $mode === 'Compare'}
-			<section class=control-selectors>
-				<!-- <NavMenu D={0} label='Usage Criterion' options={usageCriteria} /> -->
-				<!-- <NavMenu D={150} smaller label='Country' options={metrics} /> -->
-			</section>
+			<section class=control-selectors></section>
 		{/if}
-		<section class=control-foot>
-			<div>
-				Made by Mozilla Data Engineering + Data Science. 
-			</div>	
-		</section>
+		<footer class=control-foot>
+			<div>Made by Mozilla Data Engineering + Data Science.</div>	
+		</footer>
 	</div>
 
 {#if visible}
@@ -99,12 +94,14 @@
 					<div>Uh oh!</div>
 			{/await}
 		<!-- foot -->
-		<div class=content-foot>
-			Inquiries
-				Overall – someone@mozilla.com. 
-				Data - someone-else@mozilla.com. 
-				Frontend – another-person@mozilla.com
-		</div>
+		<footer>
+			<h3>Inquiries</h3>
+			<ul>
+				<li><strong>OVERALL</strong> –  jmccrosky@mozilla.com</li>
+				<li><strong>DATA</strong> – jklukas@mozilla.com</li>
+				<li><strong>FRONTEND</strong> – hulmer@mozilla.com</li>
+			</ul>
+		</footer>
 	</div>
 {/if}
 </main>

@@ -9,7 +9,8 @@ html, body {
 	--subsection-margin: 30px;
 	--left-pane: 350px;
 	--title-height: 85px;
-	--control-foot-height: calc(var(--title-height) / 2);
+	--footer-height: 60px;
+	--control-foot-height: var(--footer-height);
 	--top-height: calc(var(--title-height) + var(--pad) + var(--pad));
 	/* menu widths */
 	--tooltip-trigger-width: 20px;
@@ -18,6 +19,10 @@ html, body {
 
 	/* graph settings */
 	--graph-width: 350px;
+
+	--moderate-transition: 200ms;
+
+	--secondary-color: #0097B2;
 
 }
 
@@ -51,7 +56,11 @@ main {
 .controls {
 	grid-column: controls;
 	display: grid;
-	grid-template-rows: [control-mode] var(--title-height) [control-selectors] auto [control-foot] var(--control-foot-height);
+	grid-template-rows: 
+		[control-mode] var(--title-height) 
+		[control-reset] var(--title-height)
+		[control-selectors] auto 
+		[control-foot] var(--control-foot-height);
 	background: rgb(243, 243, 243) none repeat scroll 0% 0%;
 }
 
@@ -59,10 +68,39 @@ main {
 	margin-bottom: var(--pad);
 }
 
+.control-reset {
+	padding: var(--pad);
+}
+
+.control-reset button {
+	padding: calc(var(--pad) / 3);
+	/* background-color: var(--secondary-color); */
+	/* color: white; */
+	border: none;
+	color: var(--secondary-color);
+	border: 1px solid var(--secondary-color);
+	/* border-top:    1px solid var(--secondary-color); */
+	border-radius: 3px;
+	cursor: pointer;
+	transition: var(--moderate-transition);
+	text-transform: uppercase;
+	opacity: .6;
+}
+
+.control-reset button span {
+	padding-left: calc(var(--pad) / 3);
+	font-weight:900;
+}
+
+.control-reset button:hover {
+	opacity: 1;
+	box-shadow: 2px 2px 0px rgba(0,0,0,.2);
+}
+
 .control-selectors {
 	grid-row: control-selectors;
 	padding: var(--pad);
-	padding-top: var(--top-height);
+	/* padding-top: var(--top-height); */
 }
 
 .control-foot {
@@ -167,7 +205,7 @@ h1 span {
 	padding: var(--pad);
 }
 
-.content-foot {
+footer {
 	grid-row: footer;
 	background-color: #ddd;
 	font-size: 13px;
@@ -175,6 +213,42 @@ h1 span {
 	width:100%;
 	height: 100%;
 	text-align:center;
+	display: grid;
+	grid-template-columns: max-content max-content;
+	align-items: center;
+}
+
+footer h3 {
+	width: max-content;
+	padding-left:  var(--pad);
+	padding-right: var(--pad);
+}
+
+footer ul {
+	margin: 0;
+	display: flex;
+}
+
+footer ul li {
+	list-style-type: none;
+}
+
+footer ul * + * {
+	padding-left: var(--subsection-margin);
+}
+
+footer.control-foot {
+	display: grid;
+	grid-template-columns: max-content;
+	justify-items: center;
+	justify-content: center;
+	width: 100%;
+}
+
+footer.control-foot div {
+	text-align: center;
+	font-weight: 300;
+	margin: auto;
 }
 
 /* media queries */

@@ -1,5 +1,5 @@
 <script>
-import { onMount } from 'svelte';
+import { onMount, beforeUpdate } from 'svelte';
 import { fly } from 'svelte/transition';
 export let options;
 export let setter;
@@ -7,15 +7,24 @@ export let label;
 export let smaller = false;
 export let D = 0;
 
-let currentlySelected = $setter ? options.findIndex(o => o.key === $setter) : 0;
-$: currentlySelectedText = options[currentlySelected].label;
-$: $setter = options[currentlySelected].key;
-
 let visible = false;
+
+let currentlySelectedText;
+let currentlySelected = $setter ? options.findIndex(o => o.key === $setter) : 0;
+
+$: $setter = options[currentlySelected].key;
+$: currentlySelectedText = options[currentlySelected].label;
 
 onMount(() => {
     visible = true;
 })
+
+// handle case if reset query button is pushed.
+beforeUpdate(() => {
+    currentlySelected = options.findIndex(o => o.key === $setter)
+    currentlySelectedText = options[currentlySelected].label;
+})
+
 </script>
 
 <style>
