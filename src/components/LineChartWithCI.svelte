@@ -6,12 +6,19 @@ export let data;
 import { onMount } from 'svelte';
 import { select, mouse } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
+import {precisionPrefix, formatPrefix} from 'd3-format'
 import { timeMonth, timeYear } from 'd3-time'
 import { timeFormat } from 'd3-time-format'
 import { area } from 'd3-shape';
 import { fly, fade } from 'svelte/transition';
 
 import { writable } from 'svelte/store';
+
+const yFormat = (v) => {
+    var p = precisionPrefix(1e5, 1.3e6),
+    f = formatPrefix("." + p, 1.3e6);
+    return f(v)
+}
 
 // const markers = [
 //     {label: '64', date: new Date('2018-12-11')},
@@ -36,8 +43,8 @@ const xAxisMonth = timeFormat('%b');
 const xAxisYear = timeFormat('%Y')
 const xRollover = timeFormat('%b %d, %Y')
 const M = {
-    left:30,
-    right:30,
+    left:45,
+    right:45,
     top:40,
     bottom:40,
     buffer:5
@@ -180,7 +187,7 @@ svg {
                 stroke='gray'
                 stroke-width={1}
                 ></line>
-                {#each xTicks as xTick, i}
+                <!-- {#each xTicks as xTick, i}
                     <line 
                         x1={xScale(xTick)}
                         x2={xScale(xTick)}
@@ -193,26 +200,23 @@ svg {
                         y={A.bottom + M.buffer * 3}
                         dy={'.35em'}
                         font-size={10}
+                        font-weight={xAxisMonth(xTick) === 'Jan' ? 'normal' : '100'} 
                         text-anchor="middle"
                     >{xAxisMonth(xTick)}</text>
-                    <!-- <text
-                        class=x-axis-month
-                        in:fly="{{y:20, duration: 300 + i * 100, delay: 150 + Math.random() * 20}}"
-                        x={xScale(xTick)}
-                        y={A.bottom + M.buffer * 3 + 9}
-                        dy={'.35em'}
-                        font-size={9}
-                        text-anchor="middle"
-                    >{xAxisMonth(xTick)}</text> -->
-                {/each}
+                {/each} -->
                 {#each years as year, i}
+                    <line 
+                        x1={xScale(year)}
+                        x2={xScale(year)}
+                        y1={A.bottom}
+                        y2={A.bottom + M.buffer}
+                        stroke='gray'
+                    />
                     <text
                         x={xScale(year)}
-                        y={A.bottom +M.buffer*3 + 10}
+                        y={A.bottom +M.buffer*3}
                         dy='.35em'
-                        font-size={8}
-                        opacity={0.4}
-                        font-weight=bold
+                        font-size={10}
                         text-anchor=middle
 
                     >{xAxisYear(year)}</text>
@@ -240,7 +244,7 @@ svg {
                         dy={'.35em'}
                         font-size={10}
                         text-anchor="end"
-                    >{yTick}</text>
+                    >{yFormat(yTick)}</text>
                     
                 {/each}
         </g>
