@@ -1,7 +1,7 @@
 import { writable, derived } from 'svelte/store'
 import queryString, { queryParameters } from './query'
 
-import fetchData from './fetchData'
+import {fetchExploreData} from './fetchData'
 
 const cacheObj = writable({})
 
@@ -14,7 +14,7 @@ export const queryIsCached = derived([queryString, cacheObj], ([$q, $cacheObj]) 
 const dataset = derived([cacheObj, queryIsCached, queryString, queryParameters], async ([$cacheObj, $isCached, $q, $qp]) => {
     // this block is where we should do the fetch request! So easy.
     if (!$isCached) {
-        $cacheObj[$q] = await fetchData($qp);
+        $cacheObj[$q] = await fetchExploreData($qp);
     } 
     return $cacheObj[$q]
 })

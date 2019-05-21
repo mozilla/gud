@@ -65,7 +65,9 @@
 			<section class=control-selectors></section>
 		{/if}
 		<footer class=control-foot>
-			<div>Made by Mozilla Data Engineering + Data Science.</div>	
+			{#if visible}
+				<div>Made by Mozilla Data Engineering + Data Science.</div>	
+			{/if}
 		</footer>
 	</div>
 

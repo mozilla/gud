@@ -6,17 +6,26 @@ export let data;
 import { onMount } from 'svelte';
 import { select, mouse } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
-import { timeMonth } from 'd3-time'
+import { timeMonth, timeYear } from 'd3-time'
 import { timeFormat } from 'd3-time-format'
 import { area } from 'd3-shape';
 import { fly, fade } from 'svelte/transition';
 
 import { writable } from 'svelte/store';
 
+// const markers = [
+//     {label: '64', date: new Date('2018-12-11')},
+//     {label: '65', date: new Date('2019-01-28')},
+//     {label: '66', date: new Date('2019-03-19')},
+// ]
+
 const markers = [
-    {label: '64', date: new Date('2018-12-11')},
+    // {label: '40', date: new Date('08-15-2015')},
+    {label: '50', date: new Date('2016-11-15')},
+    {label: '55', date: new Date('2017-08-08')},
+    {label: '60', date: new Date('2018-05-09')},
     {label: '65', date: new Date('2019-01-28')},
-    {label: '66', date: new Date('2019-03-19')},
+    
 ]
 
 const W = 350;
@@ -24,12 +33,13 @@ const H = W * .6;
 
 const xAxisDate = timeFormat('%d');
 const xAxisMonth = timeFormat('%b');
+const xAxisYear = timeFormat('%Y')
 const xRollover = timeFormat('%b %d, %Y')
 const M = {
     left:30,
     right:30,
     top:40,
-    bottom:30,
+    bottom:40,
     buffer:5
 }
 
@@ -103,7 +113,10 @@ onMount(() => {
 
 let coords = writable({ x: -150, y: -150 });
 
-$: xTicks = timeMonth.range(...xScale.domain())
+$: xTicks = timeMonth.range(...xScale.domain(), 3)
+
+$: years = timeYear.range(...xScale.domain())
+$: console.log(years)
 
 
 </script>
@@ -134,9 +147,9 @@ svg {
 }
 
 .path-line.loaded {
-    stroke-dasharray: 2000;
-    stroke-dashoffset: 2000;
-    animation: dash 1s ease-in forwards;
+    /* stroke-dasharray: 2000; */
+    /* stroke-dashoffset: 2000; */
+    /* animation: dash 1s ease-in forwards; */
 }
 
 @keyframes dash {
@@ -191,6 +204,18 @@ svg {
                         font-size={9}
                         text-anchor="middle"
                     >{xAxisMonth(xTick)}</text> -->
+                {/each}
+                {#each years as year, i}
+                    <text
+                        x={xScale(year)}
+                        y={A.bottom +M.buffer*3 + 10}
+                        dy='.35em'
+                        font-size={8}
+                        opacity={0.4}
+                        font-weight=bold
+                        text-anchor=middle
+
+                    >{xAxisYear(year)}</text>
                 {/each}
         </g>
         <g class=y-axis>
