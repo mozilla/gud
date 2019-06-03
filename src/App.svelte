@@ -9,10 +9,11 @@
 
 	// stores
 	import {
-		menuOptions, allOptions, mode
+		menuOptions, allOptions, mode, modeIsImplemented
 	} from './stores/stores'
 	import cache, { queryIsCached } from './stores/cache'
 	import currentQuery, { isNotDefaultQueryset, resetQuery } from './stores/query'
+	
 
 	// props
 	export let metrics;
@@ -47,7 +48,7 @@
 		<section class=control-modes>
 			<ControlModes />
 		</section>
-		{#if $isNotDefaultQueryset}
+		{#if $isNotDefaultQueryset && $modeIsImplemented}
 			<section class=control-reset transition:fly={{x: -30, duration: 300}}>
 				<button on:click={() => {
 					resetQuery()

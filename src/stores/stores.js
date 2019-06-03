@@ -1,6 +1,6 @@
+import {derived} from 'svelte/store'
 import createListStore from './list-store-creator'
 import optionSet from './options.json'
-console.log(optionSet)
 const modeOptions = optionSet.modeOptions
 
 const menuOptions = [
@@ -25,9 +25,15 @@ const mode = modeOptions.setter;
 
 const allStores = allOptions.map(option => option.setter)
 
+const modeIsImplemented = derived(mode, ($mode) => {
+    // check if mode is same.
+    return ['explore'].includes($mode)
+})
+
 export {
     allOptions,
     menuOptions,
     allStores,
-    mode, modeOptions
+    mode, modeOptions,
+    modeIsImplemented
 }

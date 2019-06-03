@@ -1,6 +1,7 @@
 <script>
 import LineChartWithCI from './LineChartWithCI.svelte'
 import { mode } from '../stores/stores'
+import { modeIsImplemented } from '../stores/stores'
 import {fly} from 'svelte/transition'
 // should this read the store?
 
@@ -50,14 +51,14 @@ if ($mode === 'explore') {
 
 
 <div class=graphic-body>
-    {#if $mode === 'explore'}
+    {#if $modeIsImplemented}
         <div class=graphics >
             {#each outdata as dataset, i}
             <LineChartWithCI title={dataset.metric} data={dataset.data} />
             {/each}
         </div>
     {:else}
-        <div in:fly={{y:40, duration: 500, delay: 250}} class=coming-soon>
+        <div in:fly={{y:-30, duration: 300, delay: 250}} class=coming-soon>
             <div>coming soon</div>
         </div>
     {/if}
