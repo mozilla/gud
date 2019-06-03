@@ -20,14 +20,7 @@ const yFormat = (v) => {
     return f(v)
 }
 
-// const markers = [
-//     {label: '64', date: new Date('2018-12-11')},
-//     {label: '65', date: new Date('2019-01-28')},
-//     {label: '66', date: new Date('2019-03-19')},
-// ]
-
 const markers = [
-    // {label: '40', date: new Date('08-15-2015')},
     {label: '50', date: new Date('2016-11-15')},
     {label: '55', date: new Date('2017-08-08')},
     {label: '60', date: new Date('2018-05-09')},
@@ -282,7 +275,7 @@ svg {
         
         <text opacity=".8" font-size='12' text-anchor='start' x={PL.left} y={12}>
             {#if mouseYValue !== undefined}
-                <tspan font-weight="bold" fill='blue'> – </tspan> <tspan> MAU </tspan><tspan>{`   ${mouseYValue}   `}    </tspan>
+                <tspan font-weight="bold" fill='blue'> – </tspan> <tspan> MAU </tspan><tspan>{`   ${yFormat(mouseYValue)}   `}    </tspan>
             {/if}
         </text>
         <text opacity=".8" font-size='12' text-anchor='end' x={PL.right} y={12}>
