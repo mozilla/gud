@@ -14,7 +14,12 @@ export const queryIsCached = derived([queryString, cacheObj], ([$q, $cacheObj]) 
 const dataset = derived([cacheObj, queryIsCached, queryString, queryParameters], async ([$cacheObj, $isCached, $q, $qp]) => {
     // this block is where we should do the fetch request! So easy.
     if (!$isCached) {
-        $cacheObj[$q] = await fetchExploreData($qp);
+        if ($qp.mode === 'explore') {
+            $cacheObj[$q] = await fetchExploreData($qp);
+        } else {
+            $cacheObj[$q] = 'coming soon.'
+        }
+        
     } 
     return $cacheObj[$q]
 })

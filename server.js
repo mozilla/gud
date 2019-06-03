@@ -70,46 +70,7 @@ ORDER BY
     submission_date,
     id_bucket;
     `)
-
-    //return []
-    
-    // return query(`
-    // SELECT
-    //   submission_date AS date,
-    //   id_bucket,
-    //   SUM(mau) AS mau,
-    //   SUM(wau) AS wau,
-    //   SUM(dau) AS dau
-    // FROM
-    //   \`moz-fx-data-derived-datasets.telemetry.firefox_desktop_exact_mau28_by_dimensions_v1\`
-    // -- WHERE country = 'US'
-    // ${channel === 'all' ? '--' : ''} WHERE channel = '${channel}'
-    // GROUP BY
-    //   submission_date,
-    //   id_bucket
-    // ORDER BY
-    //   submission_date,
-    //   id_bucket;
-    // `)
 }
-
-// query(`
-// SELECT
-//   submission_date,
-//   id_bucket,
-//   SUM(mau) AS mau,
-//   SUM(wau) AS wau,
-//   SUM(dau) AS dau
-// FROM
-//   \`moz-fx-data-derived-datasets.telemetry.firefox_desktop_exact_mau28_by_dimensions_v1\`
-// -- WHERE country = 'US'
-// GROUP BY
-//   submission_date,
-//   id_bucket
-// ORDER BY
-//   submission_date,
-//   id_bucket;
-// `)
 
 const fakeData = () => {
     let value = 100;
@@ -130,26 +91,14 @@ app.use(express.json())
 app.use('/', express.static('public'));
 
 app.post('/fetch-data', async (req, res) => {
-    // simulate the delay.
-    //await new Promise(r=>setTimeout(r, 1000));
     const params = req.body
-    // for now, let's just look at channel!
-    const datasets = metrics.map( m => {
-        return {
-            metric: m,
-            data: fakeData()
-        }
-    })
     const out = await exploreQuery(params).then(data => {
         data.forEach(d => {
             d.date = d.date.value
         })
         return data;
     })
-    console.log(out.slice(0,2))
-    // let's make one data set?
     res.json(JSON.stringify(out))
-    //res.json(JSON.stringify(datasets))
 })
 
 app.listen(3000, () => console.log('app listening on port 3000'));

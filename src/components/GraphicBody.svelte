@@ -1,28 +1,30 @@
 <script>
 import LineChartWithCI from './LineChartWithCI.svelte'
 import { mode } from '../stores/stores'
+import {fly} from 'svelte/transition'
 // should this read the store?
 
 export let data;
 
-// ok, can we separate data into constituents?
-
-const metrics = Object.keys(data[0]).filter(m => {
-    return !m.includes('_low') && !m.includes('_high') && !m.includes('date')
-})
-
-const outdata = metrics.map(m => {
-    return {
-        metric: m, 
-        data: data.map(d=> {
-            const di = {date: d.date}
-            di.value = d[m]
-            di.lower = d[`${m}_low`]
-            di.upper = d[`${m}_high`]
-            return di
-        })
-    }
-})
+let metrics;
+let outdata;
+if ($mode === 'explore') {
+    metrics = Object.keys(data[0]).filter(m => {
+        return !m.includes('_low') && !m.includes('_high') && !m.includes('date')
+    })
+    outdata = metrics.map(m => {
+        return {
+            metric: m, 
+            data: data.map(d=> {
+                const di = {date: d.date}
+                di.value = d[m]
+                di.lower = d[`${m}_low`]
+                di.upper = d[`${m}_high`]
+                return di
+            })
+        }
+    })
+}
 
 </script>
 
@@ -32,13 +34,31 @@ const outdata = metrics.map(m => {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr;
 }
+
+.coming-soon {
+    display: grid;
+    margin: auto;
+    height: 100%;
+    text-align: center;
+    font-size:25px;
+    font-weight: 900;
+    color: var(--faint-text);
+}
+
 </style>
 
 
+
 <div class=graphic-body>
-    <div class=graphics >
-        {#each outdata as dataset, i}
-        <LineChartWithCI title={dataset.metric} data={dataset.data} />
-        {/each}
-    </div>
+    {#if $mode === 'explore'}
+        <div class=graphics >
+            {#each outdata as dataset, i}
+            <LineChartWithCI title={dataset.metric} data={dataset.data} />
+            {/each}
+        </div>
+    {:else}
+        <div in:fly={{y:40, duration: 500, delay: 250}} class=coming-soon>
+            <div>coming soon</div>
+        </div>
+    {/if}
 </div>
