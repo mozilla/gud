@@ -32,6 +32,7 @@
     "platformOptions": {
         "label": "Platform",
         "key": "platform",
+        "type": "multi",
         "values": [
         {"label": "Windows", "key": "win"},
         {"label": "Mac", "key": "mac"},
@@ -60,6 +61,7 @@
     "channelOptions": {
         "label": "Channel",
         "key": "channel",
+        "type": "multi",
         "values": [
             {"label": "Release", "key": "release"},
             {"label": "Beta", "key": "beta"},

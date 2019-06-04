@@ -6,6 +6,7 @@
 	import NavMenu from './components/NavMenu.svelte';
 	import ControlModes from './components/ControlModes.svelte';
 	import GraphicBody from './components/GraphicBody.svelte';
+	import Singleselector from './components/Singleselector.svelte'
 	import Multiselector from './components/Multiselector.svelte';
 	import ErrorMessage from './components/ErrorMessage.svelte';
 
@@ -59,11 +60,21 @@
 		{/if}
 		{#if $mode === 'explore'}
 			<section class=control-selectors>
-				<!-- {#each menuOptions as selector, i} -->
+				{#each menuOptions as selector, i}
 					<!-- <NavMenu smaller D={i * 20} label={selector.label} options={selector.values} setter={selector.setter} /> -->
-					<!-- <Multiselector title={selector.label} options={selector.values} setter={selector.setter} /> -->
-				<!-- {/each} -->
-				<Multiselector setter={optionSet.countryOptions.setter} title={'Country'} options={optionSet.countryOptions.values} />
+					<!-- {#if selector.type === 'multi'}
+						<Multiselector title={selector.label} options={selector.values} setter={selector.setter} />
+					{:else}
+						<Singleselector title={selector.label} options={selector.values} setter={selector.setter} />
+					{/if} -->
+					<Multiselector selectType={selector.type || 'single'} title={selector.label} options={selector.values} setter={selector.setter} />
+					<!-- <svelte:component 
+						this={selector.type === 'multi' ? Multiselector : Singleselector}
+						title={selector.label}
+						options={selector.values}
+						setter={selector.setter}
+					/> -->
+				{/each}
 			</section>
 		{/if}
 		{#if $mode === 'Compare'}

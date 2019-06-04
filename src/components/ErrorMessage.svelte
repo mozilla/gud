@@ -1,4 +1,5 @@
 <script>
+import { fly } from 'svelte/transition'
 export let error;
 </script>
 
@@ -6,7 +7,7 @@ export let error;
 section {
     text-align: center;
     font-size:22px;
-    color: tomato;
+    color: var(--faint-text);
     font-weight: 900;
     opacity: .8;
 }
@@ -17,7 +18,7 @@ div {
 }
 </style>
 
-<section>
+<section in:fly={{y:20, duration: 1000}}>
     Dang – an error has occurred :(
     <div>
         Contact hulmer@mozilla.com / @hamilton on Slack.

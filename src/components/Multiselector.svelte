@@ -7,15 +7,16 @@ import Popper from 'popper.js'
 export let title;
 export let options;
 export let setter;
+export let selectType = 'single';
 
 let parentRef;
 let menuRef;
 let isActive = false;
-let menuPopup;
 
 let key;
 let keyCode;
 
+let menuPopup;
 onMount(() => {
     const container = document.body
     menuPopup = new Popper(parentRef, menuRef, {
@@ -32,16 +33,15 @@ onMount(() => {
     });
 })
 
+// set singleOptionLabel 
+let singleOptionLabel = options[0].label;
+$: if (selectType === 'single') {
+    singleOptionLabel = options.find(opt => opt.key === $setter).label;
+}
+
 function toggleActive() {
     isActive = !isActive
     if (isActive) hideOnClickOutside(menuRef)
-}
-
-function addSelection(key) {
-    if (!$setter.includes(key)) { 
-        $setter = [...$setter, key];
-        $setter.sort();
-    }
 }
 
 function removeSelection(key) {
@@ -49,20 +49,25 @@ function removeSelection(key) {
 }
 
 function handleSelection(key) {
-    if (!$setter.includes(key)) {
-        $setter = [...$setter, key];
+    if (selectType === 'multi') {
+            if (!$setter.includes(key)) {
+            $setter = [...$setter, key];
+        }
+        else $setter = $setter.filter(k=>k!==key)
+    } else {
+        $setter = key
     }
-    else $setter = $setter.filter(k=>k!==key)
+    
+}
+
+function clearAllSelections() {
+    $setter = selectType === 'multi' ? [] : options[0].key
 }
 
 function handleKeydown(event) {
     if (isActive && event.key === 'Escape') {
         isActive = false;
     }
-}
-
-function clearAllSelections() {
-    $setter = []
 }
 
 function addAllSelections() {
@@ -213,32 +218,22 @@ ul.active {
     background-color: transparent;
 }
 
-ul.selected-items {
+.selected-items {
     display: flex;
     padding:0;
     margin:0;
     margin-top: var(--list-item-pad);
     flex-wrap: wrap;
+    font-size: 14px;
+    font-weight: bold;
 }
 
-ul.selected-items li {
+.selected-items li {
+    font-weight: normal;
     list-style-type: none;
     font-size: 12px;
     margin-right:5px;
     margin-bottom:5px;
-}
-
-/* ul.selected-items li:hover {
-    border-bottom: 1px solid tomato;
-} */
-
-/* ul.selected-items li + li {
-    margin-left: var(--list-item-pad);
-} */
-
-.select-all {
-    font-size: 14px;
-    border-bottom: 1px solid gainsboro;
 }
 
 .remove-item {
@@ -266,6 +261,8 @@ ul.selected-items li {
     <div class=dropdown-button-icon class:active-icon={isActive}>▾</div>
 </button>
 
+
+{#if selectType === 'multi'}
 <ul class=selected-items>
     {#if $setter.length === 0}
         <div class=default-selected-item-message>
@@ -279,9 +276,15 @@ ul.selected-items li {
         </li>
     {/each}
 </ul>
+{:else}
+<div class='selected-items'>
+    {singleOptionLabel}
+</div>
+{/if}
 
 <div bind:this={menuRef} class=menu-popup class:active={isActive} class:hidden={!isActive}>
     <ul class=menu-content class:active={isActive} class:hidden={!isActive}>
+        {#if selectType === 'multi'}
         <li class=clear-all class:nothing-selected={!$setter.length} on:click={clearAllSelections}>
             <div class=dropdown-status>
                 {#if $setter.length}
@@ -295,7 +298,8 @@ ul.selected-items li {
                     nothing selected
                 {/if}
             </div>
-        </li>        
+        </li>
+        {/if}
         {#each options as {label, key}}
             <li on:click={() => handleSelection(key)} class:selected={$setter.includes(key)}>
                 <div class=dropdown-status>{$setter.includes(key) ? '✓' : ' '}</div>
