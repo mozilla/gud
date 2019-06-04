@@ -7,6 +7,7 @@
 	import ControlModes from './components/ControlModes.svelte';
 	import GraphicBody from './components/GraphicBody.svelte';
 	import Multiselector from './components/Multiselector.svelte';
+	import ErrorMessage from './components/ErrorMessage.svelte';
 
 	// stores
 	import {
@@ -97,7 +98,7 @@
 				{:then value}
 					<GraphicBody data={value} />
 				{:catch error}
-					<div>Uh oh!</div>
+					<ErrorMessage error={error} />
 			{/await}
 		<!-- foot -->
 		<footer>
