@@ -6,6 +6,7 @@
 	import NavMenu from './components/NavMenu.svelte';
 	import ControlModes from './components/ControlModes.svelte';
 	import GraphicBody from './components/GraphicBody.svelte';
+	import Multiselector from './components/Multiselector.svelte';
 
 	// stores
 	import {
@@ -13,7 +14,7 @@
 	} from './stores/stores'
 	import cache, { queryIsCached } from './stores/cache'
 	import currentQuery, { isNotDefaultQueryset, resetQuery } from './stores/query'
-	
+	import optionSet from './stores/options.json'
 
 	// props
 	export let metrics;
@@ -37,7 +38,7 @@
 		cacheValue = v;
 	})
 
-	$: if (visible) { 
+	$: if (visible) {
 		updateQueryString($currentQuery);
 	}
 
@@ -57,9 +58,11 @@
 		{/if}
 		{#if $mode === 'explore'}
 			<section class=control-selectors>
-				{#each menuOptions as selector, i}
-					<NavMenu smaller D={i * 20} label={selector.label} options={selector.values} setter={selector.setter} />
-				{/each}
+				<!-- {#each menuOptions as selector, i} -->
+					<!-- <NavMenu smaller D={i * 20} label={selector.label} options={selector.values} setter={selector.setter} /> -->
+					<!-- <Multiselector title={selector.label} options={selector.values} setter={selector.setter} /> -->
+				<!-- {/each} -->
+				<Multiselector setter={optionSet.countryOptions.setter} title={'Country'} options={optionSet.countryOptions.values} />
 			</section>
 		{/if}
 		{#if $mode === 'Compare'}

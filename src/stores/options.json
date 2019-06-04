@@ -2,6 +2,7 @@
     "modeOptions": {
         "label": "Mode",
         "key": "mode",
+        "type": "single",
         "values": [
         { "label": "Explore", "key": "explore" }, 
         { "label": "Compare", "key": "compare" }, 
@@ -10,6 +11,7 @@
     "usageCriteriaOptions": {
         "label": "Usage Criteria",
         "key": "usageCriteria",
+        "type": "single",
         "values": [
         {   
             "label":"Any Desktop Activity",
@@ -31,7 +33,6 @@
         "label": "Platform",
         "key": "platform",
         "values": [
-        {"label": "All", "key": "all"},
         {"label": "Windows", "key": "win"},
         {"label": "Mac", "key": "mac"},
         {"label": "Linux", "key": "linux"}
@@ -39,8 +40,8 @@
     "countryOptions": {
         "label": "Country",
         "key": "country",
+        "type": "multi",
         "values": [
-            {"label": "All", "key": "all"},
             {"label": "United States", "key": "US"},
             {"label": "Germany", "key": "DE"},
             {"label": "Great Britain", "key": "GB"},
@@ -60,7 +61,6 @@
         "label": "Channel",
         "key": "channel",
         "values": [
-            {"label": "All", "key": "all"},
             {"label": "Release", "key": "release"},
             {"label": "Beta", "key": "beta"},
             {"label": "Nighty", "key": "nightly"}

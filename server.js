@@ -16,7 +16,14 @@ const getParamInfo = (paramKey) => {
 
 const getDefault = (paramKey) => {
     const paramInfo = getParamInfo(paramKey)
-    return paramInfo.values[0]
+    if (paramInfo.type === 'multi') return []
+    else return paramInfo.values[0]
+}
+
+const isDefaultValue = (paramKey, value) => {
+    const paramInfo = getParamInfo(paramKey)
+    if (paramInfo.type === 'multi') return value.length === 0
+    else return value.length = paramInfo.values[0]
 }
 
 async function query(q) {
@@ -37,6 +44,7 @@ async function query(q) {
 
 const exploreQuery =(params) => {
     // FiXME: validate params HERE!!!! Do NOT DEPLOY UNTIL PARAMS ARE VALIDATED.
+    // otherwise we run the risk of something really bad happening.
 
     const { channel } = params
     // for all params, implement a WHERE ${keyname} IN ${yes-options}
@@ -44,11 +52,13 @@ const exploreQuery =(params) => {
     const WHEREClauses = Object.keys(params)
         .filter(k=> {
             const defaultValue = getDefault(k).key
-            return k !== 'mode' && params[k] !== defaultValue
+            return k !== 'mode' && !isDefaultValue(k, params[k])//params[k] !== defaultValue
         })
         .map(paramKey => {
             // get default param
-            const values = [params[paramKey]]
+            const opt = getParamInfo(paramKey)
+
+            const values = opt.type === 'multi' ? params[paramKey] : [params[paramKey]]
             // console.log(getParamInfo(paramKey))
             return `WHERE ${paramKey} IN (${values.map(v=>`"${v}"`).join(',')})`
         })

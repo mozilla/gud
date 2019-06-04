@@ -1,5 +1,5 @@
 import {derived} from 'svelte/store'
-import createListStore from './list-store-creator'
+import {createListStore, createMultiselectStore} from './list-store-creator'
 import optionSet from './options.json'
 const modeOptions = optionSet.modeOptions
 
@@ -17,8 +17,14 @@ const allOptions =   [
 const params = new URLSearchParams(window.location.search);
 
 allOptions.forEach(opt => {
-    let queryValue = params.get(opt.key) || undefined;
-    opt.setter = createListStore(opt.values)(queryValue);
+    if (opt.type === 'multi') {
+        const queryValue = params.get(opt.key) || '[]';
+        opt.setter = createMultiselectStore(opt.values)(JSON.parse(queryValue))
+    }
+    else {
+        const queryValue = params.get(opt.key) || undefined;
+        opt.setter = createListStore(opt.values)(queryValue);
+    }
 })
 
 const mode = modeOptions.setter;

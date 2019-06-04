@@ -116,8 +116,6 @@ let coords = writable({ x: -150, y: -150 });
 $: xTicks = timeMonth.range(...xScale.domain(), 3)
 
 $: years = timeYear.range(...xScale.domain())
-$: console.log(years)
-
 
 </script>
 
