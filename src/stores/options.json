@@ -1,4 +1,14 @@
 {
+    "startOptions": {
+        "label": "Start",
+        "type": "date",
+        "key": "start"
+    },
+    "endOptions": {
+        "label": "End",
+        "type": "date",
+        "key": "end"
+    },
     "modeOptions": {
         "label": "Mode",
         "key": "mode",

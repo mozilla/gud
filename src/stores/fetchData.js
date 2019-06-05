@@ -96,7 +96,6 @@ function convertExploreData(inputs) {
 }
 
 export async function fetchExploreData(params) {
-    console.log(params)
     const dataset = await fetch('/fetch-data', {
         method: 'POST',
         headers: {

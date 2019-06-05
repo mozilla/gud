@@ -46,20 +46,18 @@ const exploreQuery =(params) => {
     // FiXME: validate params HERE!!!! Do NOT DEPLOY UNTIL PARAMS ARE VALIDATED.
     // otherwise we run the risk of something really bad happening.
 
-    const { channel } = params
     // for all params, implement a WHERE ${keyname} IN ${yes-options}
     // check for default param.
     const WHEREClauses = Object.keys(params)
         .filter(k=> {
+            if (k === 'start' || k === 'end') return false
             const defaultValue = getDefault(k).key
             return k !== 'mode' && !isDefaultValue(k, params[k])//params[k] !== defaultValue
         })
         .map(paramKey => {
             // get default param
             const opt = getParamInfo(paramKey)
-
             const values = opt.type === 'multi' ? params[paramKey] : [params[paramKey]]
-            // console.log(getParamInfo(paramKey))
             return `WHERE ${paramKey} IN (${values.map(v=>`"${v}"`).join(',')})`
         })
     const WHERE = WHEREClauses.length > 1 ? WHEREClauses.join(' AND\n') : WHEREClauses;

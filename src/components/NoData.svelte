@@ -19,8 +19,8 @@ div {
 </style>
 
 <section in:fly={{y:20, duration: 1000}}>
-    Dang – an error has occurred :( 
+    No data with the specified parameters.
     <div>
-        Contact hulmer@mozilla.com / @hamilton on Slack.
+        Try selecting a different date range or set of parameters.
     </div>
 </section>

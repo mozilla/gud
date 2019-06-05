@@ -8,8 +8,9 @@
 	import GraphicBody from './components/GraphicBody.svelte';
 	import Singleselector from './components/Singleselector.svelte'
 	import Multiselector from './components/Multiselector.svelte';
+	import DatePicker from './components/DatePicker.svelte';
 	import ErrorMessage from './components/ErrorMessage.svelte';
-
+	import NoData from './components/NoData.svelte'
 	// stores
 	import {
 		menuOptions, allOptions, mode, modeIsImplemented
@@ -17,13 +18,11 @@
 	import cache, { queryIsCached } from './stores/cache'
 	import currentQuery, { isNotDefaultQueryset, resetQuery } from './stores/query'
 	import optionSet from './stores/options.json'
-
+	import { majorReleases } from './stores/productDetails'
 	// props
-	export let metrics;
 	export let name;
 
 	let visible = false;
-	let cacheValue;
 
 	onMount(() => {
 		visible = true;
@@ -35,10 +34,6 @@
 			window.history.pushState({path:newurl},'', newurl);
 		}
 	}
-
-	$: $cache.then(v => {
-		cacheValue = v;
-	})
 
 	$: if (visible) {
 		updateQueryString($currentQuery);
@@ -61,20 +56,11 @@
 		{#if $mode === 'explore'}
 			<section class=control-selectors>
 				{#each menuOptions as selector, i}
-					<!-- <NavMenu smaller D={i * 20} label={selector.label} options={selector.values} setter={selector.setter} /> -->
-					<!-- {#if selector.type === 'multi'}
-						<Multiselector title={selector.label} options={selector.values} setter={selector.setter} />
-					{:else}
-						<Singleselector title={selector.label} options={selector.values} setter={selector.setter} />
-					{/if} -->
-					<Multiselector selectType={selector.type || 'single'} title={selector.label} options={selector.values} setter={selector.setter} />
-					<!-- <svelte:component 
-						this={selector.type === 'multi' ? Multiselector : Singleselector}
-						title={selector.label}
-						options={selector.values}
-						setter={selector.setter}
-					/> -->
+					{#if selector.type !== 'date'}
+						<Multiselector selectType={selector.type || 'single'} title={selector.label} options={selector.values} setter={selector.setter} />
+					{/if}
 				{/each}
+			<DatePicker />
 			</section>
 		{/if}
 		{#if $mode === 'Compare'}
@@ -107,7 +93,11 @@
 						</div>
 					</div>
 				{:then value}
-					<GraphicBody data={value} />
+					{#if value.length}
+						<GraphicBody data={value} />
+					{:else}
+						<NoData />
+					{/if}
 				{:catch error}
 					<ErrorMessage error={error} />
 			{/await}

@@ -2,6 +2,8 @@
 
 export let title;
 export let data;
+export let xMin;
+export let xMax;
 
 import { onMount } from 'svelte';
 import { select, mouse } from 'd3-selection';
@@ -55,7 +57,9 @@ const PL = {
     bottom: H - M.bottom - M.buffer
 }
 
-$: xScale = scaleLinear().domain([Math.min(...data.map(v=>v.date)), Math.max(...data.map(v=>v.date))])
+$: xScale = scaleLinear().domain([
+        xMin !== '' ? new Date(xMin) : Math.min(...data.map(v=>v.date)), 
+        xMax !== '' ? new Date(xMax) : Math.max(...data.map(v=>v.date))])
     .range([PL.left,PL.right])
 
 
@@ -158,6 +162,7 @@ svg {
 
 </style>
 
+{#if data.length}
 <div
     class=graphic-container
 >
@@ -283,3 +288,6 @@ svg {
         </text>
     </svg>
 </div>
+{:else}
+    Yes, there's no data with this range specified
+{/if}

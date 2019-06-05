@@ -3,12 +3,17 @@ import LineChartWithCI from './LineChartWithCI.svelte'
 import { mode } from '../stores/stores'
 import { modeIsImplemented } from '../stores/stores'
 import {fly} from 'svelte/transition'
+import optionSet from '../stores/options.json'
 // should this read the store?
 
 export let data;
 
 let metrics;
 let outdata;
+
+const start = optionSet.startOptions.setter;
+const end = optionSet.endOptions.setter;
+
 if ($mode === 'explore') {
     metrics = Object.keys(data[0]).filter(m => {
         return !m.includes('_low') && !m.includes('_high') && !m.includes('date')
@@ -54,7 +59,7 @@ if ($mode === 'explore') {
     {#if $modeIsImplemented}
         <div class=graphics >
             {#each outdata as dataset, i}
-            <LineChartWithCI title={dataset.metric} data={dataset.data} />
+            <LineChartWithCI title={dataset.metric} data={dataset.data} xMin={$start} xMax={$end} />
             {/each}
         </div>
     {:else}
