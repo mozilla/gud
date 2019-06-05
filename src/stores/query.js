@@ -1,5 +1,5 @@
 import { derived } from 'svelte/store'
-import { allOptions, allStores } from './stores'
+import { allOptions, allStores, rawStart, rawEnd } from './stores'
 
 export const queryParameters = derived(allStores, (stores) => {
     const outs = {}
@@ -39,7 +39,7 @@ export const isNotDefaultQueryset = derived(allStores, stores => {
     return !stores.every(($store, i) => {
         const opt = allOptions[i];
         if (opt.type === 'multi') return $store.length === 0
-        if (opt.type === 'date') return $store !== ''
+        else if (opt.type === 'date') return $store === ''
         else return $store === opt.values[0].key
     })
 })
@@ -48,9 +48,12 @@ export const resetQuery = () => {
     allStores.forEach((store, i) => {
         const opt = allOptions[i]
         if (opt.type === 'multi') store.set([])
-        if (opt.type === 'date') store.set('')
+        else if (opt.type === 'date') store.set('')
         else store.set(opt.values[0].key);
     })
+    rawStart.set('');
+    rawEnd.set('')
+    // reset according to 
 }
 
 export default queryString

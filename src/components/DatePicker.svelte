@@ -3,16 +3,14 @@ import {onMount} from 'svelte'
 import { timeFormat } from 'd3-time-format'
 import { majorReleases } from '../stores/productDetails'
 import optionSet from '../stores/options.json'
-
-let rawStart;
-let rawEnd;
+import {rawStart, rawEnd} from '../stores/stores'
  
 let start = optionSet.startOptions.setter;
 let end = optionSet.endOptions.setter;
 
 onMount(() => {
-    if ($start !== '') rawStart = $start;
-    if ($end !== '') rawEnd = $end;
+    if ($start !== '') $rawStart = $start;
+    if ($end !== '') $rawEnd = $end;
 })
 
 let tf = timeFormat('%Y-%m-%d')
@@ -33,29 +31,24 @@ const dayAfter = (d) => {
 // FIXME: replace this with something a bit more relevant.
 let START = '2016-01-01';
 
-let tempStart = rawStart;
-
 // check boundary conditions.
-$: if (rawStart !== '') {
-    if (rawStart < START) $start = START
-    if (rawStart > START) $start = rawStart
-    if (rawEnd !== '' && rawStart > rawEnd) $start = tf(dayBefore(rawEnd));
-    if (rawStart > TODAY) $start = tf(dayBefore(TODAY))
+$: if ($rawStart !== '' ) {
+    if ($rawStart < START) $start = START
+    if ($rawStart > START) $start = $rawStart
+    if ($rawEnd !== '' && $rawStart > rawEnd) $start = tf(dayBefore($rawEnd));
+    if ($rawStart > TODAY) $start = tf(dayBefore(TODAY))
 } else {
     $start = ''
 }
 
-$: if (rawEnd !== '') {
-    if (rawEnd > TODAY) $end = TODAY
-    if (rawEnd < TODAY) $end = rawEnd
-    if (rawStart !== '' && rawEnd <= rawStart) $end = tf(dayAfter(rawStart))
-    if (rawEnd < START) $end = tf(dayAfter(START))
+$: if ($rawEnd !== '') {
+    if ($rawEnd > TODAY) $end = TODAY
+    if ($rawEnd < TODAY) $end = $rawEnd
+    if ($rawStart !== '' && $rawEnd <= $rawStart) $end = tf(dayAfter($rawStart))
+    if ($rawEnd < START) $end = tf(dayAfter(START))
 } else {
     $end = ''
 }
-
-//$: $start = selectorStart < START || selectorStart === '' ? START : selectorStart;//Math.max(selectorStart, START);
-//$: console.log(selectorStart, START)
 
 $: currentStart = new Date($start === '' ? START : $start);
 $: currentEnd = new Date($end === '' ? TODAY : $end);
@@ -102,7 +95,7 @@ div.days-since {
 
 <input type="date" id="start" name="range-start"
        value="2018-07-22"
-       min={START} max={$end === '' ? TODAY : $end} bind:value={rawStart}>
+       min={START} max={$end === '' ? TODAY : $end} bind:value={$rawStart}>
 
 <input type="date" id="end" name="range-end"
        value="2018-07-22"
@@ -110,7 +103,7 @@ div.days-since {
            $start === '' ? 
             START :
             ($start)
-       } max={TODAY} bind:value={rawEnd}>
+       } max={TODAY} bind:value={$rawEnd}>
 
 {#if days !== NaN}
     <div class=days-since>

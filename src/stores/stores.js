@@ -40,10 +40,19 @@ const modeIsImplemented = derived(mode, ($mode) => {
     return ['explore'].includes($mode)
 })
 
+// writables for handling raw inputs on date selector.
+// if we deprecate DatePicker.svelte, these can leave.
+// until then, it's nice to have these store values
+// so we can reset these as needed.
+const rawStart = writable('')
+const rawEnd = writable('')
+
 export {
     allOptions,
     menuOptions,
     allStores,
     mode, modeOptions,
-    modeIsImplemented
+    modeIsImplemented,
+    rawStart,
+    rawEnd
 }
