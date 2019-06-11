@@ -11,7 +11,7 @@ export const queryParameters = derived(allStores, (stores) => {
 
 const filterDates = ($store, i) => {
     const opt = allOptions[i]
-    return opt.type !== 'date'
+    return !opt.onlyLocal
 }
 
 const toQueryStringParts = ($store,i) => {
@@ -30,7 +30,10 @@ const queryString = derived(
     return currentQuery
 })
 
-export const queryStringWithoutDates = derived(allStores, (stores) => {
+// this store specifically filters out all the options that have
+// onlyLocal = true. These are not meaningful for the cached data, which is
+// where this store is primarily used.
+export const queryStringWithoutLocalOpts = derived(allStores, (stores) => {
     const outs = stores.map(toQueryStringParts).filter(filterDates)
     return outs.join('&')
 })

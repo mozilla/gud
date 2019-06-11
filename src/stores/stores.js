@@ -3,14 +3,7 @@ import {createListStore, createMultiselectStore} from './list-store-creator'
 import optionSet from './options.json'
 const modeOptions = optionSet.modeOptions
 
-const menuOptions = [
-    optionSet.usageCriteriaOptions,
-    optionSet.platformOptions,
-    optionSet.countryOptions,
-    optionSet.channelOptions,
-    optionSet.startOptions,
-    optionSet.endOptions
-]
+const menuOptions = Object.keys(optionSet).filter(k => optionSet[k].inMenu).map(k => optionSet[k])
 
 const allOptions =   [
     optionSet.modeOptions, 

@@ -11,12 +11,19 @@ export let data;
 let metrics;
 let outdata;
 
+let metricSet = optionSet.metricOptions.setter;
+
 const start = optionSet.startOptions.setter;
 const end = optionSet.endOptions.setter;
 
 if ($mode === 'explore') {
+    // this is where we filter?
     metrics = Object.keys(data[0]).filter(m => {
         return !m.includes('_low') && !m.includes('_high') && !m.includes('date')
+    }).filter(m => {
+        // take out everything not in the $metricsSet, or default to all if $metricSet === 'all'
+        if ($metricSet === 'all') return true
+        return $metricSet === m
     })
     // FIXME: add filter when we are not on metric=all
     outdata = metrics.map(m => {
@@ -36,10 +43,15 @@ if ($mode === 'explore') {
 </script>
 
 <style>
-.graphics {
+
+.all-graphics {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr;
+}
+
+.one-graphic {
+    display: block;
 }
 
 .coming-soon {
@@ -58,9 +70,12 @@ if ($mode === 'explore') {
 
 <div class=graphic-body>
     {#if $modeIsImplemented}
-        <div class=graphics >
+        <div 
+            class:all-graphics={$metricSet === 'all'}
+            class:one-graphic={$metricSet !== 'all'}
+        >
             {#each outdata as dataset, i}
-            <LineChartWithCI title={dataset.metric} data={dataset.data} xMin={$start} xMax={$end} />
+            <LineChartWithCI size={$metricSet === 'all' ? 'small' : 'large'} title={dataset.metric} data={dataset.data} xMin={$start} xMax={$end} />
             {/each}
         </div>
     {:else}

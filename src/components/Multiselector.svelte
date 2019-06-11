@@ -158,7 +158,7 @@ ul.menu-content {
     border-radius: 5px;
     background-color: white;
     box-shadow: 0px 0px 10px rgba(0,0,0,.1);
-    max-width: 375px;
+    max-width: 425px;
     min-width: 200px;
 
 }

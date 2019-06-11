@@ -18,7 +18,8 @@ html, body {
 	--menu-width: calc(var(--left-pane) - var(--pad) - var(--pad) - var(--left-pane-grid-pad) - var(--tooltip-trigger-width));
 
 	/* graph settings */
-	--graph-width: 350px;
+	--small-graph-width: 350px;
+	--large-graph-width: 750px;
 
 	--moderate-transition: 200ms;
 

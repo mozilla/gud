@@ -3,18 +3,21 @@
         "label": "Start",
         "type": "date",
         "key": "start",
-        "onlyLocal" : true
+        "onlyLocal" : true,
+        "inMenu": true
     },
     "endOptions": {
         "label": "End",
         "type": "date",
         "key": "end",
-        "onlyLocal" : true
+        "onlyLocal" : true,
+        "inMenu": true
     },
     "modeOptions": {
         "label": "Mode",
         "key": "mode",
         "type": "single",
+        "inMenu": false,
         "values": [
         { "label": "Explore", "key": "explore" }, 
         { "label": "Compare", "key": "compare" }, 
@@ -24,6 +27,7 @@
         "label": "Usage Criteria",
         "key": "usage",
         "type": "single",
+        "inMenu": true,
         "values": [
         {
             "itemType": "section",
@@ -61,16 +65,63 @@
             "key": "Any Fennec Android Activity",
             "shortDescription": "The profile has sent a telemetry ping from Fennec Android on the day in question"
         },
-        { 
+        {
             "label": "New Fennec Android Profile Created",
             "key": "New Fennec Android Profile Created",
             "shortDescription": "The count of the number of new profiles created on the day in question"
         }
     ]},
+    "metricOptions": {
+        "label": "Metric",
+        "type": "single",
+        "key": "metric",
+        "onlyLocal": true,
+        "inMenu": true,
+        "values": [
+            {
+                "label": "All", "key": "all",
+                "shortDescription": "Shows all the below metrics on one page"
+            },
+            {
+                "itemType": "divider"
+            },
+            {
+                "label": "Monthly Active Users", "key": "mau", "short": "MAU", "agg": "sum",
+                "shortDescription": "The number of unique profiles that met the usage criterion at least once during the 28-day window ending on the specified day",
+                "format": "count"
+            },
+            {
+                "label": "Weekly Active Users", "key": "wau", "short": "WAU", "agg": "sum",
+                "shortDescription": "The number of unique profiles that met the usage criterion at least once during the 7-day window ending on the specified day",
+                "format": "count"
+            },
+            {
+                "label": "Daily Active Users", "key": "dau", "short": "DAU", "agg": "sum",
+                "shortDescription": "The number of unique profiles that meet the usage criterion on each day",
+                "format": "count"
+            },
+            {
+                "label": "Intensity", "key": "intensity", "short": "intensity", "agg": "mean",
+                "shortDescription": "Among profiles that meet the usage criterion at least once in the week ending on the date specified, how many days on average do they meet the usage criterion during that one-week window",
+                "format": "ratio"
+            },
+            {
+                "label": "1-Week New Profile Retention", "key": "retention_1_week_new_profile", "short": "1-wk. retention %", "agg": "mean",
+                "shortDescription": "Among new profiles created on the day specified, what proportion (out of 1) meet the usage criterion during the week beginning one week after the day specified",
+                "format": "percentage"
+            },
+            {
+                "label": "1-Week Retention (Usage Criterion Population)", "key": "retention_1_week_active_in_week_0", "short": "1-wk. retention %", "agg": "mean",
+                "shortDescription": "Among profiles that were active in the specified usage criterion at least once in the week starting on the specified day, what proportion (out of 1) meet the usage criterion during the following week",
+                "format": "percentage"
+            }
+        ]
+    },
     "platformOptions": {
         "label": "OS",
         "key": "os",
         "type": "multi",
+        "inMenu": true,
         "values": [
         {"label": "Windows", "key": "Windows_NT"},
         {"label": "Mac", "key": "Darwin"},
@@ -80,6 +131,7 @@
         "label": "Country",
         "key": "country",
         "type": "multi",
+        "inMenu": true,
         "values": [
             {"label": "United States", "key": "US"},
             {"label": "Germany", "key": "DE"},
@@ -100,6 +152,7 @@
         "label": "Channel",
         "key": "channel",
         "type": "multi",
+        "inMenu": true,
         "values": [
             {"label": "Release", "key": "release"},
             {"label": "Beta", "key": "beta"},

@@ -1,6 +1,7 @@
 <script>
 
 export let title;
+export let size;
 export let data;
 export let xMin;
 export let xMax;
@@ -42,8 +43,8 @@ const markers = [
     
 ]
 
-const W = 350;
-const H = W * .6;
+const W = size === 'small' ? 350 : 750;
+const H = size==='small' ? W * .6 : W*.5;
 
 const xAxisDate = timeFormat('%d');
 const xAxisMonth = timeFormat('%b');
@@ -154,8 +155,14 @@ $: years = timeYear.range(...xScale.domain())
 
 svg {
     display: block;
-    width: var(--graph-width);
-    outline: 1px sold gray;
+    margin: auto;
+}
+
+svg.small-graph {
+        width: var(--small-graph-width);
+}
+svg.large-graph {
+        width: var(--large-graph-width);
 }
 
 .path-line {
@@ -189,6 +196,8 @@ svg {
         in:fly="{{y:4 * Math.sign(Math.random()-.5), duration: 100, delay: 150}}" 
         width="100%" 
         viewbox='0 0 {W} {H}'
+        class:small-graph={size==='small'}
+        class:large-graph={size==='large'}
     >
         
         <g class=x-axis>
