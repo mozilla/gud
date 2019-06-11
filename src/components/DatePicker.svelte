@@ -4,7 +4,7 @@ import { timeFormat } from 'd3-time-format'
 import { majorReleases } from '../stores/productDetails'
 import optionSet from '../stores/options.json'
 import {rawStart, rawEnd} from '../stores/stores'
- 
+
 let start = optionSet.startOptions.setter;
 let end = optionSet.endOptions.setter;
 

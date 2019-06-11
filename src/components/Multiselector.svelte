@@ -158,6 +158,9 @@ ul.menu-content {
     border-radius: 5px;
     background-color: white;
     box-shadow: 0px 0px 10px rgba(0,0,0,.1);
+    max-width: 375px;
+    min-width: 200px;
+
 }
 
 ul.hidden {
@@ -181,7 +184,7 @@ ul.active {
     min-height: var(--list-item-status-size);
     grid-gap: calc(var(--list-item-pad) / 2);
     transition: 50ms;
-    align-items: center;
+    align-items: start;
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
@@ -194,7 +197,7 @@ ul.active {
 
 .dropdown-status {
     text-align: center;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .dropdown-content {
@@ -250,6 +253,27 @@ ul.active {
     color: white;
 }
 
+.dropdown-item-description {
+    font-size:13px;
+    opacity:.6;
+}
+
+.divider {
+    border-bottom: 1px solid gainsboro;
+    margin-bottom: calc(var(--list-item-pad) / 2);
+    margin-top: calc(var(--list-item-pad) / 2);
+}
+
+.menu-section {
+    text-transform: uppercase;
+    font-size:12px;
+    font-weight:900;
+    color: darkgray;
+    padding-top: calc(var(--list-item-pad) / 2);
+    padding-bottom: calc(var(--list-item-pad) / 2);
+    padding-left: calc(var(--list-item-status-size) + var(--list-item-pad) * 1.5);
+}
+
 </style>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -300,11 +324,22 @@ ul.active {
             </div>
         </li>
         {/if}
-        {#each options as {label, key}}
-            <li on:click={() => handleSelection(key)} class:selected={$setter.includes(key)}>
-                <div class=dropdown-status>{$setter.includes(key) ? '✓' : ' '}</div>
-                <div class=dropdown-content>{label}</div>
-            </li>
+        {#each options as {label, key, shortDescription, itemType}}
+            {#if itemType === 'divider'}
+                <div class=divider></div>
+            {:else if itemType === 'section'}
+                <div class=menu-section>{label}</div>
+            {:else}
+                <li on:click={() => handleSelection(key)} class:selected={$setter.includes(key)}>
+                    <div class=dropdown-status>{$setter.includes(key) ? '✓' : ' '}</div>
+                    <div class=dropdown-content>
+                        {label}
+                        {#if shortDescription}
+                            <div class=dropdown-item-description>{shortDescription}</div>
+                        {/if}
+                    </div>
+                </li>
+            {/if}
         {/each}
     </ul>
 </div>

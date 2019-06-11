@@ -52,33 +52,57 @@ const exploreQuery =(params) => {
         .filter(k=> {
             if (k === 'start' || k === 'end') return false
             const defaultValue = getDefault(k).key
-            return k !== 'mode' && !isDefaultValue(k, params[k])//params[k] !== defaultValue
+            return (k !== 'mode' && !isDefaultValue(k, params[k])) || k === 'usage'//params[k] !== defaultValue
         })
         .map(paramKey => {
             // get default param
             const opt = getParamInfo(paramKey)
             const values = opt.type === 'multi' ? params[paramKey] : [params[paramKey]]
-            return `WHERE ${paramKey} IN (${values.map(v=>`"${v}"`).join(',')})`
+            if (opt.key === 'usage') return `${paramKey} = '${params[paramKey]}'`
+            return `${paramKey} IN (${values.map(v=>`"${v}"`).join(',')})`
         })
-    const WHERE = WHEREClauses.length > 1 ? WHEREClauses.join(' AND\n') : WHEREClauses;
+    const WHERE = WHEREClauses.length ? `WHERE ${WHEREClauses.length > 1 ? WHEREClauses.join(' AND\n') : WHEREClauses}` : '';
+//     return query(`
+// SELECT
+//     submission_date AS date,
+//     id_bucket,
+//     SUM(mau) AS mau,
+//     SUM(wau) AS wau,
+//     SUM(dau) AS dau
+// FROM
+//     \`moz-fx-data-derived-datasets.telemetry.firefox_desktop_exact_mau28_by_dimensions_v1\`
+// ${WHERE}
+// GROUP BY
+//     submission_date,
+//     id_bucket
+// ORDER BY
+//     submission_date,
+//     id_bucket;
+//     `)
+// }
+     
     return query(`
 SELECT
-    submission_date AS date,
-    id_bucket,
-    SUM(mau) AS mau,
-    SUM(wau) AS wau,
-    SUM(dau) AS dau
+date,
+id_bucket,
+SUM(dau) AS dau,
+SUM(wau) AS wau,
+SUM(mau) AS mau,
+SAFE_DIVIDE(SUM(active_days_in_week),
+  SUM(wau)) AS intensity,
+SAFE_DIVIDE(SUM(active_in_week_1),
+  SUM(new_profiles)) AS retention_1_week_new_profile,
+SAFE_DIVIDE(SUM(active_in_weeks_0_and_1),
+  SUM(active_in_week_0)) AS retention_1_week_active_in_week_0
 FROM
-    \`moz-fx-data-derived-datasets.telemetry.firefox_desktop_exact_mau28_by_dimensions_v1\`
+telemetry.smoot_usage_all_mtr_v1
 ${WHERE}
 GROUP BY
-    submission_date,
-    id_bucket
+date, id_bucket
 ORDER BY
-    submission_date,
-    id_bucket;
-    `)
-}
+date;
+`)
+    }
 
 const fakeData = () => {
     let value = 100;

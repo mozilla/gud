@@ -15,15 +15,16 @@ export function createMultiselectStore(list) {
 }
 
 export function createListStore(list) {
-    return function(startingValue=list[0].key) {
+    const filteredList = list.filter((l) => !(l.itemType))
+    return function(startingValue=filteredList[0].key) {
         const { subscribe, set } = writable(startingValue)
         return {
             subscribe,
             set: (v) => {
-                if (!list.map(l=>l.key).includes(v)) throw Error(`${v} not recognized in store`);
+                if (!filteredList.map(l=>l.key).includes(v)) throw Error(`${v} not recognized in store`);
                 set(v);
             },
-            options: () => list
+            options: () => filteredList
         }
     }
 }

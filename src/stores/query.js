@@ -19,7 +19,7 @@ const toQueryStringParts = ($store,i) => {
     if (opt.type === 'multi') {
         return `${opt.key}=${encodeURIComponent(JSON.stringify($store.sort()))}`
     }
-    else  return `${opt.key}=${$store.toString()}`
+    else  return `${opt.key}=${encodeURIComponent($store)}`
 }
 
 const queryString = derived(
@@ -40,7 +40,7 @@ export const isNotDefaultQueryset = derived(allStores, stores => {
         const opt = allOptions[i];
         if (opt.type === 'multi') return $store.length === 0
         else if (opt.type === 'date') return $store === ''
-        else return $store === opt.values[0].key
+        else return $store === opt.values.filter(v=>!(v.itemType))[0].key
     })
 })
 
@@ -49,7 +49,7 @@ export const resetQuery = () => {
         const opt = allOptions[i]
         if (opt.type === 'multi') store.set([])
         else if (opt.type === 'date') store.set('')
-        else store.set(opt.values[0].key);
+        else store.set(opt.values.filter(v=>!(v.itemType))[0].key);
     })
     rawStart.set('');
     rawEnd.set('')

@@ -40,7 +40,7 @@
 	$: if (visible) {
 		updateQueryString($currentQuery);
 	}
-
+	
 </script>
 
 <main>

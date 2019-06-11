@@ -20,7 +20,8 @@ const allOptions =   [
 const params = new URLSearchParams(window.location.search);
 
 allOptions.forEach(opt => {
-    if (opt.type === 'multi') {
+    if (opt.itemType === 'divider') {
+    } else if (opt.type === 'multi') {
         const queryValue = params.get(opt.key) || '[]';
         opt.setter = createMultiselectStore(opt.values)(JSON.parse(queryValue))
     }

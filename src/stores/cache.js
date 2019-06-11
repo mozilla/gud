@@ -18,14 +18,25 @@ export const queryIsCached = derived([queryString, queryStringWithoutDates, cach
     else return true;
 })
 
+const removeLocalParams = (obj) => {
+    const toRemove = Object.keys(obj).filter(f => {
+        return Object.keys(options).filter(opt => options[opt].onlyLocal).map(opt=>options[opt].key).includes(f)
+    })
+
+    toRemove.forEach(r=>delete obj[r])
+}
+
 const dataset = derived([cacheObj, queryIsCached, queryStringWithoutDates, queryParameters, start, end], async ([$cacheObj, $isCached, $q, $qp, $start, $end]) => {
     if (!$isCached) {
+        // remove unusd?
+        const query = Object.assign({}, $qp)
+        //removeLocalParams(query)
+        console.log(query)
         if ($qp.mode === 'explore') {
-            $cacheObj[$q] = await fetchExploreData($qp);
+            $cacheObj[$q] = await fetchExploreData(query);
         } else {
             $cacheObj[$q] = 'coming soon.'
         }
-        
     }
     // local filters:
     let data = $cacheObj[$q]

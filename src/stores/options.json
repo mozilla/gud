@@ -2,12 +2,14 @@
     "startOptions": {
         "label": "Start",
         "type": "date",
-        "key": "start"
+        "key": "start",
+        "onlyLocal" : true
     },
     "endOptions": {
         "label": "End",
         "type": "date",
-        "key": "end"
+        "key": "end",
+        "onlyLocal" : true
     },
     "modeOptions": {
         "label": "Mode",
@@ -20,33 +22,59 @@
     ]},
     "usageCriteriaOptions": {
         "label": "Usage Criteria",
-        "key": "usageCriteria",
+        "key": "usage",
         "type": "single",
         "values": [
-        {   
-            "label":"Any Desktop Activity",
-            "key": "any-desktop",
-            "description": "sodnfosfidosfndiosnfodifnsodifnsdoifn"
-        }, 
         {
-            "label": "Any Fennec Activity",
-            "key": "any-fennec",
-            "description": "sodnfosfidosfndiosnfodifnsodifnsdoifn"
+            "itemType": "section",
+            "label": "Firefox (Desktop)"
+        },
+        {   
+            "label":"Any Firefox Activity",
+            "key": "Any Firefox Desktop Activity",
+            "shortDescription": "The profile has sent a telemetry ping from Firefox Desktop on the day in question"
+        }, 
+        { 
+            "label": "New Firefox Profile Created",
+            "key": "New Firefox Profile Created",
+            "shortDescription": "The count of the number of new profiles created on the day in question"
         },
         { 
-            "label": "FxA Active",
-            "key": "fxa-active",
-            "description": "sodnfosfidosfndiosnfodifnsodifnsdoifn"
+            "label": "Visited 5 URIs",
+            "key": "Firefox Desktop Visited 5 URI",
+            "shortDescription": "The profile sent a main ping on the day in question that indicates that the developer tools feature was activated at least once"
+        },
+        { 
+            "label": "Opened DevTools",
+            "key": "Firefox Desktop Opened Dev Tools",
+            "shortDescription": "The profile sent a main ping on the day in question that indicates that the profile opened at least 5 URIs"
+        },
+        {
+            "itemType": "divider"
+        },
+        {
+            "itemType": "section",
+            "label": "Fennec (Android)"
+        },
+        {
+            "label": "Any Fennec Android Activity",
+            "key": "Any Fennec Android Activity",
+            "shortDescription": "The profile has sent a telemetry ping from Fennec Android on the day in question"
+        },
+        { 
+            "label": "New Fennec Android Profile Created",
+            "key": "New Fennec Android Profile Created",
+            "shortDescription": "The count of the number of new profiles created on the day in question"
         }
     ]},
     "platformOptions": {
-        "label": "Platform",
-        "key": "platform",
+        "label": "OS",
+        "key": "os",
         "type": "multi",
         "values": [
-        {"label": "Windows", "key": "win"},
-        {"label": "Mac", "key": "mac"},
-        {"label": "Linux", "key": "linux"}
+        {"label": "Windows", "key": "Windows_NT"},
+        {"label": "Mac", "key": "Darwin"},
+        {"label": "Linux", "key": "Linux"}
     ]},
     "countryOptions": {
         "label": "Country",

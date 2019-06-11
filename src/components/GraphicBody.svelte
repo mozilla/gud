@@ -18,6 +18,7 @@ if ($mode === 'explore') {
     metrics = Object.keys(data[0]).filter(m => {
         return !m.includes('_low') && !m.includes('_high') && !m.includes('date')
     })
+    // FIXME: add filter when we are not on metric=all
     outdata = metrics.map(m => {
         return {
             metric: m, 
