@@ -1,6 +1,8 @@
 <script>
 
 export let title;
+export let rolloverLabel = 'value';
+export let subtitle;
 export let size;
 export let data;
 export let xMin;
@@ -141,6 +143,18 @@ $: years = timeYear.range(...xScale.domain())
 </script>
 
 <style>
+h3 {
+    margin: 0;
+}
+label {
+    margin-top: -4px;
+    font-size: 12px;
+    display: block;
+    text-align: center;
+    font-weight: 300;
+    opacity: .8;
+    text-transform: uppercase;
+}
 
 .graphic-container {
     display: block;
@@ -190,6 +204,7 @@ svg.large-graph {
     class=graphic-container
 >
     <h3>{title}</h3>
+    <label>{subtitle || ""}</label>
     <svg
         bind:this={graph}
         on:mousemove="{e => coords.set({ x: e.clientX, y: e.offsetY })}"
@@ -303,7 +318,7 @@ svg.large-graph {
         
         <text opacity=".8" font-size='12' text-anchor='start' x={PL.left} y={12}>
             {#if mouseYValue !== undefined}
-                <tspan font-weight="bold" fill='blue'> – </tspan> <tspan> {title} </tspan><tspan>{`   ${yFormat(mouseYValue)}   `}    </tspan>
+                <tspan font-weight="bold" fill='blue'> – </tspan> <tspan> {rolloverLabel} </tspan><tspan>{`   ${yFormat(mouseYValue)}   `}    </tspan>
             {/if}
         </text>
         <text opacity=".8" font-size='12' text-anchor='end' x={PL.right} y={12}>

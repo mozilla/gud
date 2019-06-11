@@ -16,6 +16,10 @@ let metricSet = optionSet.metricOptions.setter;
 const start = optionSet.startOptions.setter;
 const end = optionSet.endOptions.setter;
 
+const getMetricInformation = (m) => {
+    return optionSet.metricOptions.values.find(v=> v.key === m);
+}
+
 if ($mode === 'explore') {
     // this is where we filter?
     metrics = Object.keys(data[0]).filter(m => {
@@ -27,8 +31,12 @@ if ($mode === 'explore') {
     })
     // FIXME: add filter when we are not on metric=all
     outdata = metrics.map(m => {
+        const metricInfo = getMetricInformation(m)
         return {
-            metric: m, 
+            metric: m,
+            title: metricInfo.label,
+            rolloverLabel: metricInfo.short,
+            subtitle: metricInfo.subtitle,
             data: data.map(d=> {
                 const di = {date: d.date}
                 di.value = d[m]
@@ -75,7 +83,14 @@ if ($mode === 'explore') {
             class:one-graphic={$metricSet !== 'all'}
         >
             {#each outdata as dataset, i}
-            <LineChartWithCI size={$metricSet === 'all' ? 'small' : 'large'} title={dataset.metric} data={dataset.data} xMin={$start} xMax={$end} />
+            <LineChartWithCI 
+                size={$metricSet === 'all' ? 'small' : 'large'} 
+                title={dataset.title} 
+                subtitle={dataset.subtitle}
+                rolloverLabel={dataset.rolloverLabel}
+                data={dataset.data} 
+                xMin={$start} 
+                xMax={$end} />
             {/each}
         </div>
     {:else}

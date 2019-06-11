@@ -86,32 +86,50 @@
                 "itemType": "divider"
             },
             {
-                "label": "Monthly Active Users", "key": "mau", "short": "MAU", "agg": "sum",
+                "label": "Monthly Active Users", 
+                "subtitle": "Count of Unique Profiles",
+                "shortsub": "count",
+                "key": "mau", "short": "MAU", "agg": "sum",
                 "shortDescription": "The number of unique profiles that met the usage criterion at least once during the 28-day window ending on the specified day",
                 "format": "count"
             },
             {
-                "label": "Weekly Active Users", "key": "wau", "short": "WAU", "agg": "sum",
+                "label": "Weekly Active Users", 
+                "subtitle": "Count of Unique Profiles",
+                "shortsub": "count",
+                "key": "wau", "short": "WAU", "agg": "sum",
                 "shortDescription": "The number of unique profiles that met the usage criterion at least once during the 7-day window ending on the specified day",
                 "format": "count"
             },
             {
-                "label": "Daily Active Users", "key": "dau", "short": "DAU", "agg": "sum",
+                "label": "Daily Active Users", 
+                "subtitle": "Count of Unique Profiles",
+                "shortsub": "count",
+                "key": "dau", "short": "DAU", "agg": "sum",
                 "shortDescription": "The number of unique profiles that meet the usage criterion on each day",
                 "format": "count"
             },
             {
-                "label": "Intensity", "key": "intensity", "short": "intensity", "agg": "mean",
+                "label": "Intensity",
+                "subtitle": "Ratio of Days Used",
+                "shortsub": "ratio",
+                "key": "intensity", "short": "intensity", "agg": "mean",
                 "shortDescription": "Among profiles that meet the usage criterion at least once in the week ending on the date specified, how many days on average do they meet the usage criterion during that one-week window",
                 "format": "ratio"
             },
             {
-                "label": "1-Week New Profile Retention", "key": "retention_1_week_new_profile", "short": "1-wk. retention %", "agg": "mean",
+                "label": "1-Week New Profile Retention", 
+                "subtitle": "Perc. Retained",
+                "shortsub": "Perc.",
+                "key": "retention_1_week_new_profile", "short": "1-wk. retention %", "agg": "mean",
                 "shortDescription": "Among new profiles created on the day specified, what proportion (out of 1) meet the usage criterion during the week beginning one week after the day specified",
                 "format": "percentage"
             },
             {
-                "label": "1-Week Retention (Usage Criterion Population)", "key": "retention_1_week_active_in_week_0", "short": "1-wk. retention %", "agg": "mean",
+                "label": "1-Week Retention", 
+                "subtitle": "Perc. Retained (Usage Criterion Population)",
+                "shortsub": "Perc.",
+                "key": "retention_1_week_active_in_week_0", "short": "1-wk. retention %", "agg": "mean",
                 "shortDescription": "Among profiles that were active in the specified usage criterion at least once in the week starting on the specified day, what proportion (out of 1) meet the usage criterion during the following week",
                 "format": "percentage"
             }
