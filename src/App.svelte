@@ -6,7 +6,6 @@
 	import NavMenu from './components/NavMenu.svelte';
 	import ControlModes from './components/ControlModes.svelte';
 	import GraphicBody from './components/GraphicBody.svelte';
-	import Singleselector from './components/Singleselector.svelte'
 	import Multiselector from './components/Multiselector.svelte';
 	import DatePicker from './components/DatePicker.svelte';
 	import ErrorMessage from './components/ErrorMessage.svelte';
