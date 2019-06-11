@@ -2,6 +2,8 @@
 import { onMount } from 'svelte'
 import { writable } from 'svelte/store';
 import { slide } from 'svelte/transition';
+import SelectedCheckbox from './SelectedCheckbox.svelte';
+import BlankCheckbox from './BlankCheckbox.svelte';
 import Popper from 'popper.js'
 
 export let title;
@@ -176,13 +178,13 @@ ul.active {
     margin:0;
     padding-left: var(--list-item-pad);
     padding-right: var(--list-item-pad);
-    padding-top: calc(var(--list-item-pad) / 2);
-    padding-bottom: calc(var(--list-item-pad) / 2);
+    padding-top: calc(var(--list-item-pad) );
+    padding-bottom: calc(var(--list-item-pad) );
     cursor: pointer;
     display: grid;
     grid-template-columns: [status] var(--list-item-status-size) [content] auto [right] var(--list-item-status-size);
     min-height: var(--list-item-status-size);
-    grid-gap: calc(var(--list-item-pad) / 2);
+    grid-gap: calc(var(--list-item-pad));
     transition: 50ms;
     align-items: start;
     -webkit-user-select: none;  /* Chrome all / Safari all */
@@ -198,6 +200,7 @@ ul.active {
 .dropdown-status {
     text-align: center;
     font-size: 14px;
+    opacity: .75;
 }
 
 .dropdown-content {
@@ -319,7 +322,7 @@ ul.active {
                 {#if $setter.length}
                     clear {$setter.length} item{$setter.length > 1 ? 's' : ''}
                 {:else}
-                    nothing selected
+                    default: showing all
                 {/if}
             </div>
         </li>
@@ -331,7 +334,21 @@ ul.active {
                 <div class=menu-section>{label}</div>
             {:else}
                 <li on:click={() => handleSelection(key)} class:selected={$setter.includes(key)}>
-                    <div class=dropdown-status>{$setter.includes(key) ? '✓' : ' '}</div>
+                    <!-- <div class=dropdown-status>{$setter.includes(key) ? '✓' : ' '}</div> -->
+                    <div class=dropdown-status>
+                        {#if selectType === 'multi'}
+                            <div 
+                                class=dropdown-status
+                            >
+                            <svelte:component this={$setter.includes(key) ? SelectedCheckbox : BlankCheckbox} />
+                        </div>
+                        {:else}
+                            <div 
+                                class=dropdown-status
+
+                            >{$setter.includes(key) ? '✓' : ' '}</div>
+                        {/if}
+                    </div>
                     <div class=dropdown-content>
                         {label}
                         {#if shortDescription}

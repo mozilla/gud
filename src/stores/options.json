@@ -121,7 +121,7 @@
                 "label": "1-Week New Profile Retention", 
                 "subtitle": "Perc. Retained",
                 "shortsub": "Perc.",
-                "key": "retention_1_week_new_profile", "short": "1-wk. retention %", "agg": "mean",
+                "key": "retention_1_week_new_profile", "short": "1-wk. retention", "agg": "mean",
                 "shortDescription": "Among new profiles created on the day specified, what proportion (out of 1) meet the usage criterion during the week beginning one week after the day specified",
                 "format": "percentage"
             },
@@ -129,7 +129,7 @@
                 "label": "1-Week Retention", 
                 "subtitle": "Perc. Retained (Usage Criterion Population)",
                 "shortsub": "Perc.",
-                "key": "retention_1_week_active_in_week_0", "short": "1-wk. retention %", "agg": "mean",
+                "key": "retention_1_week_active_in_week_0", "short": "1-wk. retention", "agg": "mean",
                 "shortDescription": "Among profiles that were active in the specified usage criterion at least once in the week starting on the specified day, what proportion (out of 1) meet the usage criterion during the following week",
                 "format": "percentage"
             }
