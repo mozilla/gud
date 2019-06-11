@@ -37,10 +37,11 @@ if ($mode === 'explore') {
             title: metricInfo.label,
             rolloverLabel: metricInfo.short,
             subtitle: metricInfo.subtitle,
+            format: metricInfo.format,
             data: data.map(d=> {
                 const di = {date: d.date}
                 di.value = d[m]
-                di.lower = d[`${m}_low`]
+                di.lower = Math.max(d[`${m}_low`], 0)
                 di.upper = d[`${m}_high`]
                 return di
             })
@@ -88,6 +89,7 @@ if ($mode === 'explore') {
                 title={dataset.title} 
                 subtitle={dataset.subtitle}
                 rolloverLabel={dataset.rolloverLabel}
+                yType={dataset.format}
                 data={dataset.data} 
                 xMin={$start} 
                 xMax={$end} />

@@ -3,6 +3,7 @@
 export let title;
 export let rolloverLabel = 'value';
 export let subtitle;
+export let yType;
 export let size;
 export let data;
 export let xMin;
@@ -25,7 +26,9 @@ const magnitude = (n) => {
     return Math.pow(10,order);
 }
 
-const makeFormatter = (maxValue) => {
+const makeFormatter = (maxValue, fmt) => {
+    if (fmt === 'percentage') return format('.2%')
+    if (fmt === 'ratio') return format('.2f')
     return (v) => format('~s')(v)
 }
 
@@ -74,7 +77,7 @@ const PL = {
 
 const MAX_Y =  Math.max(...data.map(v=>v.upper))
 
-const yFormat = makeFormatter(MAX_Y);
+const yFormat = makeFormatter(MAX_Y, yType);
 
 $: xScale = scaleLinear().domain([
         xMin !== '' ? new Date(xMin) : Math.min(...data.map(v=>v.date)), 
@@ -82,7 +85,7 @@ $: xScale = scaleLinear().domain([
     .range([PL.left,PL.right])
 
 
-$: yScale = scaleLinear().domain([0, MAX_Y])
+$: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : MAX_Y])
     .range([PL.bottom, PL.top])
 
 $: path = `M${data.map(p => `${xScale(p.date)},${yScale(p.value)}`).join('L')}`;
@@ -117,7 +120,7 @@ onMount(() => {
             $coords.y = yScale(yPoint.value)
             //mouseXValue = `${~~xScale.invert(x)}  `
             mouseXValue = xRollover(new Date(xScale.invert(x)))
-            mouseYValue = `  ${~~yPoint.value}`
+            mouseYValue = `  ${yPoint.value}`
         } else {
             $coords.x = -150;
             $coords.y = -150;
