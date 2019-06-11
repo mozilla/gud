@@ -31,7 +31,6 @@ const dataset = derived([cacheObj, queryIsCached, queryStringWithoutDates, query
         // remove unusd?
         const query = Object.assign({}, $qp)
         //removeLocalParams(query)
-        console.log(query)
         if ($qp.mode === 'explore') {
             $cacheObj[$q] = await fetchExploreData(query);
         } else {

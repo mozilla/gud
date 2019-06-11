@@ -8,7 +8,7 @@ export let xMax;
 import { onMount } from 'svelte';
 import { select, mouse } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
-import {precisionPrefix, formatPrefix} from 'd3-format'
+import {precisionPrefix, formatPrefix, format} from 'd3-format'
 import { timeMonth, timeYear } from 'd3-time'
 import { timeFormat } from 'd3-time-format'
 import { area } from 'd3-shape';
@@ -16,11 +16,23 @@ import { fly, fade } from 'svelte/transition';
 
 import { writable } from 'svelte/store';
 
-const yFormat = (v) => {
-    var p = precisionPrefix(1e5, 1.3e6),
-    f = formatPrefix("." + p, 1.3e6);
-    return f(v)
+const magnitude = (n) => {
+    const order = Math.floor(Math.log(n) / Math.LN10
+                       + 0.000000001); // because float math sucks like that
+    return Math.pow(10,order);
 }
+
+const makeFormatter = (maxValue) => {
+    return (v) => format('~s')(v)
+}
+
+
+
+// const yFormat = (v) => {
+//     var p = precisionPrefix(1e5, 1.3e6),
+//     f = formatPrefix("." + p, 1.3e6);
+//     return f(v)
+// }
 
 const markers = [
     {label: '50', date: new Date('2016-11-15')},
@@ -57,13 +69,17 @@ const PL = {
     bottom: H - M.bottom - M.buffer
 }
 
+const MAX_Y =  Math.max(...data.map(v=>v.upper))
+
+const yFormat = makeFormatter(MAX_Y);
+
 $: xScale = scaleLinear().domain([
         xMin !== '' ? new Date(xMin) : Math.min(...data.map(v=>v.date)), 
         xMax !== '' ? new Date(xMax) : Math.max(...data.map(v=>v.date))])
     .range([PL.left,PL.right])
 
 
-$: yScale = scaleLinear().domain([0, Math.max(...data.map(v=>v.upper))])
+$: yScale = scaleLinear().domain([0, MAX_Y])
     .range([PL.bottom, PL.top])
 
 $: path = `M${data.map(p => `${xScale(p.date)},${yScale(p.value)}`).join('L')}`;
@@ -278,7 +294,7 @@ svg {
         
         <text opacity=".8" font-size='12' text-anchor='start' x={PL.left} y={12}>
             {#if mouseYValue !== undefined}
-                <tspan font-weight="bold" fill='blue'> – </tspan> <tspan> MAU </tspan><tspan>{`   ${yFormat(mouseYValue)}   `}    </tspan>
+                <tspan font-weight="bold" fill='blue'> – </tspan> <tspan> {title} </tspan><tspan>{`   ${yFormat(mouseYValue)}   `}    </tspan>
             {/if}
         </text>
         <text opacity=".8" font-size='12' text-anchor='end' x={PL.right} y={12}>
