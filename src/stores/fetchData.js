@@ -1,5 +1,8 @@
-// this is where we jackknife
+import optionSet from './options.json'
 
+const getMetricInformation = (m) => {
+    return optionSet.metricOptions.values.find(v=> v.key === m);
+}
 
 function erfinv(x){
     var z;
@@ -47,7 +50,7 @@ function array_avg(arr) {
     return array_sum(arr) / arr.length;
 }
 
-function sum_buckets_with_ci(counts_per_bucket) {
+function sum_buckets_with_ci(counts_per_bucket, agg='sum') {
     //counts_per_bucket = counts_per_bucket.map(x => parseInt(x));
     var n = counts_per_bucket.length;
     var total = array_sum(counts_per_bucket);
@@ -59,12 +62,17 @@ function sum_buckets_with_ci(counts_per_bucket) {
     var std_err = n * bucket_std_err;
     var z_score = Math.sqrt(2.0) * erfinv(0.90);
     // shouldn't these be mean?
-    var high = total + z_score * std_err;
-    var low = total - z_score * std_err;
+    let value;
+    if (agg === 'sum') value = total;
+    else if (agg === 'mean') value = mean;
+    var high = value + z_score * std_err;
+    var low = value - z_score * std_err;
     return {
-        total,
+        value,
+        sum: total,
         low: low,
         high: high,
+        margin: z_score * std_err,
         "pm": high - total,
         "nbuckets": n,
         mean
@@ -84,9 +92,10 @@ function convertExploreData(inputs) {
     const output = Object.entries(byDate).map(([date, points]) => {
         let pt = {date: new Date(date)}
         metrics.forEach(m => {
+            const info = getMetricInformation(m)
             const metricPoints =  points.map(p=>p[m])
-            const CIs = sum_buckets_with_ci(metricPoints)
-            pt[m] = CIs.total;
+            const CIs = sum_buckets_with_ci(metricPoints, info.agg);
+            pt[m] = CIs.value;//CIs[info.agg==='sum' ? 'total' : 'mean'];
             pt[`${m}_low`] = CIs.low;
             pt[`${m}_high`] = CIs.high;
         })
