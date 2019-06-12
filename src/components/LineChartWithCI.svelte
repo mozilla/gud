@@ -357,6 +357,7 @@ svg.large-graph {
                     fill='rgba(0,0,100,.05)'
                 />
                 <text
+                    in:fade
                     x={xScale(mouseVersionValue.date) - M.buffer}
                     y={PL.bottom}
                     font-size=10
