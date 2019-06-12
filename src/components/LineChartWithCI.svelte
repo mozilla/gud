@@ -126,8 +126,11 @@ function setPoint(pt) {
     else $globalX = undefined
 }
 
+// this performs the rollover if $globalX has meaningfully changed.
+// note: this functionality happens to all graphs because $globalX is
+// a store shared in all component namespaces.
 $: if ($globalX) {
-    yPoint = last(data.filter(d =>  d.date <= $globalX));
+    yPoint = data.find(d => d.date.getTime() === $globalX.getTime())//last(data.filter(d =>  d.date <= $globalX));
     $coords.x = xScale(yPoint.date);
     $coords.y = yScale(yPoint.value);
     mouseXValue = xRollover(yPoint.date);
