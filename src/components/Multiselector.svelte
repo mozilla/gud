@@ -179,7 +179,7 @@ ul.active {
     padding-left: var(--list-item-pad);
     padding-right: var(--list-item-pad);
     padding-top: calc(var(--list-item-pad) );
-    padding-bottom: calc(var(--list-item-pad) w);
+    padding-bottom: calc(var(--list-item-pad));
     cursor: pointer;
     display: grid;
     grid-template-columns: [status] var(--list-item-status-size) [content] auto [right] var(--list-item-status-size);
