@@ -14,12 +14,14 @@ import { timeMonth, timeYear } from 'd3-time'
 import { timeFormat } from 'd3-time-format'
 import { area } from 'd3-shape';
 
+import Tooltip from './Tooltip.svelte'
 import { majorReleases } from '../stores/productDetails'
 
 // props
 export let title;
 export let rolloverLabel = 'value';
 export let subtitle;
+export let shortDescription;
 export let yType;
 export let size;
 export let data;
@@ -42,13 +44,6 @@ const makeFormatter = (maxValue, fmt) => {
     if (fmt === 'ratio') return format('.2f')
     return (v) => format('~s')(v)
 }
-// generate this.
-// const markers = [
-//     {label: '50', date: new Date('2016-11-15')},
-//     {label: '55', date: new Date('2017-08-08')},
-//     {label: '60', date: new Date('2018-05-09')},
-//     {label: '65', date: new Date('2019-01-28')},
-// ]
 
 const W = size === 'small' ? 350 : 750;
 const H = size==='small' ? W * .6 : W*.5;
@@ -198,36 +193,61 @@ $: xTicks = timeMonth.range(...xScale.domain(), 3)
 
 $: years = timeYear.range(...xScale.domain())
 
+// handle scale size.
+
 </script>
 
 <style>
-h3 {
-    margin: 0;
-}
-label {
-    margin-top: -4px;
-    font-size: 12px;
-    display: block;
-    text-align: center;
-    font-weight: 300;
-    opacity: .8;
-    text-transform: uppercase;
-}
+
+
 
 .graphic-container {
     display: block;
 }
 
-.graphic-container h3 {
+.graphic-container-header {
+    padding-left: 50px;
+    padding-right: 70px;
+    display: grid;
+    align-items: center;
+    grid-template-columns: auto 20px;
+    grid-template-rows: auto;
+    grid-auto-flow: column;
+    grid-template-areas: 
+        "title    tooltip"
+        "subtitle subtitle"
+}
+
+.graphic-container-header.large-header {
+    max-width: 660px;
+}
+
+.graphic-container-header h3 {
+    grid-area: title;
     margin:0;
     padding:0;
-    text-align:center;
+    text-align:left;
     font-weight: 300;
+    font-size:16px;
+}
+
+.graphic-container-header .graph-tooltip {
+    grid-area: tooltip;
+}
+
+.graphic-container-header label {
+    grid-area: subtitle;
+    margin-top: -4px;
+    font-size: 11px;
+    display: block;
+    text-align: left;
+    font-weight: 300;
+    opacity: .8;
+    text-transform: uppercase;
 }
 
 svg {
     display: block;
-    margin: auto;
 }
 
 svg.small-graph {
@@ -261,8 +281,13 @@ svg.large-graph {
 <div
     class=graphic-container
 >
-    <h3>{title}</h3>
-    <label>{subtitle || ""}</label>
+    <div class=graphic-container-header class:large-header={size==='large'}>
+        <h3>{title}</h3>
+        <div class='graph-tooltip'>
+            <Tooltip msg={shortDescription} />
+        </div>
+        <label>{subtitle || ""}</label>
+    </div>
     <svg
         bind:this={graph}
         on:mousemove="{e => coords.set({ x: e.clientX, y: e.offsetY })}"

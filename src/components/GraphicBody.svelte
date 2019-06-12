@@ -37,7 +37,8 @@ if ($mode === 'explore') {
             metric: m,
             title: metricInfo.label,
             rolloverLabel: metricInfo.short,
-            subtitle: metricInfo.subtitle,
+            shortDescription: metricInfo.shortDescription,
+            subtitle: metricInfo.shortsub,
             format: metricInfo.format,
             data: data.map(d=> {
                 const di = {date: d.date}
@@ -89,6 +90,7 @@ if ($mode === 'explore') {
                 size={$metricSet === 'all' ? 'small' : 'large'} 
                 title={dataset.title} 
                 subtitle={dataset.subtitle}
+                shortDescription={dataset.shortDescription}
                 rolloverLabel={dataset.rolloverLabel}
                 yType={dataset.format}
                 data={dataset.data} 
