@@ -26,6 +26,15 @@ export let data;
 export let xMin;
 export let xMax;
 
+const daysBetween = (firstDate, secondDate) => {
+    const oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+    return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+}
+
+
+
+
+
 const magnitude = (n) => {
     const order = Math.floor(Math.log(n) / Math.LN10
                        + 0.000000001); // because float math sucks like that
@@ -55,7 +64,7 @@ const xRollover = timeFormat('%b %d, %Y')
 const M = {
     left:45,
     right:45,
-    top:40,
+    top:45,
     bottom:40,
     buffer:5
 }
@@ -114,6 +123,9 @@ let last = (arr) => arr[arr.length-1]
 
 let mouseXValue = undefined;
 let mouseYValue = undefined;
+let mouseYLow = undefined;
+let mouseYHigh = undefined;
+let mouseVersionValue = undefined;
 
 let localX;
 let yPoint;
@@ -135,11 +147,26 @@ $: if ($globalX) {
     $coords.y = yScale(yPoint.value);
     mouseXValue = xRollover(yPoint.date);
     mouseYValue = `  ${yPoint.value}`
+    mouseYLow = yPoint.lower;
+    mouseYHigh = yPoint.upper;
+    mouseVersionValue = last($majorReleases.filter(release => {
+        return release.date <= yPoint.date;
+    }))
+    if (mouseVersionValue) {
+        mouseVersionValue.end = $majorReleases.find(release => {
+            return release.date > mouseVersionValue.date;
+        })
+        if (mouseVersionValue.end) mouseVersionValue.end = mouseVersionValue.end.date
+    }
+    
 } else {
     $coords.x = -150;
     $coords.y = -150;
-    mouseXValue = undefined
-    mouseYValue = undefined
+    mouseXValue = undefined;
+    mouseYValue = undefined;
+    mouseYLow = undefined;
+    mouseYHigh = undefined;
+    mouseVersionValue = undefined;
 }
 
 onMount(() => {
@@ -163,6 +190,8 @@ onMount(() => {
         $coords.y = -150;
         mouseXValue = undefined
         mouseYValue = undefined
+        mouseYLow = undefined;
+        mouseYHigh = undefined;
         setPoint(undefined)
     })
 })
@@ -317,6 +346,25 @@ svg.large-graph {
                     
                 {/each}
         </g>
+        <g class=plot-background>
+            {#if mouseVersionValue && mouseVersionValue.end && mouseVersionValue}
+                <rect 
+                    in:fade
+                    x={xScale(mouseVersionValue.date)}
+                    y={PL.top}
+                    width={xScale(mouseVersionValue.end) - xScale(mouseVersionValue.date)}
+                    height={A.bottom - PL.top}
+                    fill='rgba(0,0,100,.05)'
+                />
+                <text
+                    x={xScale(mouseVersionValue.date) - M.buffer}
+                    y={PL.bottom}
+                    font-size=10
+                    opacity='.5'
+                    text-anchor='end'
+                >{parseInt(mouseVersionValue.version)}</text>
+            {/if}
+        </g>
         <g class=plot-area>
             <path in:fade={{delay: 400}} d={areaShape(data)}  fill='rgba(0,0,0,.1)' />
             <path class:loaded={available} class=path-line d={path} />
@@ -351,12 +399,25 @@ svg.large-graph {
         
         <text opacity=".8" font-size='12' text-anchor='start' x={PL.left} y={12}>
             {#if mouseYValue !== undefined}
-                <tspan font-weight="bold" fill='blue'> – </tspan> <tspan> {rolloverLabel} </tspan><tspan>{`   ${yFormat(mouseYValue)}   `}    </tspan>
+                <tspan font-weight="bold" fill='blue'> – </tspan><tspan>{`   ${yFormat(mouseYValue)}   `}    </tspan>
+            {/if}
+        </text>
+        <text opacity=".6" font-size='10' text-anchor='start' x={PL.left} y={26}>
+            {#if mouseYLow !== undefined}
+                <tspan font-weight="bold" fill='black'> L </tspan><tspan fill='rgb(0,0,0,.7)'>{`   ${yFormat(mouseYLow)}   `}    </tspan>
+            {/if}
+            {#if mouseYHigh !== undefined}
+                <tspan font-weight="bold" > H </tspan><tspan fill='rgb(0,0,0,.9)'>{`   ${yFormat(mouseYHigh)}   `}    </tspan>
             {/if}
         </text>
         <text opacity=".8" font-size='12' text-anchor='end' x={PL.right} y={12}>
             {#if mouseXValue !== undefined}
                 <tspan>{`    ${mouseXValue}   `} </tspan>
+            {/if}
+        </text>
+        <text font-weight=bold opacity=".4" font-size='10' text-anchor='end' x={PL.right} y={26}>
+            {#if mouseVersionValue !== undefined && yPoint !== undefined}
+                <tspan>{`    ${parseInt(mouseVersionValue.version)} – day ${daysBetween(yPoint.date, mouseVersionValue.date)}   `} </tspan>
             {/if}
         </text>
     </svg>
