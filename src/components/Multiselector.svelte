@@ -179,7 +179,7 @@ ul.active {
     padding-left: var(--list-item-pad);
     padding-right: var(--list-item-pad);
     padding-top: calc(var(--list-item-pad) );
-    padding-bottom: calc(var(--list-item-pad) );
+    padding-bottom: calc(var(--list-item-pad) w);
     cursor: pointer;
     display: grid;
     grid-template-columns: [status] var(--list-item-status-size) [content] auto [right] var(--list-item-status-size);
@@ -298,8 +298,8 @@ ul.active {
     {/if}
     {#each $setter as key (key)}
         <li>
-            {options.find(opt => opt.key === key).label}
             <span class=remove-item on:click={() => removeSelection(key)}>╳</span>
+            {options.find(opt => opt.key === key).label}
         </li>
     {/each}
 </ul>
