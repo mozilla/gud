@@ -32,14 +32,6 @@ const makeFormatter = (maxValue, fmt) => {
     return (v) => format('~s')(v)
 }
 
-
-
-// const yFormat = (v) => {
-//     var p = precisionPrefix(1e5, 1.3e6),
-//     f = formatPrefix("." + p, 1.3e6);
-//     return f(v)
-// }
-
 const markers = [
     {label: '50', date: new Date('2016-11-15')},
     {label: '55', date: new Date('2017-08-08')},
@@ -115,8 +107,7 @@ onMount(() => {
         const [x, y] = mouse(svg.node())
         if (x >= PL.left && x <= PL.right) {
             yPoint = last(data.filter(d => d.date <= xScale.invert(x)))
-            //$coords.x = xScale(~~xScale.invert(x))
-            $coords.x = xScale(new Date(xScale.invert(x)))
+            $coords.x = xScale(yPoint.date)
             $coords.y = yScale(yPoint.value)
             //mouseXValue = `${~~xScale.invert(x)}  `
             mouseXValue = xRollover(new Date(xScale.invert(x)))
