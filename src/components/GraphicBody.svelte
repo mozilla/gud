@@ -1,10 +1,10 @@
 <script>
+import {fly} from 'svelte/transition'
+
 import LineChartWithCI from './LineChartWithCI.svelte'
 import { mode } from '../stores/stores'
 import { modeIsImplemented } from '../stores/stores'
-import {fly} from 'svelte/transition'
 import optionSet from '../stores/options.json'
-// should this read the store?
 
 export let data;
 
@@ -29,6 +29,7 @@ if ($mode === 'explore') {
         if ($metricSet === 'all') return true
         return $metricSet === m
     })
+    // get start an end date of data, and filter accordingly?
     // FIXME: add filter when we are not on metric=all
     outdata = metrics.map(m => {
         const metricInfo = getMetricInformation(m)

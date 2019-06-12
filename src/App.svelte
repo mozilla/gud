@@ -18,7 +18,6 @@
 	import cache, { queryIsCached } from './stores/cache'
 	import currentQuery, { isNotDefaultQueryset, resetQuery } from './stores/query'
 	import optionSet from './stores/options.json'
-	import { majorReleases } from './stores/productDetails'
 
 	// props
 	export let name;

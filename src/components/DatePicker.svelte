@@ -63,7 +63,7 @@ $: days = daysBetween(currentStart, currentEnd);
 // let's limit the total major releaess of FF?
 
 let releaseSet = []
-$: releaseSet = $majorReleases === undefined ? [] : $majorReleases.filter(([_name, {date}]) => {
+$: releaseSet = $majorReleases === undefined ? [] : $majorReleases.filter(({date}) => {
     return ($start !== '' ? date >= $start : true) && ($end !== '' ? date <= $end : true)
 })
 

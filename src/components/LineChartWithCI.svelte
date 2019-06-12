@@ -1,5 +1,18 @@
 <script>
 
+import { onMount } from 'svelte';
+import { writable } from 'svelte/store';
+import { fly, fade } from 'svelte/transition';
+import { select, mouse } from 'd3-selection';
+import { scaleLinear } from 'd3-scale';
+import {precisionPrefix, formatPrefix, format} from 'd3-format'
+import { timeMonth, timeYear } from 'd3-time'
+import { timeFormat } from 'd3-time-format'
+import { area } from 'd3-shape';
+
+import { majorReleases } from '../stores/productDetails'
+
+// props
 export let title;
 export let rolloverLabel = 'value';
 export let subtitle;
@@ -8,17 +21,6 @@ export let size;
 export let data;
 export let xMin;
 export let xMax;
-
-import { onMount } from 'svelte';
-import { select, mouse } from 'd3-selection';
-import { scaleLinear } from 'd3-scale';
-import {precisionPrefix, formatPrefix, format} from 'd3-format'
-import { timeMonth, timeYear } from 'd3-time'
-import { timeFormat } from 'd3-time-format'
-import { area } from 'd3-shape';
-import { fly, fade } from 'svelte/transition';
-
-import { writable } from 'svelte/store';
 
 const magnitude = (n) => {
     const order = Math.floor(Math.log(n) / Math.LN10
@@ -31,14 +33,13 @@ const makeFormatter = (maxValue, fmt) => {
     if (fmt === 'ratio') return format('.2f')
     return (v) => format('~s')(v)
 }
-
-const markers = [
-    {label: '50', date: new Date('2016-11-15')},
-    {label: '55', date: new Date('2017-08-08')},
-    {label: '60', date: new Date('2018-05-09')},
-    {label: '65', date: new Date('2019-01-28')},
-    
-]
+// generate this.
+// const markers = [
+//     {label: '50', date: new Date('2016-11-15')},
+//     {label: '55', date: new Date('2017-08-08')},
+//     {label: '60', date: new Date('2018-05-09')},
+//     {label: '65', date: new Date('2019-01-28')},
+// ]
 
 const W = size === 'small' ? 350 : 750;
 const H = size==='small' ? W * .6 : W*.5;
@@ -63,7 +64,7 @@ const A = {
 const PL = {
     left: M.left + M.buffer,
     right: W - M.right - M.buffer,
-    top: 30,
+    top: M.top,
     bottom: H - M.bottom - M.buffer
 }
 
@@ -71,10 +72,27 @@ const MAX_Y =  Math.max(...data.map(v=>v.upper))
 
 const yFormat = makeFormatter(MAX_Y, yType);
 
+let graphXMin;
+let graphXMax;
+
+$: graphXMin = xMin !== '' ? new Date(xMin) : Math.min(...data.map(v=>v.date))
+$: graphXMax = xMax !== '' ? new Date(xMax) : Math.max(...data.map(v=>v.date))
 $: xScale = scaleLinear().domain([
-        xMin !== '' ? new Date(xMin) : Math.min(...data.map(v=>v.date)), 
-        xMax !== '' ? new Date(xMax) : Math.max(...data.map(v=>v.date))])
+        graphXMin, graphXMax])
     .range([PL.left,PL.right])
+
+
+// sift throuh releases here.
+const ONE_YEAR = 1000 * 60 * 60 * 24 * (365  * (size === 'large' ? 2 : 1))
+let markers = []
+$: markers = $majorReleases.filter(release => {
+    const onlyEveryFive = graphXMax - graphXMin >= ONE_YEAR ? parseInt(release.version) % 5 === 0 : true
+    console.log(onlyEveryFive, graphXMax-graphXMin, ONE_YEAR)
+    return onlyEveryFive 
+        && (release.date >= graphXMin && release.date <= graphXMax)
+})
+
+$: console.log(markers, $majorReleases)
 
 
 $: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : MAX_Y])
