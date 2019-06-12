@@ -1,3 +1,7 @@
+<script context="module">
+    let globalX = writable(undefined);
+</script>
+
 <script>
 
 import { onMount } from 'svelte';
@@ -87,13 +91,9 @@ const ONE_YEAR = 1000 * 60 * 60 * 24 * (365  * (size === 'large' ? 2 : 1))
 let markers = []
 $: markers = $majorReleases.filter(release => {
     const onlyEveryFive = graphXMax - graphXMin >= ONE_YEAR ? parseInt(release.version) % 5 === 0 : true
-    console.log(onlyEveryFive, graphXMax-graphXMin, ONE_YEAR)
     return onlyEveryFive 
         && (release.date >= graphXMin && release.date <= graphXMax)
 })
-
-$: console.log(markers, $majorReleases)
-
 
 $: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : MAX_Y])
     .range([PL.bottom, PL.top])
@@ -115,7 +115,29 @@ let last = (arr) => arr[arr.length-1]
 let mouseXValue = undefined;
 let mouseYValue = undefined;
 
+let localX;
+let yPoint;
+$: localX = $globalX;
+
 $: yPoint = data[0];
+
+function setPoint(pt) {
+    if (pt) $globalX = pt.date
+    else $globalX = undefined
+}
+
+$: if ($globalX) {
+    yPoint = last(data.filter(d =>  d.date <= $globalX));
+    $coords.x = xScale(yPoint.date);
+    $coords.y = yScale(yPoint.value);
+    mouseXValue = xRollover(yPoint.date);
+    mouseYValue = `  ${yPoint.value}`
+} else {
+    $coords.x = -150;
+    $coords.y = -150;
+    mouseXValue = undefined
+    mouseYValue = undefined
+}
 
 onMount(() => {
     available = true;
@@ -124,25 +146,21 @@ onMount(() => {
         // move the circle.
         const [x, y] = mouse(svg.node())
         if (x >= PL.left && x <= PL.right) {
-            yPoint = last(data.filter(d => d.date <= xScale.invert(x)))
-            $coords.x = xScale(yPoint.date)
-            $coords.y = yScale(yPoint.value)
-            //mouseXValue = `${~~xScale.invert(x)}  `
-            mouseXValue = xRollover(new Date(xScale.invert(x)))
-            mouseYValue = `  ${yPoint.value}`
+            setPoint(last(data.filter(d => d.date <= xScale.invert(x))))
         } else {
             $coords.x = -150;
             $coords.y = -150;
             mouseXValue = undefined
             mouseYValue = undefined
+            setPoint(undefined)
         }
-        // so now we need to get this bolted onto
     })
     svg.on('mouseleave', () => {
         $coords.x = -150;
         $coords.y = -150;
         mouseXValue = undefined
         mouseYValue = undefined
+        setPoint(undefined)
     })
 })
 
