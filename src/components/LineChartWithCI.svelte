@@ -31,10 +31,6 @@ const daysBetween = (firstDate, secondDate) => {
     return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
 }
 
-
-
-
-
 const magnitude = (n) => {
     const order = Math.floor(Math.log(n) / Math.LN10
                        + 0.000000001); // because float math sucks like that
@@ -349,7 +345,7 @@ svg.large-graph {
         <g class=plot-background>
             {#if mouseVersionValue && mouseVersionValue.end && mouseVersionValue}
                 <rect 
-                    in:fade
+                    transition:fade={{duration:100}}
                     x={xScale(mouseVersionValue.date)}
                     y={PL.top}
                     width={xScale(mouseVersionValue.end) - xScale(mouseVersionValue.date)}
@@ -357,12 +353,17 @@ svg.large-graph {
                     fill='rgba(0,0,100,.05)'
                 />
                 <text
-                    in:fade
-                    x={xScale(mouseVersionValue.date) - M.buffer}
+                    transition:fade={{duration:100}}
+                    x={
+                        size === 'large' ? xScale(mouseVersionValue.date) + (xScale(mouseVersionValue.end) - xScale(mouseVersionValue.date)) / 2 :
+                        xScale(mouseVersionValue.date) - M.buffer
+                    }
                     y={PL.bottom}
                     font-size=10
                     opacity='.5'
-                    text-anchor='end'
+                    text-anchor={
+                        size === 'large' ? 'middle' : 'end'
+                    }
                 >{parseInt(mouseVersionValue.version)}</text>
             {/if}
         </g>
@@ -400,7 +401,7 @@ svg.large-graph {
         
         <text opacity=".8" font-size='12' text-anchor='start' x={PL.left} y={12}>
             {#if mouseYValue !== undefined}
-                <tspan font-weight="bold" fill='blue'> – </tspan><tspan>{`   ${yFormat(mouseYValue)}   `}    </tspan>
+                <tspan transition:fade={{duration:100}} font-weight="bold" fill='blue'> – </tspan><tspan>{`   ${yFormat(mouseYValue)}   `}    </tspan>
             {/if}
         </text>
         <text opacity=".6" font-size='10' text-anchor='start' x={PL.left} y={26}>
