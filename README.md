@@ -16,9 +16,9 @@ To install:
 To run locally:
 
 - first, _you will need a service account provisioned for you_. Contact jason thomas about doing that. This will be a small json file with all the relevant information.
-- to run the server, run `export GOOGLE_APPLICATION_CREDENTIALS="gcp-creds.json"; node server.js` which starts a tiny web server on port 3000 (go to `localhost:3000` in your browser), connected to 
-- to build / update the frontend, type `npm run dev`, which spins up another web server (that we're not going to use, sorry for the redundancy) and builds the little dev version of the frontend.
-– I'll make it so you don't ahve to run two servers like this at some point, but this works for now.
+- to run the server, run `export GOOGLE_APPLICATION_CREDENTIALS="gcp-creds.json"; node server.js` which starts a tiny web server on port 3000 (go to `localhost:3000` in your browser).
+- To build / update the frontend, type `npm run dev`, which spins up another web server (that we're not going to use, sorry for the redundancy here) and builds the little dev version of the frontend.
+– I'll make it so you don't ahve to run two servers like this at some point, but this works for now!
 
 
 
