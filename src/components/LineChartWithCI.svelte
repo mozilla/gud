@@ -54,7 +54,7 @@ const makeFormatter = (maxValue, fmt) => {
     return (v) => format('~s')(v)
 }
 
-const W = size === 'small' ? 350 : 750;
+const W = size === 'small' ? 350 : 900;
 const H = size==='small' ? W * .625 : W*.5;
 
 const xAxisDate = timeFormat('%d');
@@ -222,11 +222,13 @@ $: years = timeYear.range(...xScale.domain())
 
 .graphic-container {
     display: block;
+    margin: auto;
 }
 
 .graphic-container-header {
     padding-left: 50px;
     padding-right: 50px;
+    margin: auto;
     display: grid;
     align-items: center;
     grid-template-columns: auto 20px;
@@ -242,7 +244,7 @@ $: years = timeYear.range(...xScale.domain())
 }
 
 .graphic-container-header.large-header {
-    max-width: 660px;
+    max-width: 800px;
 }
 
 .graphic-container-header h3 {
@@ -260,6 +262,7 @@ $: years = timeYear.range(...xScale.domain())
 
 svg {
     display: block;
+    margin: auto;
 }
 
 svg.small-graph {
