@@ -157,6 +157,8 @@ $: if ($globalX) {
             return release.date > mouseVersionValue.date;
         })
         if (mouseVersionValue.end) mouseVersionValue.end = mouseVersionValue.end.date
+        mouseVersionValue.start = xScale(mouseVersionValue.date)
+        mouseVersionValue.end = mouseVersionValue.end ? xScale(mouseVersionValue.end) : PL.right
     }
     
 } else {
@@ -383,23 +385,24 @@ svg.large-graph {
             {#if mouseVersionValue && mouseVersionValue.end && mouseVersionValue}
                 <rect 
                     transition:fade={{duration:100}}
-                    x={xScale(mouseVersionValue.date)}
+                    x={Math.max(mouseVersionValue.start, PL.left)}
                     y={PL.top}
-                    width={xScale(mouseVersionValue.end) - xScale(mouseVersionValue.date)}
+                    width={mouseVersionValue.end- Math.max(mouseVersionValue.start, PL.left)}
                     height={A.bottom - PL.top}
                     fill='rgba(0,0,100,.05)'
                 />
                 <text
                     transition:fade={{duration:100}}
                     x={
-                        size === 'large' ? xScale(mouseVersionValue.date) + (xScale(mouseVersionValue.end) - xScale(mouseVersionValue.date)) / 2 :
-                        xScale(mouseVersionValue.date) - M.buffer
+                        size === 'large' ? mouseVersionValue.start + (mouseVersionValue.end - mouseVersionValue.start) / 2 :
+                        Math.max(mouseVersionValue.start - M.buffer, PL.left + M.buffer)
                     }
                     y={PL.bottom}
                     font-size=10
                     opacity='.5'
                     text-anchor={
-                        size === 'large' ? 'middle' : 'end'
+                        size === 'large' ? 'middle' : 
+                        ((mouseVersionValue.start - M.buffer < PL.left + M.buffer) ? 'start' : 'end')
                     }
                 >{parseInt(mouseVersionValue.version)}</text>
             {/if}

@@ -4,10 +4,9 @@ import Popper from 'popper.js';
 import Help from './Help.svelte'
 
 export let msg;
-export let title;
+export let title = undefined;
 let parentRef;
 let tooltipRef;
-let arrowRef;
 let menuPopup;
 let isActive = false;
 
@@ -22,10 +21,6 @@ onMount(() => {
     menuPopup = new Popper(parentRef, tooltipRef, {
         placement: 'top',
         modifiers: {
-            arrow: {
-                enabled: true,
-                element: arrowRef
-            },
             offset: { 
                     enabled: true,
                     offset: '0,20px'
@@ -165,8 +160,9 @@ div:hover {
     </div>
 </div>
 
-
 <div 
     on:mouseover={() => toggleActive(true)} 
     on:mouseleave={() => toggleActive(false)} 
-    class=tooltip-trigger bind:this={parentRef}><Help /></div>
+    class=tooltip-trigger bind:this={parentRef}>
+    <Help />
+</div>
