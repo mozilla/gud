@@ -29,6 +29,7 @@
         "key": "usage",
         "type": "single",
         "inMenu": true,
+        "showDescriptionOnSelect" : true,
         "values": [
         {
             "itemType": "section",

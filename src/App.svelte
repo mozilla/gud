@@ -60,6 +60,7 @@
 						<Multiselector 
 							title={selector.label} 
 							description={selector.description || selector.label}
+							showDescriptionOnSelect={selector.showDescriptionOnSelect}
 							selectType={selector.type || 'single'} 
 							options={selector.values} 
 							setter={selector.setter} />

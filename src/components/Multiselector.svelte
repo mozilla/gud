@@ -16,6 +16,7 @@ import Tooltip from './Tooltip.svelte';
 
 export let title;
 export let description=title;
+export let showDescriptionOnSelect = false;
 export let options;
 export let setter;
 export let selectType = 'single';
@@ -52,8 +53,12 @@ onMount(() => {
 
 // set singleOptionLabel 
 let singleOptionLabel = options[0].label;
+let singleOptionDescription = options[0].shortDescription;
 $: if (selectType === 'single') {
-    singleOptionLabel = options.find(opt => opt.key === $setter).label;
+    const opt = options.find(opt => opt.key === $setter)
+    singleOptionLabel = opt.label;
+    console.log('yes!', showDescriptionOnSelect)
+    if (showDescriptionOnSelect) singleOptionDescription = opt.shortDescription;
 }
 
 function toggleActive() {
@@ -309,6 +314,14 @@ ul.active {
     padding-left: calc(var(--list-item-status-size) + var(--list-item-pad) * 1.5);
 }
 
+.single-option-description {
+    font-weight: normal;
+    font-size:13px;
+    opacity: .8;
+    margin-top: calc(var(--pad) / 2);
+    font-style: italic;
+}
+
 </style>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -346,6 +359,11 @@ ul.active {
 {:else}
 <div class='selected-items'>
     {singleOptionLabel}
+    {#if showDescriptionOnSelect && singleOptionDescription && singleOptionLabel !== 'All'}
+        <div class=single-option-description>
+            {singleOptionDescription}
+        </div>
+    {/if}
 </div>
 {/if}
 
