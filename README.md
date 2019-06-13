@@ -1,4 +1,4 @@
-# Smoot Growth Dashboard
+# Growth and Usage Dashboard
 
 This is a light, server-powered dashboard showing the smoot growth metrics. It's meant to be a proof of concept for now. The frontend talks to a tiny node server by passing it the segments / usage criteria / etc. necessary for the query, and in theory the tiny web server sends the query to be run by BigQuery (subject to an API key, etc.).
 
