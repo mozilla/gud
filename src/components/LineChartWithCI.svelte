@@ -6,7 +6,8 @@
 
 import { onMount } from 'svelte';
 import { writable } from 'svelte/store';
-import { fly, fade } from 'svelte/transition';
+import { fly, fade, draw } from 'svelte/transition';
+import {linear} from 'svelte/easing';
 import { select, mouse } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import {precisionPrefix, formatPrefix, format} from 'd3-format'
@@ -392,9 +393,9 @@ svg.large-graph {
                 >{parseInt(mouseVersionValue.version)}</text>
             {/if}
         </g>
-        <g class=plot-area>
-            <path in:fade={{delay: 400}} d={areaShape(data)}  fill='rgba(0,0,0,.1)' />
-            <path class:loaded={available} class=path-line d={path} />
+        <g in:fade={{duration:300}} class=plot-area>
+            <path in:fade={{duration:1000}} d={areaShape(data)}  fill='rgba(0,0,0,.1)' />
+            <path in:draw={{duration: 500, easing: linear}} class:loaded={available} class=path-line d={path} />
         </g>
         <g class=markers>
             {#each markers as marker, i}

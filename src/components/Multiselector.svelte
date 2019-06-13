@@ -1,7 +1,11 @@
+<script context=module>
+let IND = 0;
+</script>
+
 <script>
 import { onMount } from 'svelte'
 import { writable } from 'svelte/store';
-import { fade } from 'svelte/transition';
+import { fade, fly } from 'svelte/transition';
 import { flip } from 'svelte/animate';
 import SelectedCheckbox from './SelectedCheckbox.svelte';
 import BlankCheckbox from './BlankCheckbox.svelte';
@@ -19,8 +23,14 @@ let isActive = false;
 let key;
 let keyCode;
 
+let ind = IND;
+IND += 1;
+
 let menuPopup;
+let visible = false;
+
 onMount(() => {
+    visible = true;
     const container = document.body
     menuPopup = new Popper(parentRef, menuRef, {
             placement: 'right-start',
@@ -282,13 +292,12 @@ ul.active {
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div class=selector>
+<div in:fly={{y:-10, duration: 200 + ind * 300}} class=selector>
 
 <button bind:this={parentRef} class=dropdown on:click={toggleActive}>
     <div class=dropdown-title>{title}</div>
     <div class=dropdown-button-icon class:active-icon={isActive}>▾</div>
 </button>
-
 
 {#if selectType === 'multi'}
 <ul class=selected-items>

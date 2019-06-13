@@ -73,10 +73,12 @@ div.tooltip-element {
 
 div.tooltip-element.hidden {
     transform: translateY(10px) scale(.8);
+    transition: 150ms;
 }
 
 div.tooltip-element.active {
     transform: none;
+    transition: 150ms;
 }
 
 :global(.tooltip-container[x-placement="top"] .tooltip-element:after) {
