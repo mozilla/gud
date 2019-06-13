@@ -57,7 +57,6 @@ let singleOptionDescription = options[0].shortDescription;
 $: if (selectType === 'single') {
     const opt = options.find(opt => opt.key === $setter)
     singleOptionLabel = opt.label;
-    console.log('yes!', showDescriptionOnSelect)
     if (showDescriptionOnSelect) singleOptionDescription = opt.shortDescription;
 }
 

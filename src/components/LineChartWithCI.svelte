@@ -237,6 +237,10 @@ $: years = timeYear.range(...xScale.domain())
         "subtitle subtitle"
 }
 
+.graphic-container-header.small-header {
+    max-width: 250px;
+}
+
 .graphic-container-header.large-header {
     max-width: 660px;
 }
@@ -286,6 +290,7 @@ svg.large-graph {
     <div 
         class=graphic-container-header 
         class:large-header={size==='large'}
+        class:small-header={size==='small'}
     >
         <h3 in:fly={{y:10, duration: 500 + order * orderStagger}}>{title}</h3>
         <div
