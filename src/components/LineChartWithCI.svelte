@@ -55,7 +55,7 @@ const makeFormatter = (maxValue, fmt) => {
 }
 
 const W = size === 'small' ? 350 : 750;
-const H = size==='small' ? W * .6 : W*.5;
+const H = size==='small' ? W * .625 : W*.5;
 
 const xAxisDate = timeFormat('%d');
 const xAxisMonth = timeFormat('%b');
@@ -64,7 +64,7 @@ const xRollover = timeFormat('%b %d, %Y')
 const M = {
     left:45,
     right:45,
-    top:45,
+    top:55,
     bottom:40,
     buffer:5
 }
