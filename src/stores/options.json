@@ -113,6 +113,7 @@
                 "label": "Intensity",
                 "subtitle": "Ratio of Days Used",
                 "shortsub": "ratio of days used",
+                "needsExplanation" : true,
                 "key": "intensity", "short": "intensity", "agg": "mean",
                 "shortDescription": "Among profiles that meet the usage criterion at least once in the week ending on the date specified, how many days on average do they meet the usage criterion during that one-week window",
                 "format": "ratio"

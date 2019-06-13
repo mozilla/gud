@@ -38,7 +38,7 @@ if ($mode === 'explore') {
             title: metricInfo.label,
             rolloverLabel: metricInfo.short,
             shortDescription: metricInfo.shortDescription,
-            subtitle: metricInfo.shortsub,
+            whatKind: metricInfo.needsExplanation ? metricInfo.shortsub : undefined,
             format: metricInfo.format,
             data: data.map(d=> {
                 const di = {date: d.date}
@@ -90,7 +90,7 @@ if ($mode === 'explore') {
             <LineChartWithCI 
                 size={$metricSet === 'all' ? 'small' : 'large'} 
                 title={dataset.title} 
-                subtitle={dataset.subtitle}
+                whatKind={dataset.whatKind}
                 shortDescription={dataset.shortDescription}
                 rolloverLabel={dataset.rolloverLabel}
                 yType={dataset.format}

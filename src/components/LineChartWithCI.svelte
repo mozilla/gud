@@ -20,7 +20,7 @@ import { majorReleases } from '../stores/productDetails'
 // props
 export let title;
 export let rolloverLabel = 'value';
-export let subtitle;
+export let whatKind;
 export let shortDescription;
 export let yType;
 export let size;
@@ -286,7 +286,7 @@ svg.large-graph {
         <div class='graph-tooltip'>
             <Tooltip msg={shortDescription} />
         </div>
-        <label>{subtitle || ""}</label>
+        <!-- <label>{subtitle || ""}</label> -->
     </div>
     <svg
         bind:this={graph}
@@ -447,6 +447,12 @@ svg.large-graph {
                 <tspan>{`    ${parseInt(mouseVersionValue.version)} – day ${daysBetween(yPoint.date, mouseVersionValue.date)}   `} </tspan>
             {/if}
         </text>
+
+        <!-- <text font-weight=bold opacity=".4" font-size='10' text-anchor='end' x={PL.right} y={26}>
+            {#if whatKind}
+                <tspan style='opacity:.5; text-transform: uppercase' font-weight=300>{whatKind + ' '}</tspan>
+            {/if}
+        </text> -->
     </svg>
 </div>
 {:else}

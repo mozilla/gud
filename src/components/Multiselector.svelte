@@ -1,7 +1,8 @@
 <script>
 import { onMount } from 'svelte'
 import { writable } from 'svelte/store';
-import { slide } from 'svelte/transition';
+import { fade } from 'svelte/transition';
+import { flip } from 'svelte/animate';
 import SelectedCheckbox from './SelectedCheckbox.svelte';
 import BlankCheckbox from './BlankCheckbox.svelte';
 import Popper from 'popper.js'
@@ -292,12 +293,12 @@ ul.active {
 {#if selectType === 'multi'}
 <ul class=selected-items>
     {#if $setter.length === 0}
-        <div class=default-selected-item-message>
+        <div transition:fade={{duration:150}} class=default-selected-item-message>
             All
         </div>
     {/if}
     {#each $setter as key (key)}
-        <li>
+        <li transition:fade={{duration:150}} animate:flip={{duration:150}}>
             <span class=remove-item on:click={() => removeSelection(key)}>╳</span>
             {options.find(opt => opt.key === key).label}
         </li>
