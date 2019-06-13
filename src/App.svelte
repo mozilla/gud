@@ -57,7 +57,12 @@
 			<section class=control-selectors>
 				{#each menuOptions as selector, i}
 					{#if selector.type !== 'date'}
-						<Multiselector selectType={selector.type || 'single'} title={selector.label} options={selector.values} setter={selector.setter} />
+						<Multiselector 
+							title={selector.label} 
+							description={selector.description || selector.label}
+							selectType={selector.type || 'single'} 
+							options={selector.values} 
+							setter={selector.setter} />
 					{/if}
 				{/each}
 			<DatePicker />

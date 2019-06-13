@@ -15,6 +15,8 @@ function toggleActive(tf) {
     isActive = tf
 }
 
+export let updatePosition = () => { if (menuPopup) menuPopup.scheduleUpdate() }
+
 onMount(() => {
     const container = document.body
     menuPopup = new Popper(parentRef, tooltipRef, {
@@ -33,7 +35,7 @@ onMount(() => {
             },
         }
     });
-    menuPopup.scheduleUpdate();
+    updatePosition()
 })
 
 </script>
@@ -51,6 +53,7 @@ div.tooltip-trigger {
     transition: opacity 200ms;
     display: grid;
     margin: auto;
+    align-items: end;
 }
 
 div.tooltip-element {
@@ -144,7 +147,7 @@ div.active {
 
 div.hidden {
     opacity: 0;
-    z-index: -1;
+    z-index: -1000;
 }
 
 div:hover {

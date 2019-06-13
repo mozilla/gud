@@ -7,11 +7,15 @@ import { onMount } from 'svelte'
 import { writable } from 'svelte/store';
 import { fade, fly } from 'svelte/transition';
 import { flip } from 'svelte/animate';
-import SelectedCheckbox from './SelectedCheckbox.svelte';
-import BlankCheckbox from './BlankCheckbox.svelte';
+
 import Popper from 'popper.js'
 
+import SelectedCheckbox from './SelectedCheckbox.svelte';
+import BlankCheckbox from './BlankCheckbox.svelte';
+import Tooltip from './Tooltip.svelte';
+
 export let title;
+export let description=title;
 export let options;
 export let setter;
 export let selectType = 'single';
@@ -114,7 +118,6 @@ function hideOnClickOutside(element) {
 .selector {
     margin-bottom: var(--pad);
 }
-
 button.dropdown {
     border: none;
     border-bottom: 1px solid tomato;
@@ -126,13 +129,15 @@ button.dropdown {
     font-size: 16px;
     cursor: pointer;
     display: grid;
-    grid-template-columns: auto 10px;
+    grid-template-columns: [title] max-content [tooltip] max-content [blank] auto [carat] max-content;
+    grid-column-gap: 5px;
 }
 
 button.dropdown .dropdown-button-icon {
     transform-origin: center;
     text-align:center;
     opacity: .8;
+    grid-column: carat;
 }
 
 button.dropdown div.active-icon {
@@ -141,6 +146,21 @@ button.dropdown div.active-icon {
 
 .dropdown-title {
     opacity: .7;
+    width: 100%;
+    grid-column: title;
+}
+
+.dropdown-tooltip {
+    grid-column: tooltip;
+    margin-left:0;
+    transition: 200ms;
+    display:grid;
+    align-items:end;
+    /* opacity:.5; */
+}
+
+:global(.dropdown-tooltip div.tooltip-trigger) {
+    margin:0;
 }
 
 .menu-popup {
@@ -239,6 +259,7 @@ ul.active {
     display: flex;
     padding:0;
     margin:0;
+    /* margin-left: calc(16px + var(--pad) / 2); */
     margin-top: var(--list-item-pad);
     flex-wrap: wrap;
     font-size: 14px;
@@ -292,13 +313,22 @@ ul.active {
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div in:fly={{y:-10, duration: 200 + ind * 300}} class=selector>
 
-<button bind:this={parentRef} class=dropdown on:click={toggleActive}>
-    <div class=dropdown-title>{title}</div>
-    <div class=dropdown-button-icon class:active-icon={isActive}>▾</div>
-</button>
 
+<div
+    in:fly={{y:-10, duration: 200 + ind * 300}}
+    class=selector
+>
+
+<div class=input-set>
+    <button bind:this={parentRef} class=dropdown on:click={toggleActive}>
+        <div class=dropdown-title>{title}</div>
+        <div class=dropdown-tooltip>
+            <Tooltip msg={description} />
+        </div>
+        <div class=dropdown-button-icon class:active-icon={isActive}>▾</div>
+    </button>
+</div>
 {#if selectType === 'multi'}
 <ul class=selected-items>
     {#if $setter.length === 0}

@@ -1,10 +1,11 @@
 <script context="module">
+    let ORDER = 0;
     let globalX = writable(undefined);
 </script>
 
 <script>
 
-import { onMount } from 'svelte';
+import { onMount, onDestroy, afterUpdate } from 'svelte';
 import { writable } from 'svelte/store';
 import { fly, fade, draw } from 'svelte/transition';
 import {linear} from 'svelte/easing';
@@ -28,6 +29,13 @@ export let size;
 export let data;
 export let xMin;
 export let xMax;
+
+let order = ORDER;
+ORDER += 1;
+
+let orderStagger = 150;
+
+let updateTooltipPosition;
 
 const daysBetween = (firstDate, secondDate) => {
     const oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
@@ -188,6 +196,14 @@ onMount(() => {
     })
 })
 
+onDestroy(() => {
+    ORDER -= 1;
+})
+
+afterUpdate(() => {
+    if (updateTooltipPosition) updateTooltipPosition();
+})
+
 let coords = writable({ x: -150, y: -150 });
 
 $: xTicks = timeMonth.range(...xScale.domain(), 3)
@@ -208,7 +224,7 @@ $: years = timeYear.range(...xScale.domain())
 
 .graphic-container-header {
     padding-left: 50px;
-    padding-right: 70px;
+    padding-right: 50px;
     display: grid;
     align-items: center;
     grid-template-columns: auto 20px;
@@ -236,17 +252,6 @@ $: years = timeYear.range(...xScale.domain())
     grid-area: tooltip;
 }
 
-.graphic-container-header label {
-    grid-area: subtitle;
-    margin-top: -4px;
-    font-size: 11px;
-    display: block;
-    text-align: left;
-    font-weight: 300;
-    opacity: .8;
-    text-transform: uppercase;
-}
-
 svg {
     display: block;
 }
@@ -264,12 +269,6 @@ svg.large-graph {
     stroke-width: 1px;
 }
 
-.path-line.loaded {
-    /* stroke-dasharray: 2000; */
-    /* stroke-dashoffset: 2000; */
-    /* animation: dash 1s ease-in forwards; */
-}
-
 @keyframes dash {
   to {
     stroke-dashoffset: 0;
@@ -282,10 +281,20 @@ svg.large-graph {
 <div
     class=graphic-container
 >
-    <div class=graphic-container-header class:large-header={size==='large'}>
-        <h3>{title}</h3>
-        <div class='graph-tooltip'>
-            <Tooltip title={title} msg={shortDescription} />
+    <div 
+        class=graphic-container-header 
+        class:large-header={size==='large'}
+    >
+        <h3 in:fly={{y:10, duration: 500 + order * orderStagger}}>{title}</h3>
+        <div
+            class='graph-tooltip'
+            in:fly={{y:10, duration: 400 + order * orderStagger, delay:200}}
+            out:fly={{duration:0, delay:0}}
+            on:introend="{() => {
+                if (updateTooltipPosition) updateTooltipPosition()            
+            }}"
+        >
+            <Tooltip bind:updatePosition={updateTooltipPosition} title={title} msg={shortDescription} />
         </div>
         <!-- <label>{subtitle || ""}</label> -->
     </div>
@@ -333,6 +342,7 @@ svg.large-graph {
                         stroke='gray'
                     />
                     <text
+                        in:fly={{y:10, duration:300 + i * 200}}
                         x={xScale(year)}
                         y={A.bottom +M.buffer*3}
                         dy='.35em'
@@ -359,6 +369,7 @@ svg.large-graph {
                         stroke=gray
                     />
                     <text
+                        in:fly={{x:-20, duration:200 + i * 100}}
                         y={yScale(yTick)}
                         x={A.left - M.buffer}
                         dy={'.35em'}

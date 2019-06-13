@@ -25,6 +25,7 @@
     ]},
     "usageCriteriaOptions": {
         "label": "Usage Criteria",
+        "description": "any product, feature, or population subset for which we wish to calculate growth metrics",
         "key": "usage",
         "type": "single",
         "inMenu": true,
@@ -139,6 +140,7 @@
     "platformOptions": {
         "label": "OS",
         "key": "os",
+        "description": "available operating systems",
         "type": "multi",
         "inMenu": true,
         "values": [
