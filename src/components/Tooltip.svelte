@@ -107,6 +107,34 @@ div.tooltip-element.active {
 	margin-top: -16px;
 }
 
+:global(.tooltip-container[x-placement="right"] .tooltip-element:after) {
+    content: '';
+	position: absolute;
+	right: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 16px solid transparent;
+	border-left-color: var(--fill);
+	border-right: 0;
+	margin-top: -16px;
+	margin-right: -16px;
+}
+
+:global(.tooltip-container[x-placement="left"] .tooltip-element:after) {
+    content: '';
+	position: absolute;
+	right: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 16px solid transparent;
+	border-left-color: var(--fill);
+	border-right: 0;
+	margin-top: -16px;
+	margin-right: -16px;
+}
+
 div.active {
     opacity: 1;
     z-index: 1001;
