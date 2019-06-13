@@ -284,7 +284,7 @@ svg.large-graph {
     <div class=graphic-container-header class:large-header={size==='large'}>
         <h3>{title}</h3>
         <div class='graph-tooltip'>
-            <Tooltip msg={shortDescription} />
+            <Tooltip title={title} msg={shortDescription} />
         </div>
         <!-- <label>{subtitle || ""}</label> -->
     </div>

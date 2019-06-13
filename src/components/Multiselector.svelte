@@ -155,12 +155,12 @@ ul.menu-content {
     transition: 100ms;
     margin:0;
     border: 1px solid lightgray;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.1);
     padding:0;
     padding-top:5px;
     padding-bottom:5px;
-    border-radius: 5px;
     background-color: white;
-    box-shadow: 0px 0px 10px rgba(0,0,0,.1);
     max-width: 425px;
     min-width: 200px;
 
