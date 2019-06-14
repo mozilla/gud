@@ -1,4 +1,4 @@
-# Smoot Growth Dashboard
+# Growth and Usage Dashboard
 
 This is a light, server-powered dashboard showing the smoot growth metrics. It's meant to be a proof of concept for now. The frontend talks to a tiny node server by passing it the segments / usage criteria / etc. necessary for the query, and in theory the tiny web server sends the query to be run by BigQuery (subject to an API key, etc.).
 
@@ -15,10 +15,10 @@ To install:
 
 To run locally:
 
-– first, you will need a service account provisioned for you. Contact jason thomas about doing that. This will be a small json file with all the relevant information.
-- to run the server, run `export GOOGLE_APPLICATION_CREDENTIALS="gcp-creds.json"; node server.js` which starts a tiny web server on port 3000 (go to `localhost:3000` in your browser), connected to 
-- to build / update the frontend, type `npm run dev`, which spins up another web server (that we're not going to use, sorry for the redundancy) and builds the little dev version of the frontend.
-– I'll make it so you don't ahve to run two servers like this at some point, but this works for now.
+- first, _you will need a service account provisioned for you_. Contact jason thomas about doing that. This will be a small json file with all the relevant information.
+- to run the server, run `export GOOGLE_APPLICATION_CREDENTIALS="gcp-creds.json"; node server.js` which starts a tiny web server on port 3000 (go to `localhost:3000` in your browser).
+- To build / update the frontend, type `npm run dev`, which spins up another web server (that we're not going to use, sorry for the redundancy here) and builds the little dev version of the frontend.
+– I'll make it so you don't ahve to run two servers like this at some point, but this works for now!
 
 
 
