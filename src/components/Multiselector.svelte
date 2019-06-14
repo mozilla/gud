@@ -169,6 +169,9 @@ button.dropdown div.active-icon {
 
 .menu-popup {
     transition: 100ms;
+    /* max-height: 95vh;
+    overflow: auto; */
+    box-shadow: 0px 0px 20px rgba(0,0,0,.1);
 }
 
 div {
@@ -197,6 +200,8 @@ ul.menu-content {
     background-color: white;
     max-width: 425px;
     min-width: 200px;
+    overflow: auto;
+    max-height: 95vh;
 
 }
 

@@ -61,6 +61,7 @@ const exploreQuery =(params) => {
             if (opt.key === 'usage') return `${paramKey} = '${params[paramKey]}'`
             return `${paramKey} IN (${values.map(v=>`"${v}"`).join(',')})`
         })
+    WHEREClauses.push(`date >= '2017-06-17'`)
     const WHERE = WHEREClauses.length ? `WHERE ${WHEREClauses.length > 1 ? WHEREClauses.join(' AND\n') : WHEREClauses}` : '';
 //     return query(`
 // SELECT

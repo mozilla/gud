@@ -29,7 +29,7 @@ const dayAfter = (d) => {
 }
 
 // FIXME: replace this with something a bit more relevant.
-let START = '2016-01-01';
+let START = '2017-06-13';
 
 // check boundary conditions.
 $: if ($rawStart !== '' ) {

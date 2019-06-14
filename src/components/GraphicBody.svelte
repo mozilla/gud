@@ -40,6 +40,9 @@ if ($mode === 'explore') {
             shortDescription: metricInfo.shortDescription,
             whatKind: metricInfo.needsExplanation ? metricInfo.shortsub : undefined,
             format: metricInfo.format,
+            yMax: metricInfo.yMax,
+            yMin: metricInfo.yMin,
+            yRangeGroup: metricInfo.yRangeGroup,
             data: data.map(d=> {
                 const di = {date: d.date}
                 di.value = d[m]
@@ -96,7 +99,11 @@ if ($mode === 'explore') {
                 yType={dataset.format}
                 data={dataset.data} 
                 xMin={$start} 
-                xMax={$end} />
+                xMax={$end}
+                yMin={dataset.yMin}
+                yMax={dataset.yMax}
+                yRangeGroup={$metricSet === 'all' ? dataset.yRangeGroup : undefined}
+                 />
             {/each}
         </div>
     {:else}

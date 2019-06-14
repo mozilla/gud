@@ -1,6 +1,7 @@
 <script context="module">
     let ORDER = 0;
     let globalX = writable(undefined);
+    let yRangeStore = writable({});
 </script>
 
 <script>
@@ -29,6 +30,9 @@ export let size;
 export let data;
 export let xMin;
 export let xMax;
+export let yMin;
+export let yMax;
+export let yRangeGroup;
 
 let order = ORDER;
 ORDER += 1;
@@ -81,9 +85,16 @@ const PL = {
     bottom: H - M.bottom - M.buffer
 }
 
-const MAX_Y =  Math.max(...data.map(v=>v.upper))
+const MAX_Y = yMax ? yMax : Math.max(...data.map(v=>v.upper))
 
-const yFormat = makeFormatter(MAX_Y, yType);
+// if this graph has a yRangeGroup key, let's log if it beats the current max Y for the group.
+if (yRangeGroup) {
+    $yRangeStore[yRangeGroup] = Math.max($yRangeStore[yRangeGroup] || 0, MAX_Y)
+}
+
+$: FINAL_MAX_Y = (yRangeGroup ? $yRangeStore[yRangeGroup] : MAX_Y)
+
+$: yFormat = makeFormatter(FINAL_MAX_Y, yType);
 
 let graphXMin;
 let graphXMax;
@@ -104,7 +115,7 @@ $: markers = $majorReleases.filter(release => {
         && (release.date >= graphXMin && release.date <= graphXMax)
 })
 
-$: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : MAX_Y])
+$: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : FINAL_MAX_Y])
     .range([PL.bottom, PL.top])
 
 $: path = `M${data.map(p => `${xScale(p.date)},${yScale(p.value)}`).join('L')}`;

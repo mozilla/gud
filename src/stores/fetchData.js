@@ -98,6 +98,9 @@ function convertExploreData(inputs) {
             pt[m] = CIs.value;//CIs[info.agg==='sum' ? 'total' : 'mean'];
             pt[`${m}_low`] = CIs.low;
             pt[`${m}_high`] = CIs.high;
+            if (Number.isNaN(pt[m])) pt[m] = 0;
+            if (Number.isNaN(pt[`${m}_low`])) pt[`${m}_low`] = 0;
+            if (Number.isNaN(pt[`${m}_high`])) pt[`${m}_high`] = 0;
         })
         return pt
     })
