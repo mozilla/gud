@@ -9,7 +9,6 @@ import {fetchExploreData} from './fetchData'
 
 const cacheObj = writable({})
 
-// this store value will tell you if the query is cached.
 export const queryIsCached = derived([queryString, queryStringWithoutLocalOpts, cacheObj], ([_, $q, $cacheObj]) => {
     // this requires looking at the entire queryString to see if anything has changed,
     // though we will by default want to only use queryStringWithoutLocalOpts for the cache check.
@@ -26,28 +25,25 @@ const removeLocalParams = (obj) => {
     toRemove.forEach(r=>delete obj[r])
 }
 
-const dataset = derived([cacheObj, queryIsCached, queryStringWithoutLocalOpts, queryParameters, start, end], async ([$cacheObj, $isCached, $q, $qp, $start, $end]) => {
+const cacheOrFetch = derived([cacheObj, queryIsCached, queryStringWithoutLocalOpts, queryParameters], async ([$cacheObj, $isCached, $q, $qp, ]) => {
+    if ($qp.mode !== 'explore') return undefined;
     if (!$isCached) {
-        // remove unusd?
+        // save the fetch request here.
         const query = Object.assign({}, $qp)
         removeLocalParams(query)
-        //removeLocalParams(query)
-        if ($qp.mode === 'explore') {
-            $cacheObj[$q] = await fetchExploreData(query);
-        } else {
-            $cacheObj[$q] = 'coming soon.'
-        }
+        $cacheObj[$q] = fetchExploreData(query);
     }
-    // local filters:
-    let data = $cacheObj[$q]
-        .filter(d => { // BY DATE
+    return $cacheObj[$q]
+})
+
+const dataset = derived([cacheOrFetch, start, end], async ([$data, $start, $end])=> {
+    const data = await $data
+    if (!data) return []
+    return data.filter(d => { 
         return ($start !== '' ? d.date >= new Date($start ): true) && ($end !== '' ? d.date <= new Date($end) : true)
     }).map(d => {
         return Object.assign({}, d)
     })
-    //
-
-    return data
 })
 
 export default dataset
