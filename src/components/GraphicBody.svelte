@@ -5,7 +5,7 @@ import LineChartWithCI from './LineChartWithCI.svelte'
 import { mode } from '../stores/stores'
 import { modeIsImplemented } from '../stores/stores'
 import optionSet from '../stores/options.json'
-
+import queryString from '../stores/query'
 export let data;
 
 let metrics;
@@ -42,7 +42,7 @@ if ($mode === 'explore') {
             format: metricInfo.format,
             yMax: metricInfo.yMax,
             yMin: metricInfo.yMin,
-            yRangeGroup: metricInfo.yRangeGroup,
+            yRangeGroup: `${$queryString}-${metricInfo.yRangeGroup}`,
             data: data.map(d=> {
                 const di = {date: d.date}
                 di.value = d[m]
