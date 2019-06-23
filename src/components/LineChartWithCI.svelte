@@ -150,7 +150,7 @@ $: localX = $globalX;
 $: yPoint = data[0];
 
 function setPoint(pt) {
-    if (pt) $globalX = pt.key
+    if (pt) $globalX = pt.date
     else $globalX = undefined
 }
 
@@ -158,7 +158,7 @@ function setPoint(pt) {
 // note: this functionality happens to all graphs because $globalX is
 // a store shared in all component namespaces.
 $: if ($globalX) {
-    yPoint = data.find(d => d.key === $globalX)//last(data.filter(d =>  d.date <= $globalX));
+    yPoint = data.find(d => d.date.getTime() === $globalX.getTime())//last(data.filter(d =>  d.date <= $globalX));
     $coords.x = xScale(yPoint.date);
     $coords.y = yScale(yPoint.value);
     mouseXValue = xRollover(yPoint.date);
@@ -221,10 +221,10 @@ onMount(() => {
         // move the circle.
         const [x, y] = mouse(svg.node())
         if (x >= PL.left && x <= PL.right) {
-            //const invertedX = xScale.invert(x)
-            const invertedX = formatKeyString(xScale.invert(x))
-            //const currentPoint = last(data.filter(d => d.date <= invertedX))
-            const currentPoint = last(data.filter(d => d.key === invertedX))
+            const invertedX = xScale.invert(x)
+            //const invertedX = formatKeyString(xScale.invert(x)
+            const currentPoint = last(data.filter(d => d.date <= invertedX))
+            //const currentPoint = last(data.filter(d => d.key === invertedX))
             setPoint(currentPoint)
             if (isDragging) {
                 mouseDownEndValue = currentPoint.date
