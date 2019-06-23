@@ -75,11 +75,23 @@ $: releaseSet = $majorReleases === undefined ? [] : $majorReleases.filter(({date
     --selector-metadata-font-size: 15px;
 }
 
+h2 {
+    font-size: 20px;
+    font-weight: normal;
+}
+
 input {
     background-color: transparent;
-    border: 1px solid lightgray;
-    border-radius: 5px;
+    border: none;
+    border-bottom: 1px solid tomato;
     padding: 6px;
+    font-weight: 600;
+    font-family: var(--default-font-family);
+    transition: border-bottom 100ms;
+}
+
+input:hover {
+    border-bottom: 1px solid black;
 }
 
 div.days-since {

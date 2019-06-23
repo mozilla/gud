@@ -11,6 +11,10 @@
 	import ErrorMessage from './components/ErrorMessage.svelte';
 	import NoData from './components/NoData.svelte'
 
+	// experiments
+	// import MouseMove from './Components/MouseMove.svelte';
+	// import AdjustableDate from './components/AdjustableDate.svelte';
+
 	// stores
 	import {
 		menuOptions, allOptions, mode, modeIsImplemented

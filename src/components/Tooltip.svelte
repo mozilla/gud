@@ -38,7 +38,7 @@ onMount(() => {
 <style>
 
 :root {
-    --fill: #f8ece5;
+    --fill: var(--tooltip-background);
     --tt-pad: 15px;
 }
 
