@@ -17,6 +17,8 @@ import { timeMonth, timeYear } from 'd3-time'
 import { timeFormat } from 'd3-time-format'
 import { area } from 'd3-shape';
 
+import { rawStart, rawEnd } from '../stores/stores'
+
 import Tooltip from './Tooltip.svelte'
 import { majorReleases } from '../stores/productDetails'
 
@@ -33,6 +35,8 @@ export let xMax;
 export let yMin;
 export let yMax;
 export let yRangeGroup;
+
+export let onDragFinish = (startVal, endVal) => {}
 
 let order = ORDER;
 ORDER += 1;
@@ -61,6 +65,7 @@ const makeFormatter = (maxValue, fmt) => {
 const W = size === 'small' ? 350 : 900;
 const H = size==='small' ? W * .625 : W*.5;
 
+const formatKeyString = timeFormat('%Y-%m-%d')
 const xAxisDate = timeFormat('%d');
 const xAxisMonth = timeFormat('%b');
 const xAxisYear = timeFormat('%Y')
@@ -145,7 +150,7 @@ $: localX = $globalX;
 $: yPoint = data[0];
 
 function setPoint(pt) {
-    if (pt) $globalX = pt.date
+    if (pt) $globalX = pt.key
     else $globalX = undefined
 }
 
@@ -153,7 +158,7 @@ function setPoint(pt) {
 // note: this functionality happens to all graphs because $globalX is
 // a store shared in all component namespaces.
 $: if ($globalX) {
-    yPoint = data.find(d => d.date.getTime() === $globalX.getTime())//last(data.filter(d =>  d.date <= $globalX));
+    yPoint = data.find(d => d.key === $globalX)//last(data.filter(d =>  d.date <= $globalX));
     $coords.x = xScale(yPoint.date);
     $coords.y = yScale(yPoint.value);
     mouseXValue = xRollover(yPoint.date);
@@ -182,14 +187,49 @@ $: if ($globalX) {
     mouseVersionValue = undefined;
 }
 
+// these values are used for dragging.
+let isDragging = false;
+let mouseDownStartValue;
+let mouseDownEndValue;
+
 onMount(() => {
     available = true;
     const svg = select(graph)
+    svg.on('mousedown', (e) => {
+        isDragging = true;
+        const [x, y] = mouse(svg.node())
+        mouseDownStartValue = last(data.filter(d => d.date <= xScale.invert(x)))
+        if (mouseDownStartValue) mouseDownStartValue = mouseDownStartValue.date
+    })
+    svg.on('mouseup', (e) => {
+        if (isDragging) {
+            const [x, y] = mouse(svg.node())
+            // mouseDownEndValue = last(data.filter(d => d.date <= xScale.invert(x)))
+            // if (mouseDownEndValue) mouseDownEndValue = mouseDownEndValue.date
+            // send something to the date store here?
+            if (mouseDownStartValue && mouseDownEndValue) {
+                onDragFinish(mouseDownStartValue, mouseDownEndValue)
+                $globalX = undefined;
+            }
+            isDragging=false;
+            mouseDownStartValue = undefined;
+            mouseDownEndValue = undefined;
+        }
+        
+    })
     svg.on('mousemove', (e) => {
         // move the circle.
         const [x, y] = mouse(svg.node())
         if (x >= PL.left && x <= PL.right) {
-            setPoint(last(data.filter(d => d.date <= xScale.invert(x))))
+            //const invertedX = xScale.invert(x)
+            const invertedX = formatKeyString(xScale.invert(x))
+            //const currentPoint = last(data.filter(d => d.date <= invertedX))
+            const currentPoint = last(data.filter(d => d.key === invertedX))
+            setPoint(currentPoint)
+            if (isDragging) {
+                mouseDownEndValue = currentPoint.date
+            }
+            // 
         } else {
             $coords.x = -150;
             $coords.y = -150;
@@ -199,18 +239,24 @@ onMount(() => {
         }
     })
     svg.on('mouseleave', () => {
+        isDragging = false;
         $coords.x = -150;
         $coords.y = -150;
         mouseXValue = undefined
         mouseYValue = undefined
         mouseYLow = undefined;
         mouseYHigh = undefined;
+        // clear the drag.
+        isDragging = false;
+        mouseDownStartValue = undefined;
+        mouseDownEndValue = undefined;
         setPoint(undefined)
     })
 })
 
 onDestroy(() => {
     ORDER -= 1;
+    console.log('did we distroy?')
 })
 
 afterUpdate(() => {
@@ -287,12 +333,6 @@ svg.large-graph {
     fill: none;
     stroke: rgba(138, 43, 226, .8);
     stroke-width: 1px;
-}
-
-@keyframes dash {
-  to {
-    stroke-dashoffset: 0;
-  }
 }
 
 </style>
@@ -424,6 +464,16 @@ svg.large-graph {
                         ((mouseVersionValue.start - M.buffer < PL.left + M.buffer) ? 'start' : 'end')
                     }
                 >{parseInt(mouseVersionValue.version)}</text>
+            {/if}
+            {#if isDragging}
+                <rect
+                    x={Math.min(xScale(mouseDownStartValue), xScale(mouseDownEndValue))}
+                    y={PL.top}
+                    width={Math.abs(xScale(mouseDownStartValue) - xScale(mouseDownEndValue))}
+                    height={A.bottom - PL.top}
+                    opacity={.2}
+                    fill='tomato'
+                />
             {/if}
         </g>
         <g in:fade={{duration:300}} class=plot-area>

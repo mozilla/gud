@@ -47,6 +47,11 @@ export const isNotDefaultQueryset = derived(allStores, stores => {
     })
 })
 
+export const setDateRange = (start, end) => {
+    rawStart.set(start);
+    rawEnd.set(end)
+}
+
 export const resetQuery = () => {
     allStores.forEach((store, i) => {
         const opt = allOptions[i]
@@ -55,7 +60,7 @@ export const resetQuery = () => {
         else store.set(opt.values.filter(v=>!(v.itemType))[0].key);
     })
     rawStart.set('');
-    rawEnd.set('')
+    rawEnd.set('');
     // reset according to 
 }
 

@@ -1,15 +1,20 @@
 <script>
 import {fly} from 'svelte/transition'
+import {timeFormat} from 'd3-time-format'
 
 import LineChartWithCI from './LineChartWithCI.svelte'
 import { mode } from '../stores/stores'
 import { modeIsImplemented } from '../stores/stores'
 import optionSet from '../stores/options.json'
-import queryString from '../stores/query'
+import queryString, { setDateRange } from '../stores/query'
+//import { rawStart, rawEnd } from '../stores/stores'
+
 export let data;
 
 let metrics;
 let outdata;
+
+const formatKeyString = timeFormat('%Y-%m-%d')
 
 let metricSet = optionSet.metricOptions.setter;
 
@@ -19,6 +24,8 @@ const end = optionSet.endOptions.setter;
 const getMetricInformation = (m) => {
     return optionSet.metricOptions.values.find(v=> v.key === m);
 }
+
+// $: console.log($start, $end)
 
 if ($mode === 'explore') {
     // this is where we filter?
@@ -48,6 +55,7 @@ if ($mode === 'explore') {
                 di.value = d[m]
                 di.lower = Math.max(d[`${m}_low`], 0)
                 di.upper = d[`${m}_high`]
+                di.key = formatKeyString(di.date)
                 return di
             })
         }
@@ -81,10 +89,10 @@ if ($mode === 'explore') {
 
 </style>
 
-
-
 <div class=graphic-body>
     {#if $modeIsImplemented}
+        {$start}
+        {$end}
         <div 
             class:all-graphics={$metricSet === 'all'}
             class:one-graphic={$metricSet !== 'all'}
@@ -103,6 +111,12 @@ if ($mode === 'explore') {
                 yMin={dataset.yMin}
                 yMax={dataset.yMax}
                 yRangeGroup={$metricSet === 'all' ? dataset.yRangeGroup : undefined}
+                onDragFinish={(mouseDownStartValue, mouseDownEndValue) => {
+                    const firstVal = mouseDownStartValue > mouseDownEndValue ? mouseDownEndValue : mouseDownStartValue;
+                    const secondVal = mouseDownStartValue > mouseDownEndValue ? mouseDownStartValue : mouseDownEndValue;
+                    // FIXME: this doesn't work as intended.
+                    //setDateRange(formatKeyString(firstVal), formatKeyString(secondVal))
+                }}
                  />
             {/each}
         </div>

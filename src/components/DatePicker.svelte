@@ -28,7 +28,7 @@ const dayAfter = (d) => {
     return di
 }
 
-// FIXME: replace this with something a bit more relevant.
+// FIXME: replace this with something else?
 let START = '2017-06-13';
 
 // check boundary conditions.
@@ -103,30 +103,29 @@ div.days-since {
 
 <div>
 
-<h2>Time Period</h2>
+    <h2>Time Period</h2>
 
-<input type="date" id="start" name="range-start"
-       value="2018-07-22"
-       min={START} max={$end === '' ? TODAY : $end} bind:value={$rawStart}>
+    <input type="date" id="start" name="range-start"
+        value="2018-07-22"
+        min={START} max={$end === '' ? TODAY : $end} bind:value={$rawStart}>
 
-<input type="date" id="end" name="range-end"
-       value="2018-07-22"
-       min={
-           $start === '' ? 
-            START :
-            ($start)
-       } max={TODAY} bind:value={$rawEnd}>
+    <input type="date" id="end" name="range-end"
+        value="2018-07-22"
+        min={
+            $start === '' ? 
+                START :
+                ($start)
+        } max={TODAY} bind:value={$rawEnd}>
 
-{#if days !== NaN}
-    <div class=days-since>
-        {#if $start === '' && $end === ''}
-            default
-        {/if}
-        {days} days 
-        {#if releaseSet.length > 1}
-            ({releaseSet.length} releases)
-        {/if}
-    </div>
-{/if}    
-
+    {#if days !== NaN}
+        <div class=days-since>
+            {#if $start === '' && $end === ''}
+                default
+            {/if}
+            {days} days 
+            {#if releaseSet.length > 1}
+                ({releaseSet.length} releases)
+            {/if}
+        </div>
+    {/if}
 </div>
