@@ -1,6 +1,8 @@
 import { derived } from 'svelte/store'
 import { allOptions, allStores, rawStart, rawEnd } from './stores'
 
+// this is the javascript object that contains all the currently-selected
+// options.
 export const queryParameters = derived(allStores, (stores) => {
     const outs = {}
     stores.forEach(($store,i) => {
@@ -8,11 +10,6 @@ export const queryParameters = derived(allStores, (stores) => {
     })
     return outs
 })
-
-const filterDates = ($store, i) => {
-    const opt = allOptions[i]
-    return !opt.onlyLocal
-}
 
 const toQueryStringParts = ($store,i) => {
     const opt = allOptions[i]
@@ -30,14 +27,23 @@ const queryString = derived(
     return currentQuery
 })
 
+// queryStringWithoutLocalOpts ---------------------------------
 // this store specifically filters out all the options that have
-// onlyLocal = true. These are not meaningful for the cached data, which is
-// where this store is primarily used.
+// onlyLocal = true. Those particular options are not meaningful
+// for the caching process (for instance, date ranges) since for 
+// options where onlyLocal = true we further in-client.
+
 export const queryStringWithoutLocalOpts = derived(allStores, (stores) => {
-    const outs = stores.map(toQueryStringParts).filter(filterDates)
+    const outs = stores
+        .map(toQueryStringParts)
+        .filter((_, i) => !allOptions[i].onlyLocal)
     return outs.join('&')
 })
 
+// isNotDefaultQueryset is a simple flag that is true if the user
+// has at least one selector value != the default.
+// This is used primarily in App.svelte, where we have a button
+// appear that allows you to resetQuery (see below) if true.
 export const isNotDefaultQueryset = derived(allStores, stores => {
     return !stores.every(($store, i) => {
         const opt = allOptions[i];
@@ -52,6 +58,8 @@ export const setDateRange = (start, end) => {
     rawEnd.set(end)
 }
 
+// resetQuery resets all of the stores associated with the parameters
+// to their default values.
 export const resetQuery = () => {
     allStores.forEach((store, i) => {
         const opt = allOptions[i]
@@ -61,7 +69,6 @@ export const resetQuery = () => {
     })
     rawStart.set('');
     rawEnd.set('');
-    // reset according to 
 }
 
 export default queryString

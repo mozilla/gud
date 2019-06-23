@@ -23,7 +23,6 @@
 	import currentQuery, { isNotDefaultQueryset, resetQuery } from './stores/query'
 	import optionSet from './stores/options.json'
 
-	// props
 	export let name;
 
 	let visible = false;

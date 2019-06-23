@@ -9,12 +9,12 @@ import {fetchExploreData} from './fetchData'
 
 const cacheObj = writable({})
 
+// simply put, if $q is in the cacheObj, then return true.
 export const queryIsCached = derived([queryString, queryStringWithoutLocalOpts, cacheObj], ([_, $q, $cacheObj]) => {
     // this requires looking at the entire queryString to see if anything has changed,
     // though we will by default want to only use queryStringWithoutLocalOpts for the cache check.
-    // hence the _.
-    if (!($q in $cacheObj)) return false;
-    else return true;
+    // hence the _ - we weant this to fire when queryString changes, but we don't need it.
+    return $q in $cacheObj
 })
 
 const removeLocalParams = (obj) => {
@@ -25,10 +25,10 @@ const removeLocalParams = (obj) => {
     toRemove.forEach(r=>delete obj[r])
 }
 
-const cacheOrFetch = derived([cacheObj, queryIsCached, queryStringWithoutLocalOpts, queryParameters], async ([$cacheObj, $isCached, $q, $qp, ]) => {
+const cachedRequest = derived([cacheObj, queryIsCached, queryStringWithoutLocalOpts, queryParameters], async ([$cacheObj, $isCached, $q, $qp, ]) => {
     if ($qp.mode !== 'explore') return undefined;
     if (!$isCached) {
-        // save the fetch request here.
+        // save the fetch request here as a promise.
         const query = Object.assign({}, $qp)
         removeLocalParams(query)
         $cacheObj[$q] = fetchExploreData(query);
@@ -36,11 +36,11 @@ const cacheOrFetch = derived([cacheObj, queryIsCached, queryStringWithoutLocalOp
     return $cacheObj[$q]
 })
 
-const dataset = derived([cacheOrFetch, start, end], async ([$data, $start, $end])=> {
+const dataset = derived([cachedRequest, start, end], async ([$data, $start, $end])=> {
     const data = await $data
     if (!data) return []
     return data.filter(d => { 
-        return ($start !== '' ? d.date >= new Date($start ): true) && ($end !== '' ? d.date <= new Date($end) : true)
+        return ($start !== '' ? d.date >= new Date($start): true) && ($end !== '' ? d.date <= new Date($end) : true)
     }).map(d => {
         return Object.assign({}, d)
     })

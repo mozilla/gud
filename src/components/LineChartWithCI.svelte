@@ -17,8 +17,6 @@ import { timeMonth, timeYear } from 'd3-time'
 import { timeFormat } from 'd3-time-format'
 import { area } from 'd3-shape';
 
-import { rawStart, rawEnd } from '../stores/stores'
-
 import Tooltip from './Tooltip.svelte'
 import { majorReleases } from '../stores/productDetails'
 
@@ -41,7 +39,7 @@ export let onDragFinish = (startVal, endVal) => {}
 let order = ORDER;
 ORDER += 1;
 
-let orderStagger = 150;
+let orderStagger = 50;
 
 let updateTooltipPosition;
 
@@ -70,6 +68,7 @@ const xAxisDate = timeFormat('%d');
 const xAxisMonth = timeFormat('%b');
 const xAxisYear = timeFormat('%Y')
 const xRollover = timeFormat('%b %d, %Y')
+
 const M = {
     left:45,
     right:45,
@@ -103,13 +102,15 @@ $: yFormat = makeFormatter(FINAL_MAX_Y, yType);
 
 let graphXMin;
 let graphXMax;
+// let dateRangeMode = 'years';
 
-$: graphXMin = xMin !== '' ? new Date(xMin) : Math.min(...data.map(v=>v.date))
-$: graphXMax = xMax !== '' ? new Date(xMax) : Math.max(...data.map(v=>v.date))
+$: graphXMin = xMin !== '' ? new Date(xMin) : new Date(Math.min(...data.map(v=>v.date)))
+$: graphXMax = xMax !== '' ? new Date(xMax) : new Date(Math.max(...data.map(v=>v.date)))
 $: xScale = scaleLinear().domain([
         graphXMin, graphXMax])
     .range([PL.left,PL.right])
 
+// $: dateRangeMode = daysBetween(graphXMin, graphXMax) > 600 ? 'years' : 'months'
 
 // sift throuh releases here.
 const ONE_YEAR = 1000 * 60 * 60 * 24 * (365  * (size === 'large' ? 2 : 1))
@@ -256,7 +257,6 @@ onMount(() => {
 
 onDestroy(() => {
     ORDER -= 1;
-    console.log('did we distroy?')
 })
 
 afterUpdate(() => {
@@ -346,10 +346,10 @@ svg.large-graph {
         class:large-header={size==='large'}
         class:small-header={size==='small'}
     >
-        <h3 in:fly={{y:10, duration: 500 + order * orderStagger}}>{title}</h3>
+        <h3 in:fly={{y:10, duration: 500, delay: order * orderStagger}}>{title}</h3>
         <div
             class='graph-tooltip'
-            in:fly={{y:10, duration: 400 + order * orderStagger, delay:200}}
+            in:fly={{y:-10, duration: 400, delay: order * orderStagger}}
             out:fly={{duration:0, delay:0}}
             on:introend="{() => {
                 if (updateTooltipPosition) updateTooltipPosition()            
@@ -377,23 +377,25 @@ svg.large-graph {
                 stroke='gray'
                 stroke-width={1}
                 ></line>
-                <!-- {#each xTicks as xTick, i}
-                    <line 
-                        x1={xScale(xTick)}
-                        x2={xScale(xTick)}
-                        y1={A.bottom}
-                        y2={A.bottom + M.buffer}
-                        stroke='gray'
-                    />
-                    <text
-                        x={xScale(xTick)}
-                        y={A.bottom + M.buffer * 3}
-                        dy={'.35em'}
-                        font-size={10}
-                        font-weight={xAxisMonth(xTick) === 'Jan' ? 'normal' : '100'} 
-                        text-anchor="middle"
-                    >{xAxisMonth(xTick)}</text>
-                {/each} -->
+                <!-- {#if dateRangeMode === 'months'}
+                    {#each xTicks as xTick, i}
+                        <line 
+                            x1={xScale(xTick)}
+                            x2={xScale(xTick)}
+                            y1={A.bottom}
+                            y2={A.bottom + M.buffer}
+                            stroke='gray'
+                        />
+                        <text
+                            x={xScale(xTick)}
+                            y={A.bottom + M.buffer * 3}
+                            dy={'.35em'}
+                            font-size={10}
+                            font-weight={xAxisMonth(xTick) === 'Jan' ? 'normal' : '100'} 
+                            text-anchor="middle"
+                        >{xAxisMonth(xTick)}</text>
+                    {/each}
+                {/if} -->
                 {#each years as year, i}
                     <line 
                         x1={xScale(year)}

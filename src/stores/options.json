@@ -20,7 +20,6 @@
         "inMenu": false,
         "values": [
         { "label": "Explore", "key": "explore" }, 
-        { "label": "Compare", "key": "compare" }, 
         { "label": "Table", "key": "table" }
     ]},
     "usageCriteriaOptions": {
