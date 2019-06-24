@@ -135,9 +135,9 @@ $: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : FINAL_MAX_Y])
 
 // finalData is the element that gets plotted.
 let finalData = intermediateData
-$: finalData = intermediateData.filter((d) => {
-    return d.date <= graphXMax && d.date >= graphXMin
-})
+// $: finalData = intermediateData.filter((d) => {
+//     return d.date <= graphXMax && d.date >= graphXMin
+// })
 
 let areaShape = area()
     .x(d=> xScale(d.date))
@@ -384,7 +384,17 @@ svg.large-graph {
         class:small-graph={size==='small'}
         class:large-graph={size==='large'}
     >
-        
+        <defs>
+            <clipPath id='clip-path'>
+                <rect
+                    x={PL.left}
+                    y={PL.top}
+                    width={PL.right - PL.left}
+                    height={PL.bottom - PL.top}
+                />
+            </clipPath>
+        </defs>
+
         <g class=x-axis>
             <line 
                 x1={PL.left}  
@@ -460,11 +470,13 @@ svg.large-graph {
         </g>
         <g class=plot-background>
             {#if mouseVersionValue && mouseVersionValue.end && mouseVersionValue}
-                <rect 
+                <!--  -->
+                <rect
+                    style="clip-path: url(#clip-path);" 
                     transition:fade={{duration:100}}
                     x={Math.max(mouseVersionValue.start, PL.left)}
                     y={PL.top}
-                    width={mouseVersionValue.end- Math.max(mouseVersionValue.start, PL.left)}
+                    width={mouseVersionValue.end - Math.max(mouseVersionValue.start, PL.left)}
                     height={A.bottom - PL.top}
                     fill='rgba(0,0,100,.05)'
                 />
@@ -495,8 +507,8 @@ svg.large-graph {
             {/if}
         </g>
         <g in:fade={{duration:300}} class=plot-area>
-            <path in:fade={{duration:1000}} d={ciArea}  fill='rgba(0,0,0,.1)' />
-            <path out:draw={{duration:100, easing: linear}} in:draw={{duration: 500, easing: linear}} class:loaded={available} class=path-line d={path} />
+            <path  style="clip-path: url(#clip-path);" in:fade={{duration:1000}} d={ciArea}  fill='rgba(0,0,0,.1)' />
+            <path  style="clip-path: url(#clip-path);" out:draw={{duration:100, easing: linear}} in:draw={{duration: 500, easing: linear}} class:loaded={available} class=path-line d={path} />
         </g>
         <g class=markers>
             {#each markers as marker, i}
