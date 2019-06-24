@@ -17,6 +17,7 @@ import { timeMonth, timeYear } from 'd3-time'
 import { timeFormat } from 'd3-time-format'
 import { area } from 'd3-shape';
 
+import NumericYAxis from './data-graphic/NumericYAxis.svelte'
 import TimeAxis from './data-graphic/TimeAxis.svelte'
 import Tooltip from './Tooltip.svelte'
 import { majorReleases } from '../stores/productDetails'
@@ -135,8 +136,12 @@ $: markers = $majorReleases.filter(release => {
         && (release.date >= graphXMin && release.date <= graphXMax)
 })
 
+let yScale;
+
 $: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : FINAL_MAX_Y])
     .range([PL.bottom, PL.top])
+
+$: console.log(title, yScale.domain())
 
 // finalData is the element that gets plotted.
 let finalData = intermediateData;
@@ -406,33 +411,15 @@ svg.large-graph {
             scale={xScale}
             tickLength={M.buffer}
         />
-        <g class=y-axis>
-            <line 
-                x1={PL.left}  
-                x2={PL.left}
-                y1={M.top} y2={A.bottom}
-                stroke='gray'
-                stroke-width={1}
-                ></line>
-                {#each yTicks as yTick,i}
-                    <line 
-                        x1={PL.left}
-                        x2={PL.left - M.buffer}
-                        y1={yScale(yTick)}
-                        y2={yScale(yTick)}
-                        stroke=gray
-                    />
-                    <text
-                        in:fly={{x:-20, duration:200 + i * 100}}
-                        y={yScale(yTick)}
-                        x={A.left - M.buffer}
-                        dy={'.35em'}
-                        font-size={10}
-                        text-anchor="end"
-                    >{yFormat(yTick)}</text>
-                    
-                {/each}
-        </g>
+        <NumericYAxis
+            left={PL.left}
+            right={PL.right}
+            top={PL.top}
+            bottom={PL.bottom}
+            tickLength={M.buffer}
+            scale={yScale}
+            axisType={yType}
+        />
         <g class=plot-background>
             {#if mouseVersionValue && mouseVersionValue.end && mouseVersionValue}
                 <!--  -->
