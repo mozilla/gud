@@ -17,6 +17,7 @@ import { timeMonth, timeYear } from 'd3-time'
 import { timeFormat } from 'd3-time-format'
 import { area } from 'd3-shape';
 
+import TimeAxis from './data-graphic/TimeAxis.svelte'
 import Tooltip from './Tooltip.svelte'
 import { majorReleases } from '../stores/productDetails'
 
@@ -77,7 +78,7 @@ const H = size==='small' ? W * .625 : W*.5;
 const formatKeyString = timeFormat('%Y-%m-%d')
 const xAxisDate = timeFormat('%d');
 const xAxisMonth = timeFormat('%b');
-const xAxisYear = timeFormat('%Y')
+const xAxisYear = timeFormat('%Y');
 const xRollover = timeFormat('%b %d, %Y')
 
 const M = {
@@ -394,53 +395,13 @@ svg.large-graph {
                 />
             </clipPath>
         </defs>
-
-        <g class=x-axis>
-            <line 
-                x1={PL.left}  
-                x2={PL.right}
-                y1={A.bottom} y2={A.bottom}
-                stroke='gray'
-                stroke-width={1}
-                ></line>
-                <!-- {#if dateRangeMode === 'months'}
-                    {#each xTicks as xTick, i}
-                        <line 
-                            x1={xScale(xTick)}
-                            x2={xScale(xTick)}
-                            y1={A.bottom}
-                            y2={A.bottom + M.buffer}
-                            stroke='gray'
-                        />
-                        <text
-                            x={xScale(xTick)}
-                            y={A.bottom + M.buffer * 3}
-                            dy={'.35em'}
-                            font-size={10}
-                            font-weight={xAxisMonth(xTick) === 'Jan' ? 'normal' : '100'} 
-                            text-anchor="middle"
-                        >{xAxisMonth(xTick)}</text>
-                    {/each}
-                {/if} -->
-                {#each years as year, i}
-                    <line 
-                        x1={xScale(year)}
-                        x2={xScale(year)}
-                        y1={A.bottom}
-                        y2={A.bottom + M.buffer}
-                        stroke='gray'
-                    />
-                    <text
-                        in:fly={{y:10, duration:300 + i * 200}}
-                        x={xScale(year)}
-                        y={A.bottom +M.buffer*3}
-                        dy='.35em'
-                        font-size={10}
-                        text-anchor=middle
-
-                    >{xAxisYear(year)}</text>
-                {/each}
-        </g>
+        <TimeAxis
+            left={PL.left}
+            right={PL.right}
+            bottom={A.bottom}
+            scale={xScale}
+            tickLength={M.buffer}
+        />
         <g class=y-axis>
             <line 
                 x1={PL.left}  
