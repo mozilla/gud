@@ -25,8 +25,6 @@ const getMetricInformation = (m) => {
     return optionSet.metricOptions.values.find(v=> v.key === m);
 }
 
-// $: console.log($start, $end)
-
 if ($mode === 'explore') {
     // this is where we filter?
     metrics = Object.keys(data[0]).filter(m => {
@@ -38,6 +36,12 @@ if ($mode === 'explore') {
     })
     // get start an end date of data, and filter accordingly?
     // FIXME: add filter when we are not on metric=all
+    // const intermediateData = data.filter(d => { 
+    //     return ($start !== '' ? d.date >= new Date($start): true) && ($end !== '' ? d.date <= new Date($end) : true)
+    // }).map(d => {
+    //     return Object.assign({}, d)
+    // })
+    
     outdata = metrics.map(m => {
         const metricInfo = getMetricInformation(m)
         return {
@@ -91,8 +95,6 @@ if ($mode === 'explore') {
 
 <div class=graphic-body>
     {#if $modeIsImplemented}
-        {$start}
-        {$end}
         <div 
             class:all-graphics={$metricSet === 'all'}
             class:one-graphic={$metricSet !== 'all'}
@@ -115,7 +117,7 @@ if ($mode === 'explore') {
                     const firstVal = mouseDownStartValue > mouseDownEndValue ? mouseDownEndValue : mouseDownStartValue;
                     const secondVal = mouseDownStartValue > mouseDownEndValue ? mouseDownStartValue : mouseDownEndValue;
                     // FIXME: this doesn't work as intended.
-                    //setDateRange(formatKeyString(firstVal), formatKeyString(secondVal))
+                    setDateRange(formatKeyString(firstVal), formatKeyString(secondVal))
                 }}
                  />
             {/each}

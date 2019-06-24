@@ -53,6 +53,7 @@ $: if ($rawEnd !== '') {
 $: currentStart = new Date($start === '' ? START : $start);
 $: currentEnd = new Date($end === '' ? TODAY : $end);
 
+// this is where the store gets set, y'all.
 $: if ($start !== '' && $start < START) $start = START;
 $: if ($end !== '' && $start !== '' && $start > $end) $start = $end;
 

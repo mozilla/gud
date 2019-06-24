@@ -43,6 +43,17 @@ let orderStagger = 50;
 
 let updateTooltipPosition;
 
+
+const inBounds = (xmin, xmax) => {
+    const xmindate = new Date(xmin)
+    const xmaxdate = new Date(xmax)
+    return d => { 
+        return (xmin !== '' ? d.date >= xmindate : true) && (xmax !== '' ? d.date <= new xmaxdate : true)
+    }
+}
+
+let intermediateData = data.filter(inBounds(xMin, xMax))
+
 const daysBetween = (firstDate, secondDate) => {
     const oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
     return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
@@ -89,7 +100,7 @@ const PL = {
     bottom: H - M.bottom - M.buffer
 }
 
-const MAX_Y = yMax ? yMax : Math.max(...data.map(v=>v.upper))
+const MAX_Y = yMax ? yMax : Math.max(...intermediateData.map(v=>v.upper))
 
 // if this graph has a yRangeGroup key, let's log if it beats the current max Y for the group.
 if (yRangeGroup) {
@@ -104,13 +115,11 @@ let graphXMin;
 let graphXMax;
 // let dateRangeMode = 'years';
 
-$: graphXMin = xMin !== '' ? new Date(xMin) : new Date(Math.min(...data.map(v=>v.date)))
-$: graphXMax = xMax !== '' ? new Date(xMax) : new Date(Math.max(...data.map(v=>v.date)))
+$: graphXMin = xMin !== '' ? new Date(xMin) : new Date(Math.min(...intermediateData.map(v=>v.date)))
+$: graphXMax = xMax !== '' ? new Date(xMax) : new Date(Math.max(...intermediateData.map(v=>v.date)))
 $: xScale = scaleLinear().domain([
         graphXMin, graphXMax])
     .range([PL.left,PL.right])
-
-// $: dateRangeMode = daysBetween(graphXMin, graphXMax) > 600 ? 'years' : 'months'
 
 // sift throuh releases here.
 const ONE_YEAR = 1000 * 60 * 60 * 24 * (365  * (size === 'large' ? 2 : 1))
@@ -124,14 +133,21 @@ $: markers = $majorReleases.filter(release => {
 $: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : FINAL_MAX_Y])
     .range([PL.bottom, PL.top])
 
-$: path = `M${data.map(p => `${xScale(p.date)},${yScale(p.value)}`).join('L')}`;
-$: xTicks = xScale.ticks()
-$: yTicks = yScale.ticks(5)
+// finalData is the element that gets plotted.
+let finalData = intermediateData
+$: finalData = intermediateData.filter((d) => {
+    return d.date <= graphXMax && d.date >= graphXMin
+})
 
 let areaShape = area()
     .x(d=> xScale(d.date))
     .y0(d=> yScale(d.lower))
     .y1(d=> yScale(d.upper))
+
+$: path = `M${finalData.map(p => `${xScale(p.date)},${yScale(p.value)}`).join('L')}`;
+$: ciArea = areaShape(finalData);
+$: xTicks = xScale.ticks()
+$: yTicks = yScale.ticks(5)
 
 let graph;
 let available = false;
@@ -159,7 +175,7 @@ function setPoint(pt) {
 // note: this functionality happens to all graphs because $globalX is
 // a store shared in all component namespaces.
 $: if ($globalX) {
-    yPoint = data.find(d => d.date.getTime() === $globalX.getTime())//last(data.filter(d =>  d.date <= $globalX));
+    yPoint = intermediateData.find(d => d.date.getTime() === $globalX.getTime())//last(data.filter(d =>  d.date <= $globalX));
     $coords.x = xScale(yPoint.date);
     $coords.y = yScale(yPoint.value);
     mouseXValue = xRollover(yPoint.date);
@@ -199,7 +215,7 @@ onMount(() => {
     svg.on('mousedown', (e) => {
         isDragging = true;
         const [x, y] = mouse(svg.node())
-        mouseDownStartValue = last(data.filter(d => d.date <= xScale.invert(x)))
+        mouseDownStartValue = last(intermediateData.filter(d => d.date <= xScale.invert(x)))
         if (mouseDownStartValue) mouseDownStartValue = mouseDownStartValue.date
     })
     svg.on('mouseup', (e) => {
@@ -224,7 +240,7 @@ onMount(() => {
         if (x >= PL.left && x <= PL.right) {
             const invertedX = xScale.invert(x)
             //const invertedX = formatKeyString(xScale.invert(x)
-            const currentPoint = last(data.filter(d => d.date <= invertedX))
+            const currentPoint = last(intermediateData.filter(d => d.date <= invertedX))
             //const currentPoint = last(data.filter(d => d.key === invertedX))
             setPoint(currentPoint)
             if (isDragging) {
@@ -337,7 +353,7 @@ svg.large-graph {
 
 </style>
 
-{#if data.length}
+{#if intermediateData.length}
 <div
     class=graphic-container
 >
@@ -479,7 +495,7 @@ svg.large-graph {
             {/if}
         </g>
         <g in:fade={{duration:300}} class=plot-area>
-            <path in:fade={{duration:1000}} d={areaShape(data)}  fill='rgba(0,0,0,.1)' />
+            <path in:fade={{duration:1000}} d={ciArea}  fill='rgba(0,0,0,.1)' />
             <path in:draw={{duration: 500, easing: linear}} class:loaded={available} class=path-line d={path} />
         </g>
         <g class=markers>

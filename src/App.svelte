@@ -90,7 +90,26 @@
 				{name} <span>{` / ${$mode}`}</span>
 		</h1>
 		<!-- content -->
-			{#await $cache}
+				{#if $cache}
+					{#if $cache.length}
+						<GraphicBody data={$cache} />
+					{:else}
+						<NoData />
+					{/if}
+				{:else}
+									<div 
+						in:fly={{y:30, duration: 200}} 
+						class='loading-data'>
+						<div class=loading-message>
+							Loading data ...
+						</div>
+						<div class=loading-spinner>
+							<svg viewBox="25 25 50 50"><circle cx="50" cy="50" r="20"></circle></svg>
+						</div>
+					</div>
+
+			{/if}
+			<!-- {#await $cache}
 					<div 
 						in:fly={{y:30, duration: 200}} 
 						class='loading-data'>
@@ -109,7 +128,7 @@
 					{/if}
 				{:catch error}
 					<ErrorMessage error={error} />
-			{/await}
+			{/await} -->
 		<!-- foot -->
 		<footer>
 			<h3>Inquiries</h3>
