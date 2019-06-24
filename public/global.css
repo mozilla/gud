@@ -125,12 +125,22 @@ main {
 	grid-template-rows: [header] var(--top-height) [graphic-body] auto [footer] var(--control-foot-height);
 }
 
-h1 {
+.header {
 	grid-row: header;
-	margin:0;
+	display: grid;
+	grid-template-columns: [header-title] max-content [header-buttons] max-content;
 	padding-left: var(--pad);
 	padding-right: var(--pad);
 	padding-bottom: var(--pad);
+}
+
+h1 {
+	/* grid-row: header; */
+	grid-column: header-title;
+	margin:0;
+	/* padding-left: var(--pad);
+	padding-right: var(--pad);
+	padding-bottom: var(--pad); */
 	display: flex;
 	align-items: center;
 	height: var(--title-height);
@@ -145,6 +155,14 @@ h1 span {
 .ff-logo {
 	height: calc(var(--title-height) - var(--pad) - var(--pad));
 	padding-right: calc(var(--pad) / 2);
+}
+
+.fulfillment-buttons {
+	/* this should be filled with buttons like "get query"  etc */
+	grid-column: header-buttons;
+	height: var(--title-height);
+
+	/* padding-bottom: var(--pad); */
 }
 
 /* Loading Data */

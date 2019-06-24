@@ -141,8 +141,6 @@ let yScale;
 $: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : FINAL_MAX_Y])
     .range([PL.bottom, PL.top])
 
-$: console.log(title, yScale.domain())
-
 // finalData is the element that gets plotted.
 let finalData = intermediateData;
 // $: finalData = intermediateData.filter((d) => {

@@ -37,7 +37,7 @@ const makeFormatter = (maxValue, fmt) => {
 
 $: formatter = makeFormatter(scale.domain()[1], axisType);
 $: ticks = scale.ticks(5)
-
+$: topTick = ticks[ticks.length-1]
 </script>
 
 
@@ -45,7 +45,7 @@ $: ticks = scale.ticks(5)
     <line 
         x1={SETTINGS[side].main}  
         x2={SETTINGS[side].main}
-        y1={SETTINGS[side].top} y2={SETTINGS[side].bottom}
+        y1={scale(topTick)} y2={SETTINGS[side].bottom}
         stroke='gray'
         stroke-width={1}
         ></line>

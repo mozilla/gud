@@ -84,50 +84,36 @@
 
 {#if visible}
 	<div class=content>
-		<h1 
-			in:fly="{{y:-20, duration: 400, delay: 150}}">
-				<img  in:fly="{{y:-10, duration: 600, delay: 200}}" class='ff-logo' alt='Firefox Logo' src='firefox-logo.png' />
-				{name} <span>{` / ${$mode}`}</span>
-		</h1>
+		<div class=header>
+			<h1 
+				in:fly="{{y:-20, duration: 400, delay: 150}}">
+					<img  in:fly="{{y:-10, duration: 600, delay: 200}}" class='ff-logo' alt='Firefox Logo' src='firefox-logo.png' />
+					{name} <span>{` / ${$mode}`}</span>
+			</h1>
+			<div class=fulfillment-buttons>
+			</div>
+		</div>
 		<!-- content -->
-				<!-- {#if $cache}
-					{#if $cache.length}
-						<GraphicBody data={$cache} />
-					{:else}
-						<NoData />
-					{/if}
-				{:else}
-									<div 
-						in:fly={{y:30, duration: 200}} 
-						class='loading-data'>
-						<div class=loading-message>
-							Loading data ...
-						</div>
-						<div class=loading-spinner>
-							<svg viewBox="25 25 50 50"><circle cx="50" cy="50" r="20"></circle></svg>
-						</div>
-					</div>
-			{/if} -->
-				{#await $cache}
-					<div 
-						in:fly={{y:30, duration: 200}} 
-						class='loading-data'>
-						<div class=loading-message>
-							Loading data ...
-						</div>
-						<div class=loading-spinner>
-							<svg viewBox="25 25 50 50"><circle cx="50" cy="50" r="20"></circle></svg>
-						</div>
-					</div>
-				{:then value}
-					{#if value.length}
-						<GraphicBody data={value} />
-					{:else}
-						<NoData />
-					{/if}
-				{:catch error}
-					<ErrorMessage error={error} />
-			{/await}
+		{#await $cache}
+			<div 
+				in:fly={{y:30, duration: 200}} 
+				class='loading-data'>
+				<div class=loading-message>
+					Loading data ...
+				</div>
+				<div class=loading-spinner>
+					<svg viewBox="25 25 50 50"><circle cx="50" cy="50" r="20"></circle></svg>
+				</div>
+			</div>
+		{:then value}
+			{#if value.length}
+				<GraphicBody data={value} />
+			{:else}
+				<NoData />
+			{/if}
+		{:catch error}
+			<ErrorMessage error={error} />
+		{/await}
 		<!-- foot -->
 		<footer>
 			<h3>Inquiries</h3>

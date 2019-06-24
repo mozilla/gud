@@ -6,7 +6,9 @@ import { mode } from '../stores/stores'
 import { modeIsImplemented } from '../stores/stores'
 import optionSet from '../stores/options.json'
 import queryString, { setDateRange } from '../stores/query'
-//import { rawStart, rawEnd } from '../stores/stores'
+import { majorReleases } from '../stores/productDetails';
+
+// these are the markers.
 
 export let data;
 
@@ -17,6 +19,7 @@ const formatKeyString = timeFormat('%Y-%m-%d')
 
 let metricSet = optionSet.metricOptions.setter;
 
+// filter majorReleases according to start and end.
 const start = optionSet.startOptions.setter;
 const end = optionSet.endOptions.setter;
 
