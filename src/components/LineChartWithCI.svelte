@@ -134,7 +134,7 @@ $: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : FINAL_MAX_Y])
     .range([PL.bottom, PL.top])
 
 // finalData is the element that gets plotted.
-let finalData = intermediateData
+let finalData = intermediateData;
 // $: finalData = intermediateData.filter((d) => {
 //     return d.date <= graphXMax && d.date >= graphXMin
 // })
@@ -145,7 +145,8 @@ let areaShape = area()
     .y1(d=> yScale(d.upper))
 
 $: path = `M${finalData.map(p => `${xScale(p.date)},${yScale(p.value)}`).join('L')}`;
-$: ciArea = areaShape(finalData);
+// for whatever reason, ciArea doesn't update gracefully,.
+$: ciArea = areaShape(finalData.filter(d => d.date <= graphXMax && d.date >= graphXMin));
 $: xTicks = xScale.ticks()
 $: yTicks = yScale.ticks(5)
 
@@ -366,7 +367,6 @@ svg.large-graph {
         <div
             class='graph-tooltip'
             in:fly={{y:-10, duration: 400, delay: order * orderStagger}}
-            out:fly={{duration:0, delay:0}}
             on:introend="{() => {
                 if (updateTooltipPosition) updateTooltipPosition()            
             }}"

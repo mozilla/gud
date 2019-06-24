@@ -99,7 +99,7 @@ if ($mode === 'explore') {
             class:all-graphics={$metricSet === 'all'}
             class:one-graphic={$metricSet !== 'all'}
         >
-            {#each outdata as dataset, i}
+            {#each outdata as dataset, i (dataset.title)}
             <LineChartWithCI 
                 size={$metricSet === 'all' ? 'small' : 'large'} 
                 title={dataset.title} 
