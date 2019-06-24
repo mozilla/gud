@@ -10,7 +10,7 @@ import queryString, { setDateRange } from '../stores/query'
 //import { rawStart, rawEnd } from '../stores/stores'
 
 export let data;
-
+console.log(data)
 let metrics;
 let outdata;
 
@@ -117,7 +117,7 @@ if ($mode === 'explore') {
                     const firstVal = mouseDownStartValue > mouseDownEndValue ? mouseDownEndValue : mouseDownStartValue;
                     const secondVal = mouseDownStartValue > mouseDownEndValue ? mouseDownStartValue : mouseDownEndValue;
                     // FIXME: this doesn't work as intended.
-                    setDateRange(formatKeyString(firstVal), formatKeyString(secondVal))
+                    //setDateRange(formatKeyString(firstVal), formatKeyString(secondVal))
                 }}
                  />
             {/each}

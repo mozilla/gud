@@ -36,10 +36,13 @@ const cachedRequest = derived([cacheObj, queryIsCached, queryStringWithoutLocalO
     return $cacheObj[$q]
 })
 
-const dataset = derived([cachedRequest, start, end, queryString], ([$data, $start, $end, _], set)=> {
-    const data = $data.then(set)
+const dataset = derived([cachedRequest, start, end, queryString], async ([$data, $start, $end, _])=> {
+    //const data = $data.then(set)
     // if (!data) return []
-    // return data
+    console.log($start, $end, _, '???');
+    const resultset = await $data
+    if (!resultset) return []
+    return resultset
 })
 
 export default dataset

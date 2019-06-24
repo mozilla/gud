@@ -48,7 +48,7 @@ const inBounds = (xmin, xmax) => {
     const xmindate = new Date(xmin)
     const xmaxdate = new Date(xmax)
     return d => { 
-        return (xmin !== '' ? d.date >= xmindate : true) && (xmax !== '' ? d.date <= new xmaxdate : true)
+        return (xmin !== '' ? d.date >= xmindate : true) && (xmax !== '' ? d.date <= xmaxdate : true)
     }
 }
 

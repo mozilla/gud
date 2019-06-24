@@ -90,7 +90,7 @@
 				{name} <span>{` / ${$mode}`}</span>
 		</h1>
 		<!-- content -->
-				{#if $cache}
+				<!-- {#if $cache}
 					{#if $cache.length}
 						<GraphicBody data={$cache} />
 					{:else}
@@ -108,8 +108,8 @@
 						</div>
 					</div>
 
-			{/if}
-			<!-- {#await $cache}
+			{/if} -->
+			{#await $cache}
 					<div 
 						in:fly={{y:30, duration: 200}} 
 						class='loading-data'>
@@ -128,7 +128,7 @@
 					{/if}
 				{:catch error}
 					<ErrorMessage error={error} />
-			{/await} -->
+			{/await}
 		<!-- foot -->
 		<footer>
 			<h3>Inquiries</h3>
