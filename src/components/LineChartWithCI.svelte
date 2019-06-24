@@ -37,6 +37,16 @@ export let yRangeGroup;
 
 export let onDragFinish = (startVal, endVal) => {}
 
+function getCSSVariable(variableName) {
+    return getComputedStyle(document.documentElement)
+        .getPropertyValue(variableName);
+}
+
+function getGraphWidth(size) {
+    const value = getCSSVariable(size === 'small' ? '--small-graph-width' : '--large-graph-width')
+    return new Number(value.split('px')[0])
+}
+
 let order = ORDER;
 ORDER += 1;
 
@@ -60,19 +70,13 @@ const daysBetween = (firstDate, secondDate) => {
     return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
 }
 
-const magnitude = (n) => {
-    const order = Math.floor(Math.log(n) / Math.LN10
-                       + 0.000000001); // because float math sucks like that
-    return Math.pow(10,order);
-}
-
 const makeFormatter = (maxValue, fmt) => {
     if (fmt === 'percentage') return format('.2%')
     if (fmt === 'ratio') return format('.2f')
     return (v) => format('~s')(v)
 }
 
-const W = size === 'small' ? 350 : 900;
+const W = getGraphWidth(size) //size === 'small' ? 350 : 900;
 const H = size==='small' ? W * .625 : W*.5;
 
 const formatKeyString = timeFormat('%Y-%m-%d')
