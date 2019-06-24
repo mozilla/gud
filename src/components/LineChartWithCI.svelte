@@ -496,7 +496,7 @@ svg.large-graph {
         </g>
         <g in:fade={{duration:300}} class=plot-area>
             <path in:fade={{duration:1000}} d={ciArea}  fill='rgba(0,0,0,.1)' />
-            <path in:draw={{duration: 500, easing: linear}} class:loaded={available} class=path-line d={path} />
+            <path out:draw={{duration:100, easing: linear}} in:draw={{duration: 500, easing: linear}} class:loaded={available} class=path-line d={path} />
         </g>
         <g class=markers>
             {#each markers as marker, i}
