@@ -1,5 +1,9 @@
 import { derived } from 'svelte/store'
 import { allOptions, allStores, rawStart, rawEnd } from './stores'
+import optionSet from './options.json'
+
+const start = optionSet.startOptions.setter;
+const end = optionSet.endOptions.setter;
 
 // this is the javascript object that contains all the currently-selected
 // options.
@@ -53,9 +57,11 @@ export const isNotDefaultQueryset = derived(allStores, stores => {
     })
 })
 
-export const setDateRange = (start, end) => {
-    rawStart.set(start);
-    rawEnd.set(end)
+export const setDateRange = (startVal, endVal) => {
+    rawStart.set(startVal);
+    rawEnd.set(endVal);
+    //start.set(startVal);
+    //end.set(endVal);
 }
 
 // resetQuery resets all of the stores associated with the parameters
@@ -67,6 +73,7 @@ export const resetQuery = () => {
         else if (opt.type === 'date') store.set('')
         else store.set(opt.values.filter(v=>!(v.itemType))[0].key);
     })
+    // these are specifically for the datepicker object.
     rawStart.set('');
     rawEnd.set('');
 }
