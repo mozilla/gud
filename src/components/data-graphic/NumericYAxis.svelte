@@ -12,6 +12,23 @@ export let scale;
 export let axisType;
 export let side = 'left';
 
+const SETTINGS = {
+    'left': {
+        main: left,
+        dir: -1,
+        top,
+        bottom,
+        anchor: 'end'
+    },
+    'right': {
+        main: right,
+        dir: 1,
+        top,
+        bottom,
+        anchor: 'start'
+    }
+}
+
 const makeFormatter = (maxValue, fmt) => {
     if (fmt === 'percentage') return format('.2%')
     if (fmt === 'ratio') return format('.2f')
@@ -26,16 +43,16 @@ $: ticks = scale.ticks(5)
 
 <g class=y-axis>
     <line 
-        x1={left}  
-        x2={left}
-        y1={top} y2={bottom}
+        x1={SETTINGS[side].main}  
+        x2={SETTINGS[side].main}
+        y1={SETTINGS[side].top} y2={SETTINGS[side].bottom}
         stroke='gray'
         stroke-width={1}
         ></line>
         {#each ticks as tick,i}
             <line 
-                x1={left}
-                x2={left - tickLength}
+                x1={SETTINGS[side].main}
+                x2={SETTINGS[side].main + tickLength * SETTINGS[side].dir}
                 y1={scale(tick)}
                 y2={scale(tick)}
                 stroke=gray
@@ -43,10 +60,10 @@ $: ticks = scale.ticks(5)
             <text
                 in:fly={{x:-20, duration:200 + i * 100}}
                 y={scale(tick)}
-                x={left - tickLength}
+                x={SETTINGS[side].main + tickLength * SETTINGS[side].dir * 1.5}
                 dy={'.35em'}
                 font-size={10}
-                text-anchor="end"
+                text-anchor={SETTINGS[side].anchor}
             >{formatter(tick)}</text>
             
         {/each}
