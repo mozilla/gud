@@ -473,7 +473,7 @@ svg.large-graph {
                 <!--  -->
                 <rect
                     style="clip-path: url(#clip-path);" 
-                    transition:fade={{duration:100}}
+                    in:fade={{duration:100}}
                     x={Math.max(mouseVersionValue.start, PL.left)}
                     y={PL.top}
                     width={mouseVersionValue.end - Math.max(mouseVersionValue.start, PL.left)}
@@ -481,7 +481,7 @@ svg.large-graph {
                     fill='rgba(0,0,100,.05)'
                 />
                 <text
-                    transition:fade={{duration:100}}
+                    in:fade={{duration:100}}
                     x={
                         size === 'large' ? mouseVersionValue.start + (mouseVersionValue.end - mouseVersionValue.start) / 2 :
                         Math.max(mouseVersionValue.start - M.buffer, PL.left + M.buffer)
@@ -508,7 +508,7 @@ svg.large-graph {
         </g>
         <g in:fade={{duration:300}} class=plot-area>
             <path  style="clip-path: url(#clip-path);" in:fade={{duration:1000}} d={ciArea}  fill='rgba(0,0,0,.1)' />
-            <path  style="clip-path: url(#clip-path);" out:draw={{duration:100, easing: linear}} in:draw={{duration: 500, easing: linear}} class:loaded={available} class=path-line d={path} />
+            <path  style="clip-path: url(#clip-path);" in:draw={{duration: 500, easing: linear}} class:loaded={available} class=path-line d={path} />
         </g>
         <g class=markers>
             {#each markers as marker, i}
@@ -540,7 +540,7 @@ svg.large-graph {
         
         <text opacity=".8" font-size='12' text-anchor='start' x={PL.left} y={12}>
             {#if mouseYValue !== undefined}
-                <tspan transition:fade={{duration:100}} font-weight="bold" fill='blue'> – </tspan><tspan>{`   ${yFormat(mouseYValue)}   `}    </tspan>
+                <tspan in:fade={{duration:100}} font-weight="bold" fill='blue'> – </tspan><tspan>{`   ${yFormat(mouseYValue)}   `}    </tspan>
             {/if}
         </text>
         <text opacity=".6" font-size='10' text-anchor='start' x={PL.left} y={26}>
