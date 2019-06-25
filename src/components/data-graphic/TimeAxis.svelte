@@ -80,7 +80,6 @@ if (r >= 365 * 1.5) {
                     stroke='gray'
                 />
                 <text
-                    in:fly={{y:10, duration:300 + i * 200}}
                     x={scale(period)}
                     y={LINE_1}
                     dy='.35em'
@@ -90,7 +89,6 @@ if (r >= 365 * 1.5) {
                 >{xAxisDay(period)}</text>
             {/each}
             <text
-                    in:fly={{y:10, duration:300}}
                     x={scale(days[0])}
                     y={LINE_2}
                     dy='.35em'
@@ -109,7 +107,6 @@ if (r >= 365 * 1.5) {
                     stroke='gray'
                 />
                 <text
-                    in:fly={{y:10, duration:300 + i * 200}}
                     x={scale(period)}
                     y={LINE_1}
                     dy='.35em'
@@ -130,7 +127,6 @@ if (r >= 365 * 1.5) {
                     stroke='gray'
                 />
                 <text
-                    in:fly={{y:10, duration:300 + i * 200}}
                     x={scale(month)}
                     y={LINE_1}
                     dy='.35em'
@@ -142,7 +138,6 @@ if (r >= 365 * 1.5) {
             {/each}
             {#each years as year, i}
                 <text
-                    in:fly={{y:10, duration:300 + i * 200}}
                     x={scale(year)}
                     y={LINE_2}
                     dy='.35em'
@@ -156,7 +151,6 @@ if (r >= 365 * 1.5) {
             <!-- add single year at beginning -->
             {#if !years.length}
                 <text
-                    in:fly={{y:10, duration:300}}
                     x={scale(months[0])}
                     y={LINE_2}
                     dy='.35em'
@@ -177,7 +171,6 @@ if (r >= 365 * 1.5) {
                     stroke='gray'
                 />
                 <text
-                    in:fly={{y:10, duration:300 + i * 200}}
                     x={scale(period)}
                     y={LINE_1}
                     dy='.35em'
@@ -187,15 +180,7 @@ if (r >= 365 * 1.5) {
                 >{xAxisMonth(period)}</text>
             {/each}
             {#each years as year, i}
-                <!-- <line 
-                    x1={scale(year)}
-                    x2={scale(year)}
-                    y1={bottom}
-                    y2={bottom + tickLength}
-                    stroke='gray'
-                /> -->
                 <text
-                    in:fly={{y:10, duration:300 + i * 200}}
                     x={scale(year)}
                     y={LINE_2}
                     dy='.35em'
@@ -207,24 +192,6 @@ if (r >= 365 * 1.5) {
 
         {/if}
         {#if resolution === 'years'}
-            <!-- {#each halves as period, i}
-                 <line 
-                    x1={scale(period)}
-                    x2={scale(period)}
-                    y1={bottom}
-                    y2={LINE_1}
-                    stroke='gray'
-                />
-                <text
-                    in:fly={{y:10, duration:300 + i * 200}}
-                    x={scale(period)}
-                    y={bottom + tickLength}
-                    dy='.35em'
-                    font-size={10}
-                    text-anchor=middle
-
-                >{xAxisMonth(period)}</text>
-            {/each} -->
             {#each years as year, i}
                 <line 
                     x1={scale(year)}
@@ -234,7 +201,6 @@ if (r >= 365 * 1.5) {
                     stroke='gray'
                 />
                 <text
-                    in:fly={{y:10, duration:300 + i * 200}}
                     x={scale(year)}
                     y={LINE_1}
                     dy='.35em'

@@ -58,7 +58,6 @@ $: topTick = ticks[ticks.length-1]
                 stroke=gray
             />
             <text
-                in:fly={{x:-20, duration:200 + i * 100}}
                 y={scale(tick)}
                 x={SETTINGS[side].main + tickLength * SETTINGS[side].dir * 1.5}
                 dy={'.35em'}

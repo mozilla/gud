@@ -72,11 +72,12 @@ main {
 	margin-bottom: var(--pad);
 }
 
-.control-reset {
+.app-button {
 	padding: var(--pad);
 }
 
-.control-reset button {
+.app-button button {
+	background: none;
 	padding: calc(var(--pad) / 3);
 	/* background-color: var(--secondary-color); */
 	/* color: white; */
@@ -91,12 +92,13 @@ main {
 	opacity: .6;
 }
 
-.control-reset button span {
+.app-button button span {
 	padding-left: calc(var(--pad) / 3);
 	font-weight:900;
 }
 
-.control-reset button:hover {
+.app-button button:hover {
+	background-color: rgb(240,240,240);
 	opacity: 1;
 	box-shadow: 2px 2px 0px rgba(0,0,0,.2);
 }
@@ -128,7 +130,7 @@ main {
 .header {
 	grid-row: header;
 	display: grid;
-	grid-template-columns: [header-title] max-content [header-buttons] max-content;
+	grid-template-columns: [header-title] auto [header-buttons] max-content;
 	padding-left: var(--pad);
 	padding-right: var(--pad);
 	padding-bottom: var(--pad);
@@ -161,7 +163,9 @@ h1 span {
 	/* this should be filled with buttons like "get query"  etc */
 	grid-column: header-buttons;
 	height: var(--title-height);
-
+	display: grid;
+	margin-top: auto;
+	margin-bottom: auto;
 	/* padding-bottom: var(--pad); */
 }
 

@@ -2,6 +2,10 @@
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
 
+	// 3rd parties
+
+	import { csvFormat } from 'd3-dsv';
+
 	// components
 	import NavMenu from './components/NavMenu.svelte';
 	import ControlModes from './components/ControlModes.svelte';
@@ -10,6 +14,8 @@
 	import DatePicker from './components/DatePicker.svelte';
 	import ErrorMessage from './components/ErrorMessage.svelte';
 	import NoData from './components/NoData.svelte'
+
+	import FulfillmentButton from './components/FulfillmentButton.svelte'
 
 	// experiments
 	// import MouseMove from './Components/MouseMove.svelte';
@@ -26,6 +32,22 @@
 	export let name;
 
 	let visible = false;
+
+	// FIXME: this and all the buttons around exporting should be
+	// in some other file!!!
+	function downloadString(text, fileType = 'text', fileName) {
+		const blob = new Blob([text], { type: fileType });
+		const a = document.createElement('a');
+		a.download = fileName;
+		a.href = URL.createObjectURL(blob);
+		a.dataset.downloadurl = [fileType, a.download, a.href].join(':');
+		a.style.display = "none";
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+		setTimeout(function() { URL.revokeObjectURL(a.href); }, 1500);
+	}
+
 
 	onMount(() => {
 		visible = true;
@@ -50,7 +72,7 @@
 			<ControlModes />
 		</section>
 		{#if $isNotDefaultQueryset && $modeIsImplemented}
-			<section class=control-reset transition:fly={{x: -30, duration: 300}}>
+			<section class=app-button transition:fly={{x: -30, duration: 300}}>
 				<button on:click={() => {
 					resetQuery()
 				}}>reset selections <span>✖</span></button>
@@ -90,8 +112,11 @@
 					<img  in:fly="{{y:-10, duration: 600, delay: 200}}" class='ff-logo' alt='Firefox Logo' src='firefox-logo.png' />
 					{name} <span>{` / ${$mode}`}</span>
 			</h1>
-			<div class=fulfillment-buttons>
+			{#await $cache then data}
+			<div class=fulfillment-buttons in:fade>
+				<FulfillmentButton on:click={() => downloadString(csvFormat(data), 'text', 'GUD–BigQuery-dataset.csv')} />
 			</div>
+			{/await}
 		</div>
 		<!-- content -->
 		{#await $cache}
