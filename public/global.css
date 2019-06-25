@@ -10,7 +10,7 @@ html, body {
 	--subsection-margin: 30px;
 	--left-pane: 350px;
 	--title-height: 85px;
-	--footer-height: 60px;
+	--footer-height: 40px;
 	--control-foot-height: var(--footer-height);
 	--top-height: calc(var(--title-height) + var(--pad) + var(--pad));
 	/* menu widths */
@@ -234,6 +234,16 @@ h1 span {
 	padding: var(--pad);
 }
 
+.graphic-body-header {
+	font-style: italic;
+	font-weight:normal;
+	color: #555;
+	margin:0;
+	padding:0;
+	padding-left:50px;
+	padding-bottom:25px;
+}
+
 footer {
 	grid-row: footer;
 	background-color: #ddd;
@@ -248,7 +258,10 @@ footer {
 }
 
 footer h3 {
+	font-size: 1em;
 	width: max-content;
+	padding:0;
+	margin:0;
 	padding-left:  var(--pad);
 	padding-right: var(--pad);
 }

@@ -339,22 +339,6 @@ svg.large-graph {
         order={order}
         orderStagger={orderStagger}
     />
-    <!-- <div 
-        class=graphic-container-header 
-        class:large-header={size==='large'}
-        class:small-header={size==='small'}
-    >
-        <h3 in:fly={{y:5, duration: 500, delay: order * orderStagger}}>{title}</h3>
-        <div
-            class='graph-tooltip'
-            in:fly={{y:10, duration: 400, delay: order * orderStagger}}
-            on:introend="{() => {
-                if (updateTooltipPosition) updateTooltipPosition()            
-            }}"
-        >
-            <Tooltip bind:updatePosition={updateTooltipPosition} title={title} msg={shortDescription} />
-        </div>
-    </div> -->
     <svg
         bind:this={graph}
         on:mousemove="{e => coords.set({ x: e.clientX, y: e.offsetY })}"

@@ -89,16 +89,17 @@ input {
     font-weight: 600;
     font-family: var(--default-font-family);
     transition: border-bottom 100ms;
+    cursor: pointer;
 }
 
 input:hover {
     border-bottom: 1px solid black;
 }
 
-div.days-since {
+/* div.days-since {
     margin-top: var(--pad);
     font-size: var(--selector-metadata-font-size)
-}
+} */
 
 </style>
 
@@ -116,9 +117,9 @@ div.days-since {
             $start === '' ? 
                 START :
                 ($start)
-        } max={TODAY} bind:value={$rawEnd}>
+        } max={TODAY} bind:value={$rawEnd}> 
 
-    {#if days !== NaN}
+    <!-- {#if days !== NaN}
         <div class=days-since>
             {#if $start === '' && $end === ''}
                 default
@@ -128,5 +129,5 @@ div.days-since {
                 ({releaseSet.length} releases)
             {/if}
         </div>
-    {/if}
+    {/if} -->
 </div>

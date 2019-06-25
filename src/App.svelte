@@ -29,6 +29,9 @@
 	import currentQuery, { isNotDefaultQueryset, resetQuery } from './stores/query'
 	import optionSet from './stores/options.json'
 
+	// get usage name.
+	const usageCriterion = optionSet.usageCriteriaOptions.setter;
+
 	export let name;
 
 	let visible = false;
@@ -113,7 +116,7 @@
 					{name} <span>{` / ${$mode}`}</span>
 			</h1>
 			{#await $cache then data}
-			<div class=fulfillment-buttons in:fade>
+			<div class=fulfillment-buttons in:fly={{x:20, duration:400, delay: 100}}>
 				<FulfillmentButton on:click={() => downloadString(csvFormat(data), 'text', 'GUD–BigQuery-dataset.csv')} />
 			</div>
 			{/await}
@@ -132,7 +135,7 @@
 			</div>
 		{:then value}
 			{#if value.length}
-				<GraphicBody data={value} />
+				<GraphicBody data={value} title={$usageCriterion} />
 			{:else}
 				<NoData />
 			{/if}

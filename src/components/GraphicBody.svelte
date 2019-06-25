@@ -11,6 +11,7 @@ import { majorReleases } from '../stores/productDetails';
 // these are the markers.
 
 export let data;
+export let title;
 
 let metrics;
 let outdata;
@@ -97,6 +98,9 @@ if ($mode === 'explore') {
 
 <div class=graphic-body>
     {#if $modeIsImplemented}
+        <!-- <h2 class=graphic-body-header>
+            {title}
+        </h2> -->
         <div 
             class:all-graphics={$metricSet === 'all'}
             class:one-graphic={$metricSet !== 'all'}
