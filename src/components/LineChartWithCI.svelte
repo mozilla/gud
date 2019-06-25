@@ -17,6 +17,7 @@ import { timeMonth, timeYear } from 'd3-time'
 import { timeFormat } from 'd3-time-format'
 import { area } from 'd3-shape';
 
+import GraphicHeader from './data-graphic/GraphicHeader.svelte'
 import NumericYAxis from './data-graphic/NumericYAxis.svelte'
 import TimeAxis from './data-graphic/TimeAxis.svelte'
 import Tooltip from './Tooltip.svelte'
@@ -307,41 +308,6 @@ $: years = timeYear.range(...xScale.domain())
     margin: auto;
 }
 
-.graphic-container-header {
-    padding-left: 50px;
-    padding-right: 50px;
-    margin: auto;
-    display: grid;
-    align-items: center;
-    grid-template-columns: auto 20px;
-    grid-template-rows: auto;
-    grid-auto-flow: column;
-    grid-template-areas: 
-        "title    tooltip"
-        "subtitle subtitle"
-}
-
-.graphic-container-header.small-header {
-    max-width: 250px;
-}
-
-.graphic-container-header.large-header {
-    max-width: 800px;
-}
-
-.graphic-container-header h3 {
-    grid-area: title;
-    margin:0;
-    padding:0;
-    text-align:left;
-    font-weight: 300;
-    font-size:16px;
-}
-
-.graphic-container-header .graph-tooltip {
-    grid-area: tooltip;
-}
-
 svg {
     display: block;
     margin: auto;
@@ -366,23 +332,29 @@ svg.large-graph {
 <div
     class=graphic-container
 >
-    <div 
+    <GraphicHeader
+        title={title}
+        shortDescription={shortDescription}
+        size={size}
+        order={order}
+        orderStagger={orderStagger}
+    />
+    <!-- <div 
         class=graphic-container-header 
         class:large-header={size==='large'}
         class:small-header={size==='small'}
     >
-        <h3 in:fly={{y:10, duration: 500, delay: order * orderStagger}}>{title}</h3>
+        <h3 in:fly={{y:5, duration: 500, delay: order * orderStagger}}>{title}</h3>
         <div
             class='graph-tooltip'
-            in:fly={{y:-10, duration: 400, delay: order * orderStagger}}
+            in:fly={{y:10, duration: 400, delay: order * orderStagger}}
             on:introend="{() => {
                 if (updateTooltipPosition) updateTooltipPosition()            
             }}"
         >
             <Tooltip bind:updatePosition={updateTooltipPosition} title={title} msg={shortDescription} />
         </div>
-        <!-- <label>{subtitle || ""}</label> -->
-    </div>
+    </div> -->
     <svg
         bind:this={graph}
         on:mousemove="{e => coords.set({ x: e.clientX, y: e.offsetY })}"

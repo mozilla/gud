@@ -205,6 +205,9 @@ h1 span {
   animation: dash-loader 1.5s ease-in-out infinite;
 }
 
+/* DataGraphic */
+
+
 @keyframes rotate-loader {
   100% {
     transform: rotate(360deg);
