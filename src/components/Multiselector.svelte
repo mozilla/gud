@@ -74,9 +74,13 @@ function handleSelection(key) {
             if (!$setter.includes(key)) {
             $setter = [...$setter, key];
         }
-        else $setter = $setter.filter(k=>k!==key)
+        else {
+            $setter = $setter.filter(k=>k!==key);
+        }
     } else {
-        $setter = key
+        $setter = key;
+        // if single, collapse.
+        isActive = false;
     }
     
 }

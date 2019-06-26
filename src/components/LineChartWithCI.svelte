@@ -402,7 +402,9 @@ svg.large-graph {
                 >{parseInt(mouseVersionValue.version)}</text>
             {/if}
             {#if isDragging}
+                <!-- this is the brushing element -->
                 <rect
+                    class=dg-horizontal-brush
                     x={Math.min(xScale(mouseDownStartValue), xScale(mouseDownEndValue))}
                     y={PL.top}
                     width={Math.abs(xScale(mouseDownStartValue) - xScale(mouseDownEndValue))}
@@ -467,12 +469,6 @@ svg.large-graph {
                 <tspan>{`    ${parseInt(mouseVersionValue.version)} – day ${daysBetween(yPoint.date, mouseVersionValue.date)}   `} </tspan>
             {/if}
         </text>
-
-        <!-- <text font-weight=bold opacity=".4" font-size='10' text-anchor='end' x={PL.right} y={26}>
-            {#if whatKind}
-                <tspan style='opacity:.5; text-transform: uppercase' font-weight=300>{whatKind + ' '}</tspan>
-            {/if}
-        </text> -->
     </svg>
 </div>
 {:else}
