@@ -137,6 +137,11 @@ $: markers = $majorReleases.filter(release => {
         && (release.date >= graphXMin && release.date <= graphXMax)
 })
 
+let showReleaseMarkersOnHover = true;
+$: showReleaseMarkersOnHover = markers.filter(m=> {
+    return m.date >= graphXMin && m.date <= graphXMax;
+}).length >= 3
+
 let yScale;
 
 $: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : FINAL_MAX_Y])
@@ -375,8 +380,8 @@ svg.large-graph {
             axisType={yType}
         />
         <g class=plot-background>
-            {#if mouseVersionValue && mouseVersionValue.end && mouseVersionValue}
-                <!--  -->
+            {#if mouseVersionValue && mouseVersionValue.end && mouseVersionValue && showReleaseMarkersOnHover}
+                <!-- marker hoverover -->
                 <rect
                     style="clip-path: url(#clip-path);" 
                     in:fade={{duration:100}}
