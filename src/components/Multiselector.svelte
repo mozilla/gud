@@ -334,8 +334,6 @@ ul.active {
 
 <svelte:window on:keydown={handleKeydown} />
 
-
-
 <div
     in:fly={{y:-10, duration: 200 + ind * 300}}
     class=selector

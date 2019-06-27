@@ -14,7 +14,8 @@
 	import DatePicker from './components/DatePicker.svelte';
 	import ErrorMessage from './components/ErrorMessage.svelte';
 	import NoData from './components/NoData.svelte'
-
+	// import AnnotationModal from './components/AnnotationModal.svelte';
+	
 	import FulfillmentButton from './components/FulfillmentButton.svelte'
 
 	// experiments
@@ -28,6 +29,9 @@
 	import cache, { queryIsCached } from './stores/cache'
 	import currentQuery, { isNotDefaultQueryset, resetQuery } from './stores/query'
 	import optionSet from './stores/options.json'
+
+	// annotations
+	import { annotationModalIsActive } from './stores/annotations'
 
 	// get usage name.
 	const usageCriterion = optionSet.usageCriteriaOptions.setter;
@@ -68,7 +72,10 @@
 	}
 	
 </script>
+<!-- PLUGINS ETC. GO RIGHT HERE -->
+<!-- <AnnotationModal active={$annotationModalIsActive} /> -->
 
+<!-- MAIN BODY -->
 <main>
 	<div class=controls>
 		<section class=control-modes>

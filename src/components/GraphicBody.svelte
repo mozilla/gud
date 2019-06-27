@@ -8,6 +8,9 @@ import optionSet from '../stores/options.json'
 import queryString, { setDateRange } from '../stores/query'
 import { majorReleases } from '../stores/productDetails';
 
+import AnnotationsAndRemarks from './AnnotationsAndRemarks.svelte'
+
+
 // these are the markers.
 
 export let data;
@@ -127,6 +130,7 @@ if ($mode === 'explore') {
                  />
             {/each}
         </div>
+    <!-- <AnnotationsAndRemarks /> -->
     {:else}
         <div in:fly={{y:-30, duration: 300, delay: 250}} class=coming-soon>
             <div>coming soon</div>

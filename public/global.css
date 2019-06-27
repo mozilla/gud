@@ -13,10 +13,22 @@ html, body {
 	--footer-height: 40px;
 	--control-foot-height: var(--footer-height);
 	--top-height: calc(var(--title-height) + var(--pad) + var(--pad));
-	/* menu widths */
+
+	/* shared style elements */
+	--ui-pad: calc(var(--pad) / 2);
+	--ui-radius: 5px;
+	--default-button-text-color: white;
+	--default-button-bg-color: rgb(146, 146, 212);
+
+	/* menu features */
 	--tooltip-trigger-width: 20px;
 	--left-pane-grid-pad: var(--pad);
 	--menu-width: calc(var(--left-pane) - var(--pad) - var(--pad) - var(--left-pane-grid-pad) - var(--tooltip-trigger-width));
+
+	/* modal features */
+	--modal-border-radius: 5px;
+	--modal-box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+	--modal-body-font-size: 14px;
 
 	/* graph settings */
 	--small-graph-width: 350px;
@@ -301,6 +313,75 @@ footer.control-foot div {
 	text-align: center;
 	font-weight: 300;
 	margin: auto;
+}
+
+/* button styles */
+
+.bt {
+	--bt-outline-border: #aaa;
+	--bt-text-color: blue;
+	background-color: white;
+	border: 1px solid transparent;
+	padding: var(--ui-pad);
+	padding-top: calc(var(--ui-pad) / 2);
+	padding-bottom: calc(var(--ui-pad) / 2);
+	text-transform: uppercase;
+	border-radius: var(--ui-radius);
+	cursor: pointer;
+	color: var(--default-button-text-color);
+	background-color: var(--default-button-bg-color);
+	/* box-shadow: 0px 0px 10px rgba(0,0,0,.2); */
+}
+
+.bt:hover {
+	background-color: blue;
+}
+
+.bt.bt-outline {
+	background-color: transparent;
+	color: var(--bt-text-color);
+	font-weight: bold;
+	border-color: var(--bt-outline-border);
+	box-shadow: none;
+	transition: 200ms;
+}
+
+.bt.bt-outline:hover {
+	background-color: rgba(0,0,0,.07);
+}
+
+.bt.bt-text {
+	background-color: transparent;
+	color: black;
+	box-shadow: none;
+	border-radius: 10px;
+	transition: 200ms;
+}
+
+.bt.bt-text:hover {
+	background-color: rgba(0,0,0,.2);
+	border-radius: var(--ui-radius);
+}
+
+/* ANNOTATIONS AND REMARKS */
+
+.annotations-and-remarks {
+	padding: var(--pad);
+}
+
+.annotations-and-remarks h2 {
+	margin:0;
+	padding:0;
+	font-size: 20px;
+	color: #999;
+	margin-top: var(--pad);
+	margin-bottom: calc(var(--pad) / 2);
+}
+
+.annotations-and-remarks ol {
+	margin:0;
+	padding:0;
+	font-size: 14px;
 }
 
 /* media queries */
