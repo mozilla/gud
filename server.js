@@ -63,24 +63,6 @@ const exploreQuery =(params) => {
         })
     WHEREClauses.push(`date >= '2017-06-17'`)
     const WHERE = WHEREClauses.length ? `WHERE ${WHEREClauses.length > 1 ? WHEREClauses.join(' AND\n') : WHEREClauses}` : '';
-//     return query(`
-// SELECT
-//     submission_date AS date,
-//     id_bucket,
-//     SUM(mau) AS mau,
-//     SUM(wau) AS wau,
-//     SUM(dau) AS dau
-// FROM
-//     \`moz-fx-data-derived-datasets.telemetry.firefox_desktop_exact_mau28_by_dimensions_v1\`
-// ${WHERE}
-// GROUP BY
-//     submission_date,
-//     id_bucket
-// ORDER BY
-//     submission_date,
-//     id_bucket;
-//     `)
-// }
      
     return query(`
 SELECT

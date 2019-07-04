@@ -10,7 +10,6 @@ import { majorReleases } from '../stores/productDetails';
 
 import AnnotationsAndRemarks from './AnnotationsAndRemarks.svelte'
 
-
 // these are the markers.
 
 export let data;
@@ -117,6 +116,16 @@ if ($mode === 'explore') {
                 rolloverLabel={dataset.rolloverLabel}
                 yType={dataset.format}
                 data={dataset.data} 
+                markers={$majorReleases}
+                filterMarkerCallback={ // filters by range.
+                    (release, graphXMin, graphXMax) => {
+                        const size = $metricSet === 'all' ? 'small' : 'large';
+                        const ONE_YEAR = 1000 * 60 * 60 * 24 * (365  * (size === 'large' ? 2 : 1))
+                        const onlyEveryFive = graphXMax - graphXMin >= ONE_YEAR ? parseInt(release.version) % 5 === 0 : true
+                        return onlyEveryFive 
+                            && (release.date >= graphXMin && release.date <= graphXMax)
+                    }
+                }
                 xMin={$start} 
                 xMax={$end}
                 yMin={dataset.yMin}

@@ -1,6 +1,10 @@
 <script context="module">
     let ORDER = 0;
+    // maintain the globalX value.
     let globalX = writable(undefined);
+    // maintain the maximum y-range value for
+    // a given grouping, and use  that max y for
+    // all the graphs in that grouping (such as dau / wau / mau)
     let yRangeStore = writable({});
 </script>
 
@@ -21,7 +25,6 @@ import GraphicHeader from './data-graphic/GraphicHeader.svelte'
 import NumericYAxis from './data-graphic/NumericYAxis.svelte'
 import TimeAxis from './data-graphic/TimeAxis.svelte'
 import Tooltip from './Tooltip.svelte'
-import { majorReleases } from '../stores/productDetails'
 
 // props
 export let title;
@@ -35,6 +38,11 @@ export let xMin;
 export let xMax;
 export let yMin;
 export let yMax;
+// markers are thin, vertical lines that
+// denote special events & annotations on a graph.
+export let markers = [];
+export let filterMarkerCallback = () => true;
+
 export let yRangeGroup;
 
 export let onDragFinish = (startVal, endVal) => {}
@@ -49,9 +57,9 @@ function getGraphWidth(size) {
     return new Number(value.split('px')[0])
 }
 
+// for fade-ins etc.
 let order = ORDER;
 ORDER += 1;
-
 let orderStagger = 50;
 
 let updateTooltipPosition;
@@ -129,16 +137,16 @@ $: xScale = scaleLinear().domain([
     .range([PL.left,PL.right])
 
 // sift throuh releases here.
-const ONE_YEAR = 1000 * 60 * 60 * 24 * (365  * (size === 'large' ? 2 : 1))
-let markers = []
-$: markers = $majorReleases.filter(release => {
-    const onlyEveryFive = graphXMax - graphXMin >= ONE_YEAR ? parseInt(release.version) % 5 === 0 : true
-    return onlyEveryFive 
-        && (release.date >= graphXMin && release.date <= graphXMax)
-})
+let filteredMarkers = []
+// $: filteredMarkers = markers.filter(release => {
+//     const onlyEveryFive = graphXMax - graphXMin >= ONE_YEAR ? parseInt(release.version) % 5 === 0 : true
+//     return onlyEveryFive 
+//         && (release.date >= graphXMin && release.date <= graphXMax)
+// })
+$: filteredMarkers = markers.filter(marker => filterMarkerCallback(marker, graphXMin, graphXMax))
 
 let showReleaseMarkersOnHover = true;
-$: showReleaseMarkersOnHover = markers.filter(m=> {
+$: showReleaseMarkersOnHover = filteredMarkers.filter(m=> {
     return m.date >= graphXMin && m.date <= graphXMax;
 }).length >= 3
 
@@ -197,11 +205,11 @@ $: if ($globalX) {
     mouseYValue = `  ${yPoint.value}`
     mouseYLow = yPoint.lower;
     mouseYHigh = yPoint.upper;
-    mouseVersionValue = last($majorReleases.filter(release => {
+    mouseVersionValue = last(markers.filter(release => {
         return release.date <= yPoint.date;
     }))
     if (mouseVersionValue) {
-        mouseVersionValue.end = $majorReleases.find(release => {
+        mouseVersionValue.end = markers.find(release => {
             return release.date > mouseVersionValue.date;
         })
         if (mouseVersionValue.end) mouseVersionValue.end = mouseVersionValue.end.date
@@ -236,9 +244,6 @@ onMount(() => {
     svg.on('mouseup', (e) => {
         if (isDragging) {
             const [x, y] = mouse(svg.node())
-            // mouseDownEndValue = last(data.filter(d => d.date <= xScale.invert(x)))
-            // if (mouseDownEndValue) mouseDownEndValue = mouseDownEndValue.date
-            // send something to the date store here?
             if (mouseDownStartValue && mouseDownEndValue) {
                 onDragFinish(mouseDownStartValue, mouseDownEndValue)
                 $globalX = undefined;
@@ -305,8 +310,6 @@ $: years = timeYear.range(...xScale.domain())
 </script>
 
 <style>
-
-
 
 .graphic-container {
     display: block;
@@ -424,7 +427,7 @@ svg.large-graph {
             <path  style="clip-path: url(#clip-path);" in:draw={{duration: 500, easing: linear}} class:loaded={available} class=path-line d={path} />
         </g>
         <g class=markers>
-            {#each markers as marker, i}
+            {#each filteredMarkers as marker, i}
                 <line 
                     x1={xScale(marker.date)}
                     x2={xScale(marker.date)}
