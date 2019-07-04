@@ -49,10 +49,35 @@ input[type='radio'] + label {
     user-select: none; /* Standard */
 }
 
+input[type='radio'].coming-soon + label {
+    font-style: italic;
+}
+
 input[type='radio']:hover + label {
     background-color: rgba(255,99,71,.3);
     padding:.3em;
     border-radius:10px;
+}
+
+input[type='radio'].coming-soon + label:after {
+    content: 'coming soon!';
+    position: absolute;
+    text-align: center;
+    display: block;
+    opacity: 0;
+    font-size:12px;
+    transition: 200ms;
+    transform: translateX(20px);
+}
+
+
+input[type='radio'].coming-soon:hover + label:after {
+    content: 'coming soon!';
+    position: absolute;
+    display: block;
+    opacity: .6;
+    margin: auto;
+    transform: translateX(20px) translateY(5px);
 }
 
 input[type='radio']:checked {
@@ -75,6 +100,8 @@ input[type='radio']:checked + label {
         <div in:fly="{{y:-10, duration: 250, delay: 200 + i * 50}}" class=mode-selector>
             <input type=radio id={option.key} name="mode" value={option.key}
                     on:select={(opt)=>mode.store.set(opt.key)}
+                    class:coming-soon={option.key !== 'explore'}
+                    disabled={option.key !== 'explore'}
                     bind:group={$mode}>
             <label for="{option.key}">{option.label}</label>
         </div>
