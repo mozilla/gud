@@ -118,12 +118,14 @@
 							options={selector.values} 
 							setter={selector.setter}
 							onSelection={(option) =>{
-								// aside from assigning the selection value to (or pushing to)
-								// $setter, any additional callbacks should go here.
-								if (option.disabledDimensions) {
-									$disabledDimensions = [...option.disabledDimensions];
-								} else {
-									$disabledDimensions = []
+								if (selector.key === 'usage') {
+									// aside from assigning the selection value to (or pushing to)
+									// $setter, any additional callbacks should go here.
+									if (option.disabledDimensions) {
+										$disabledDimensions = [...option.disabledDimensions];
+									} else {
+										$disabledDimensions = []
+									}
 								}
 							}}
 							 />
