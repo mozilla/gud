@@ -347,6 +347,7 @@ ul.active {
     opacity: .8;
     margin-top: calc(var(--pad) / 2);
     font-style: italic;
+    text-align:right;
 }
 
 </style>
