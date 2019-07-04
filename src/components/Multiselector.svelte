@@ -5,7 +5,7 @@ let IND = 0;
 <script>
 import { onMount } from 'svelte'
 import { writable } from 'svelte/store';
-import { fade, fly } from 'svelte/transition';
+import { fade, fly, slide } from 'svelte/transition';
 import { flip } from 'svelte/animate';
 
 import Popper from 'popper.js'
@@ -20,6 +20,7 @@ export let showDescriptionOnSelect = false;
 export let options;
 export let setter;
 export let selectType = 'single';
+export let onSelection;
 
 let parentRef;
 let menuRef;
@@ -33,6 +34,8 @@ IND += 1;
 
 let menuPopup;
 let visible = false;
+
+export let updatePopup = () => { if (menuPopup) menuPopup.scheduleUpdate() }
 
 onMount(() => {
     visible = true;
@@ -49,9 +52,10 @@ onMount(() => {
             },
             }
     });
+    updatePopup();
 })
 
-// set singleOptionLabel 
+// set singleOptionLabel
 let singleOptionLabel = options[0].label;
 let singleOptionDescription = options[0].shortDescription;
 $: if (selectType === 'single') {
@@ -65,11 +69,12 @@ function toggleActive() {
     if (isActive) hideOnClickOutside(menuRef)
 }
 
-function removeSelection(key) {
+function removeSelection(key) { 
     $setter = $setter.filter(k=>k!==key)
 }
 
 function handleSelection(key) {
+    const thisOption = options.find(k=>k.key===key);
     if (selectType === 'multi') {
             if (!$setter.includes(key)) {
             $setter = [...$setter, key];
@@ -81,8 +86,11 @@ function handleSelection(key) {
         $setter = key;
         // if single, collapse.
         isActive = false;
+    } // check to see if  more info?
+    if (onSelection) {
+        console.log('yeah!', thisOption)
+        onSelection(thisOption)
     }
-    
 }
 
 function clearAllSelections() {
@@ -118,27 +126,37 @@ function hideOnClickOutside(element) {
 
 <style>
 
-:root {
-    --list-item-pad: 10px;
-    --list-item-status-size: 25px;
-}
-
 .selector {
     margin-bottom: var(--pad);
 }
+
 button.dropdown {
     border: none;
-    border-bottom: 1px solid tomato;
+    /* border-bottom: 1px solid tomato; */
+    border: 1px solid var(--multiselector-border-color);
+    padding: calc(var(--multiselector-list-item-pad) / 2);
+    border-radius: calc(var(--multiselector-list-item-pad) / 4);
+    color: var(--multiselector-button-text-color);
     background-color: transparent;
-    width: 100%;
     text-align: left;
-    padding:0;
-    padding-bottom: 5px;
-    font-size: 16px;
+    text-transform: uppercase;
+    /* padding-bottom: 5px; */
+    font-size: 14px;
     cursor: pointer;
     display: grid;
-    grid-template-columns: [title] max-content [tooltip] max-content [blank] auto [carat] max-content;
+    margin-right:0;
+    margin-left: auto;
+    grid-template-columns:  [title] max-content [carat] max-content;
     grid-column-gap: 5px;
+    transition: background-color 200ms, box-shadow 200ms;
+}
+
+button.dropdown:hover {
+    box-shadow: 2px 2px 0px rgba(0,0,0,.2);
+}
+
+button.dropdown.isActive {
+    background-color: var(--multiselector-selected-bg);
 }
 
 button.dropdown .dropdown-button-icon {
@@ -220,15 +238,15 @@ ul.active {
 .menu-content li {
     list-style-type: none;
     margin:0;
-    padding-left: var(--list-item-pad);
-    padding-right: var(--list-item-pad);
-    padding-top: calc(var(--list-item-pad) );
-    padding-bottom: calc(var(--list-item-pad));
+    padding-left: var(--multiselector-list-item-pad);
+    padding-right: var(--multiselector-list-item-pad);
+    padding-top: calc(var(--multiselector-list-item-pad) );
+    padding-bottom: calc(var(--multiselector-list-item-pad));
     cursor: pointer;
     display: grid;
-    grid-template-columns: [status] var(--list-item-status-size) [content] auto [right] var(--list-item-status-size);
-    min-height: var(--list-item-status-size);
-    grid-gap: calc(var(--list-item-pad));
+    grid-template-columns: [status] var(--multiselector-list-item-size) [content] auto [right] var(--multiselector-list-item-size);
+    min-height: var(--multiselector-list-item-size);
+    grid-gap: calc(var(--multiselector-list-item-pad));
     transition: 50ms;
     align-items: start;
     -webkit-user-select: none;  /* Chrome all / Safari all */
@@ -273,10 +291,11 @@ ul.active {
     padding:0;
     margin:0;
     /* margin-left: calc(16px + var(--pad) / 2); */
-    margin-top: var(--list-item-pad);
+    margin-top: var(--multiselector-list-item-pad);
     flex-wrap: wrap;
     font-size: 14px;
     font-weight: bold;
+    justify-content: flex-end;
 }
 
 .selected-items li {
@@ -308,8 +327,8 @@ ul.active {
 
 .divider {
     border-bottom: 1px solid gainsboro;
-    margin-bottom: calc(var(--list-item-pad) / 2);
-    margin-top: calc(var(--list-item-pad) / 2);
+    margin-bottom: calc(var(--multiselector-list-item-pad) / 2);
+    margin-top: calc(var(--multiselector-list-item-pad) / 2);
 }
 
 .menu-section {
@@ -317,9 +336,9 @@ ul.active {
     font-size:12px;
     font-weight:900;
     color: darkgray;
-    padding-top: calc(var(--list-item-pad) / 2);
-    padding-bottom: calc(var(--list-item-pad) / 2);
-    padding-left: calc(var(--list-item-status-size) + var(--list-item-pad) * 1.5);
+    padding-top: calc(var(--multiselector-list-item-pad) / 2);
+    padding-bottom: calc(var(--multiselector-list-item-pad) / 2);
+    padding-left: calc(var(--multiselector-list-item-size) + var(--multiselector-list-item-pad) * 1.5);
 }
 
 .single-option-description {
@@ -334,17 +353,21 @@ ul.active {
 
 <svelte:window on:keydown={handleKeydown} />
 
+<!-- <div class=dropdown-tooltip>
+    <Tooltip msg={description} />
+</div> -->
+
 <div
-    in:fly={{y:-10, duration: 200 + ind * 300}}
+    transition:fly={{x:-10, duration: 200}}
+    on:introend={() =>{
+        updatePopup()
+    }}
     class=selector
 >
 
 <div class=input-set>
-    <button bind:this={parentRef} class=dropdown on:click={toggleActive}>
+    <button bind:this={parentRef} class=dropdown class:isActive on:click={toggleActive}>
         <div class=dropdown-title>{title}</div>
-        <div class=dropdown-tooltip>
-            <Tooltip msg={description} />
-        </div>
         <div class=dropdown-button-icon class:active-icon={isActive}>▾</div>
     </button>
 </div>

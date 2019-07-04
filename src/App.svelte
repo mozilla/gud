@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
+	import { flip } from 'svelte/animate';
 
 	// 3rd parties
 
@@ -11,6 +12,7 @@
 	import ControlModes from './components/ControlModes.svelte';
 	import GraphicBody from './components/GraphicBody.svelte';
 	import Multiselector from './components/Multiselector.svelte';
+	// import RadioGroup from './components/RadioGroup.svelte';
 	import DatePicker from './components/DatePicker.svelte';
 	import ErrorMessage from './components/ErrorMessage.svelte';
 	import NoData from './components/NoData.svelte'
@@ -24,7 +26,7 @@
 
 	// stores
 	import {
-		menuOptions, allOptions, mode, modeIsImplemented
+		menuOptions, allOptions, mode, modeIsImplemented, disabledDimensions
 	} from './stores/stores'
 	import cache, { queryIsCached } from './stores/cache'
 	import currentQuery, { isNotDefaultQueryset, resetQuery } from './stores/query'
@@ -88,18 +90,45 @@
 				}}>reset selections <span>✖</span></button>
 			</section>
 		{/if}
-		{#if $mode === 'explore'}
+		{#if $mode === 'explore' && visible}
 			<section class=control-selectors>
-				{#each menuOptions as selector, i}
-					{#if selector.type !== 'date'}
+				{#each menuOptions as selector, i (selector.key)}
+				{#if !$disabledDimensions.includes(selector.key)}
+					<!-- {#if selector.variant === 'radio-group'}
+						<RadioGroup 
+							title={selector.label}
+							options={selector.values} 
+							setter={selector.setter}
+							onSelection={(option) =>{
+								// aside from assigning the selection value to (or pushing to)
+								// $setter, any additional callbacks should go here.
+								if (option.disabledDimensions) {
+									$disabledDimensions = [...option.disabledDimensions];
+								} else {
+									$disabledDimensions = []
+								}
+							}}
+						/> -->
+						{#if selector.type !== 'date'}
 						<Multiselector 
 							title={selector.label} 
 							description={selector.description || selector.label}
 							showDescriptionOnSelect={selector.showDescriptionOnSelect}
 							selectType={selector.type || 'single'} 
 							options={selector.values} 
-							setter={selector.setter} />
+							setter={selector.setter}
+							onSelection={(option) =>{
+								// aside from assigning the selection value to (or pushing to)
+								// $setter, any additional callbacks should go here.
+								if (option.disabledDimensions) {
+									$disabledDimensions = [...option.disabledDimensions];
+								} else {
+									$disabledDimensions = []
+								}
+							}}
+							 />
 					{/if}
+				{/if}
 				{/each}
 			<DatePicker />
 			</section>

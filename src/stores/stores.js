@@ -11,19 +11,31 @@ const allOptions =   [
 ]
 
 const params = new URLSearchParams(window.location.search);
-
+let initialDisabledDimensions = []
 allOptions.forEach(opt => {
+    let queryValue
     if (opt.itemType === 'divider') {
     } else if (opt.type === 'multi') {
-        const queryValue = params.get(opt.key) || '[]';
+        queryValue = params.get(opt.key) || '[]';
         opt.setter = createMultiselectStore(opt.values)(JSON.parse(queryValue))
     }
     else {
-        const queryValue = params.get(opt.key) || undefined;
+        queryValue = params.get(opt.key) || undefined;
         if (opt.type === 'date') opt.setter = writable(queryValue || '')
         else opt.setter = createListStore(opt.values)(queryValue);
     }
+    // if the default usage criteria has disabled dimensions, make sure to
+    // set the initialDisabledDimensions
+    if (opt.key === 'usage') {
+        const selected = opt.values.find(v=> v.key === queryValue);
+        if (selected.disabledDimensions) {
+            initialDisabledDimensions = [...selected.disabledDimensions];
+        }
+    }
 })
+
+// get current value to set any disabled dimensions before going on your merry way.
+const disabledDimensions = writable(initialDisabledDimensions)
 
 const mode = modeOptions.setter;
 
@@ -48,5 +60,6 @@ export {
     mode, modeOptions,
     modeIsImplemented,
     rawStart,
-    rawEnd
+    rawEnd,
+    disabledDimensions
 }

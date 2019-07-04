@@ -20,10 +20,20 @@ html, body {
 	--default-button-text-color: white;
 	--default-button-bg-color: rgb(146, 146, 212);
 
-	/* menu features */
+	/* menu / tooltip features */
 	--tooltip-trigger-width: 20px;
 	--left-pane-grid-pad: var(--pad);
 	--menu-width: calc(var(--left-pane) - var(--pad) - var(--pad) - var(--left-pane-grid-pad) - var(--tooltip-trigger-width));
+	--tooltip-background: rgb(235, 235, 235);
+	--modal-fill: var(--tooltip-background);
+    --modal-tt-pad: 15px;
+
+	/* multiselector */
+	--multiselector-list-item-pad: 10px;
+    --multiselector-list-item-size: 25px;
+    --multiselector-border-color: #aaa;
+    --multiselector-button-text-color: #444;
+    --multiselector-selected-bg: #ddd;
 
 	/* modal features */
 	--modal-border-radius: 5px;
@@ -38,7 +48,7 @@ html, body {
 
 	--secondary-color: #0097B2;
 	--faint-text: lightgray;
-	--tooltip-background: rgb(235, 235, 235);
+
 
 }
 

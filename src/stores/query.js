@@ -1,5 +1,5 @@
 import { derived } from 'svelte/store'
-import { allOptions, allStores, rawStart, rawEnd } from './stores'
+import { allOptions, allStores, rawStart, rawEnd, disabledDimensions } from './stores'
 import optionSet from './options.json'
 
 const start = optionSet.startOptions.setter;
@@ -76,6 +76,7 @@ export const resetQuery = () => {
     // these are specifically for the datepicker object.
     rawStart.set('');
     rawEnd.set('');
+    disabledDimensions.set([]);
 }
 
 export default queryString
