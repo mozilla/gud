@@ -39,8 +39,6 @@ export let xMax;
 export let yMin;
 export let yMax;
 
-$: console.log(xMin, xMax)
-
 // markers are thin, vertical lines that
 // denote special events & annotations on a graph.
 export let markers = [];
@@ -132,6 +130,7 @@ let graphXMax;
 
 $: graphXMin = xMin !== '' ? new Date(xMin) : new Date(Math.min(...intermediateData.map(v=>v.date)))
 $: graphXMax = xMax !== '' ? new Date(xMax) : new Date(Math.max(...intermediateData.map(v=>v.date)))
+
 $: xScale = scaleLinear().domain([
         graphXMin, graphXMax])
     .range([PL.left,PL.right])
@@ -164,7 +163,7 @@ let areaShape = area()
 $: path = `M${finalData.map(p => `${xScale(p.date)},${yScale(p.value)}`).join('L')}`;
 // for whatever reason, ciArea doesn't update gracefully,.
 $: ciArea = areaShape(finalData.filter(d => d.date <= graphXMax && d.date >= graphXMin));
-$: xTicks = xScale.ticks()
+
 $: yTicks = yScale.ticks(5)
 
 let graph;
@@ -192,35 +191,68 @@ function setPoint(pt) {
 // this performs the rollover if $globalX has meaningfully changed.
 // note: this functionality happens to all graphs because $globalX is
 // a store shared in all component namespaces.
-$: if ($globalX) {
-    yPoint = intermediateData.find(d => d.date.getTime() === $globalX.getTime())//last(data.filter(d =>  d.date <= $globalX));
-    $coords.x = xScale(yPoint.date);
-    $coords.y = yScale(yPoint.value);
-    mouseXValue = xRollover(yPoint.date);
-    mouseYValue = `  ${yPoint.value}`
-    mouseYLow = yPoint.lower;
-    mouseYHigh = yPoint.upper;
-    mouseVersionValue = last(markers.filter(release => {
-        return release.date <= yPoint.date;
-    }))
-    if (mouseVersionValue) {
-        mouseVersionValue.end = markers.find(release => {
-            return release.date > mouseVersionValue.date;
-        })
-        if (mouseVersionValue.end) mouseVersionValue.end = mouseVersionValue.end.date
-        mouseVersionValue.start = xScale(mouseVersionValue.date)
-        mouseVersionValue.end = mouseVersionValue.end ? xScale(mouseVersionValue.end) : PL.right
+
+function updateRollover(gbx) {
+    if (gbx) {
+        yPoint = intermediateData.find(d => d.date.getTime() === gbx.getTime())//last(data.filter(d =>  d.date <= $globalX));
+        $coords.x = xScale(yPoint.date);
+        $coords.y = yScale(yPoint.value);
+        mouseXValue = xRollover(yPoint.date);
+        mouseYValue = `  ${yPoint.value}`
+        mouseYLow = yPoint.lower;
+        mouseYHigh = yPoint.upper;
+        mouseVersionValue = last(markers.filter(release => {
+            return release.date <= yPoint.date;
+        }))
+        if (mouseVersionValue) {
+            mouseVersionValue.end = markers.find(release => {
+                return release.date > mouseVersionValue.date;
+            })
+            if (mouseVersionValue.end) mouseVersionValue.end = mouseVersionValue.end.date
+            mouseVersionValue.start = xScale(mouseVersionValue.date)
+            mouseVersionValue.end = mouseVersionValue.end ? xScale(mouseVersionValue.end) : PL.right
+        }
+    } else {
+        $coords.x = -150;
+        $coords.y = -150;
+        mouseXValue = undefined;
+        mouseYValue = undefined;
+        mouseYLow = undefined;
+        mouseYHigh = undefined;
+        mouseVersionValue = undefined;
     }
-    
-} else {
-    $coords.x = -150;
-    $coords.y = -150;
-    mouseXValue = undefined;
-    mouseYValue = undefined;
-    mouseYLow = undefined;
-    mouseYHigh = undefined;
-    mouseVersionValue = undefined;
 }
+$: updateRollover($globalX)
+// DELETE WHEN WE VERIFY THIS IS GOOD TO GET RID OF.
+// $: if ($globalX) {
+//     yPoint = intermediateData.find(d => d.date.getTime() === $globalX.getTime())//last(data.filter(d =>  d.date <= $globalX));
+//     $coords.x = xScale(yPoint.date);
+//     $coords.y = yScale(yPoint.value);
+//     mouseXValue = xRollover(yPoint.date);
+//     mouseYValue = `  ${yPoint.value}`
+//     mouseYLow = yPoint.lower;
+//     mouseYHigh = yPoint.upper;
+//     mouseVersionValue = last(markers.filter(release => {
+//         return release.date <= yPoint.date;
+//     }))
+//     if (mouseVersionValue) {
+//         mouseVersionValue.end = markers.find(release => {
+//             return release.date > mouseVersionValue.date;
+//         })
+//         if (mouseVersionValue.end) mouseVersionValue.end = mouseVersionValue.end.date
+//         mouseVersionValue.start = xScale(mouseVersionValue.date)
+//         mouseVersionValue.end = mouseVersionValue.end ? xScale(mouseVersionValue.end) : PL.right
+//     }
+    
+// } else {
+//     $coords.x = -150;
+//     $coords.y = -150;
+//     mouseXValue = undefined;
+//     mouseYValue = undefined;
+//     mouseYLow = undefined;
+//     mouseYHigh = undefined;
+//     mouseVersionValue = undefined;
+// }
 
 // these values are used for dragging.
 let isDragging = false;
@@ -296,11 +328,9 @@ afterUpdate(() => {
 
 let coords = writable({ x: -150, y: -150 });
 
-$: xTicks = timeMonth.range(...xScale.domain(), 3)
-
-$: years = timeYear.range(...xScale.domain())
-
 // handle scale size.
+
+
 
 </script>
 
@@ -330,7 +360,6 @@ svg.large-graph {
 }
 
 </style>
-
 {#if intermediateData.length}
 <div
     class=graphic-container
