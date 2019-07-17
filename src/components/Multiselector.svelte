@@ -134,7 +134,7 @@ function hideOnClickOutside(element) {
 .disabled {
     pointer-events: none;
     cursor: not-allowed;
-    opacity: 0.45;
+    opacity: 0.25;
 }
 
 .disabled-text {
@@ -165,7 +165,7 @@ button.dropdown {
 }
 
 button.dropdown:hover {
-    box-shadow: 2px 2px 0px #0250bb;
+    box-shadow: 4px 4px 0px orange;
 }
 
 button.dropdown.isActive {
@@ -184,7 +184,6 @@ button.dropdown div.active-icon {
 }
 
 .dropdown-title {
-    opacity: .7;
     width: 100%;
     grid-column: title;
 }

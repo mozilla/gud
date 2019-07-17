@@ -1,10 +1,11 @@
 import optionSet from './options.json'
 import { readable, derived } from 'svelte/store'
 
-const start = optionSet.startOptions.setter;
-const end = optionSet.startOptions.setter;
+const usage = optionSet.usageCriteriaOptions.setter;
 
-let hasLoaded = false
+console.log(usage,'osnfsonf')
+
+
 
 const productDetails = readable(undefined, async(set) => {
     //if (!hasLoaded) {
@@ -14,7 +15,21 @@ const productDetails = readable(undefined, async(set) => {
     return () => undefined
 })
 
+// filter 
+// const productDetails = derived([usage, rawProductDetails], ([$usage, $productDetails]) => {
+//     const thisCriterion = optionSet.usageCriteriaOptions.values.find(opt => opt.key===$usage)
+//     console.log('...', thisCriterion)
+//     if (!thisCriterion || thisCriterion.markerSet !== 'productDetails') return undefined
+//     return $productDetails
+// })
+
+export const showProductDetails = derived(usage, ($usage) => {
+    const thisCriterion = optionSet.usageCriteriaOptions.values.find(opt => opt.key===$usage);
+    return thisCriterion && thisCriterion.markerSet === 'productDetails'
+})
+
 export const majorReleases = derived(productDetails, ($pd) => {
+    // get $usage for optionSet.
     if ($pd === undefined) return undefined
     return Object.entries($pd).filter(([key, {category}]) => {
         return category === 'major' && key.includes('firefox')

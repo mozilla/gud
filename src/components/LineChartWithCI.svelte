@@ -38,10 +38,10 @@ export let xMin;
 export let xMax;
 export let yMin;
 export let yMax;
+export let markers = [];
 
 // markers are thin, vertical lines that
 // denote special events & annotations on a graph.
-export let markers = [];
 export let filterMarkerCallback = () => true;
 
 export let yRangeGroup;
@@ -73,8 +73,6 @@ const inBounds = (xmin, xmax) => {
         return (xmin !== '' ? d.date >= xmindate : true) && (xmax !== '' ? d.date <= xmaxdate : true)
     }
 }
-
-let intermediateData = data.filter(inBounds(xMin, xMax))
 
 const daysBetween = (firstDate, secondDate) => {
     const oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
@@ -113,6 +111,8 @@ const PL = {
     bottom: H - M.bottom - M.buffer
 }
 
+let intermediateData = data.filter(inBounds(xMin, xMax));
+//$: intermediateData = data.filter(inBounds(xMin, xMax));
 const MAX_Y = yMax ? yMax : Math.max(...intermediateData.map(v=>v.upper))
 
 // if this graph has a yRangeGroup key, let's log if it beats the current max Y for the group.
@@ -151,11 +151,10 @@ $: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : FINAL_MAX_Y])
 
 // finalData is the element that gets plotted.
 let finalData = intermediateData;
-// $: finalData = intermediateData.filter((d) => {
-//     return d.date <= graphXMax && d.date >= graphXMin
-// })
 
-let areaShape = area()
+
+let areaShape;
+$: areaShape = area()
     .x(d=> xScale(d.date))
     .y0(d=> yScale(d.lower))
     .y1(d=> yScale(d.upper))

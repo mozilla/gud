@@ -6,7 +6,7 @@ import { mode } from '../stores/stores'
 import { modeIsImplemented } from '../stores/stores'
 import optionSet from '../stores/options.json'
 import queryString, { setDateRange } from '../stores/query'
-import { majorReleases } from '../stores/productDetails';
+import { majorReleases, showProductDetails } from '../stores/productDetails';
 
 import AnnotationsAndRemarks from './AnnotationsAndRemarks.svelte'
 
@@ -20,19 +20,20 @@ let outdata;
 const formatKeyString = timeFormat('%Y-%m-%d')
 
 let metricSet = optionSet.metricOptions.setter;
+let usage = optionSet.usageCriteriaOptions.setter;
+let showProductMarkers = true;
 
 // filter majorReleases according to start and end.
 const start = optionSet.startOptions.setter;
 const end = optionSet.endOptions.setter;
 
-console.log('start/end', $start, $end);
+$: console.log({$showProductDetails});
 
 const getMetricInformation = (m) => {
     return optionSet.metricOptions.values.find(v=> v.key === m);
 }
 
 function carveData(rawData, visibleMetrics) {
-    console.log('carving data ...')
     let metrics = Object.keys(rawData[0]).filter(m => {
         return !m.includes('_low') && !m.includes('_high') && !m.includes('date')
     }).filter(m => {
@@ -67,7 +68,6 @@ function carveData(rawData, visibleMetrics) {
 }
 
 $: outdata = carveData(data, $metricSet)
-$: console.log('$metricSet', $metricSet)
 
 </script>
 
@@ -117,7 +117,7 @@ $: console.log('$metricSet', $metricSet)
                 rolloverLabel={dataset.rolloverLabel}
                 yType={dataset.format}
                 data={dataset.data} 
-                markers={$majorReleases}
+                markers={$showProductDetails ? $majorReleases : []}
                 filterMarkerCallback={ // filters by range.
                     (release, graphXMin, graphXMax) => {
                         const size = $metricSet === 'all' ? 'small' : 'large';

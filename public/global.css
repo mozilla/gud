@@ -40,7 +40,7 @@ html, body {
 	--multiselector-border-color: transparent;
 	--multiselector-bg: #00b3f4;
     --multiselector-button-text-color: white;
-    --multiselector-selected-bg: #ddd;
+    --multiselector-selected-bg: tomato;
 
 	/* modal features */
 	--modal-border-radius: 5px;
