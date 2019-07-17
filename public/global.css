@@ -34,10 +34,12 @@ html, body {
 	--dp-active-color: #444;
 
 	/* multiselector	 */
+	--multiselector-horiz-pad: 8px;
 	--multiselector-list-item-pad: calc(var(--pad) / 2);
     --multiselector-list-item-size: 25px;
-    --multiselector-border-color: #aaa;
-    --multiselector-button-text-color: #444;
+	--multiselector-border-color: transparent;
+	--multiselector-bg: #00b3f4;
+    --multiselector-button-text-color: white;
     --multiselector-selected-bg: #ddd;
 
 	/* modal features */

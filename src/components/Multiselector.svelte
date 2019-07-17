@@ -21,6 +21,7 @@ export let options;
 export let setter;
 export let selectType = 'single';
 export let onSelection;
+export let enabled;
 
 let parentRef;
 let menuRef;
@@ -74,6 +75,7 @@ function removeSelection(key) {
 }
 
 function handleSelection(key) {
+    console.log('-----------------------------Multiselector: ', title, key)
     const thisOption = options.find(k=>k.key===key);
     if (selectType === 'multi') {
             if (!$setter.includes(key)) {
@@ -86,9 +88,8 @@ function handleSelection(key) {
         $setter = key;
         // if single, collapse.
         isActive = false;
-    } // check to see if  more info?
+    }
     if (onSelection) {
-        console.log('yeah!', thisOption)
         onSelection(thisOption)
     }
 }
@@ -130,14 +131,26 @@ function hideOnClickOutside(element) {
     margin-bottom: var(--pad);
 }
 
+.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.disabled-text {
+    font-weight: 300;
+}
+
 button.dropdown {
     border: none;
     /* border-bottom: 1px solid tomato; */
+    background-color: var(--multiselector-bg);
     border: 1px solid var(--multiselector-border-color);
     padding: calc(var(--multiselector-list-item-pad) / 2);
+    padding-left: var(--multiselector-horiz-pad);
+    padding-right: var(--multiselector-horiz-pad);
     border-radius: calc(var(--multiselector-list-item-pad) / 4);
     color: var(--multiselector-button-text-color);
-    background-color: transparent;
     text-align: left;
     text-transform: uppercase;
     /* padding-bottom: 5px; */
@@ -152,7 +165,7 @@ button.dropdown {
 }
 
 button.dropdown:hover {
-    box-shadow: 2px 2px 0px rgba(0,0,0,.2);
+    box-shadow: 2px 2px 0px #0250bb;
 }
 
 button.dropdown.isActive {
@@ -167,7 +180,7 @@ button.dropdown .dropdown-button-icon {
 }
 
 button.dropdown div.active-icon {
-    transform: rotate(-90deg);
+    transform: rotate(-1080deg);
 }
 
 .dropdown-title {
@@ -364,6 +377,7 @@ ul.active {
         updatePopup()
     }}
     class=selector
+    class:disabled={!enabled}
 >
 
 <div class=input-set>

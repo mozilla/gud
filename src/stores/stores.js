@@ -9,6 +9,8 @@ const allOptions =   [
     optionSet.modeOptions, 
     , ...menuOptions
 ]
+const rawStart = writable('')
+const rawEnd = writable('')
 
 const params = new URLSearchParams(window.location.search);
 let initialDisabledDimensions = []
@@ -21,8 +23,15 @@ allOptions.forEach(opt => {
     }
     else {
         queryValue = params.get(opt.key) || undefined;
-        if (opt.type === 'date') opt.setter = writable(queryValue || '')
-        else opt.setter = createListStore(opt.values)(queryValue);
+        if (opt.type === 'date') {
+            if (opt.label === 'Start') rawStart.set(queryValue || '')
+            if (opt.label === 'End') rawEnd.set(queryValue || '')
+        
+            opt.setter = writable(queryValue || '')
+        }
+        else {
+            opt.setter = createListStore(opt.values)(queryValue);
+        }
     }
     // if the default usage criteria has disabled dimensions, make sure to
     // set the initialDisabledDimensions
@@ -50,8 +59,7 @@ const modeIsImplemented = derived(mode, ($mode) => {
 // if we deprecate DatePicker.svelte, these can leave.
 // until then, it's nice to have these store values
 // so we can reset these as needed.
-const rawStart = writable('')
-const rawEnd = writable('')
+
 
 export {
     allOptions,

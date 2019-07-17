@@ -28,7 +28,7 @@
 	import {
 		menuOptions, allOptions, mode, modeIsImplemented, disabledDimensions
 	} from './stores/stores'
-	import cache, { queryIsCached } from './stores/cache'
+	import cache from './stores/cache'
 	import currentQuery, { isNotDefaultQueryset, resetQuery } from './stores/query'
 	import optionSet from './stores/options.json'
 
@@ -93,7 +93,6 @@
 		{#if $mode === 'explore' && visible}
 			<section class=control-selectors>
 				{#each menuOptions as selector, i (selector.key)}
-				{#if !$disabledDimensions.includes(selector.key)}
 					<!-- {#if selector.variant === 'radio-group'}
 						<RadioGroup 
 							title={selector.label}
@@ -110,7 +109,8 @@
 							}}
 						/> -->
 						{#if selector.type !== 'date'}
-						<Multiselector 
+						<Multiselector
+							enabled={!$disabledDimensions.includes(selector.key)}
 							title={selector.label} 
 							description={selector.description || selector.label}
 							showDescriptionOnSelect={selector.showDescriptionOnSelect}
@@ -123,6 +123,12 @@
 									// $setter, any additional callbacks should go here.
 									if (option.disabledDimensions) {
 										$disabledDimensions = [...option.disabledDimensions];
+										// reset setter to default.
+										Object.keys(optionSet).filter(k=> $disabledDimensions.includes(optionSet[k].key))
+											.forEach(k => {
+												if (optionSet[k].type === 'multi') optionSet[k].setter.set([])
+												else if (optionSet[k].type === 'single') optionSet[k].setter.set(optionSet[k].values[0])
+											})
 									} else {
 										$disabledDimensions = []
 									}
@@ -130,7 +136,6 @@
 							}}
 							 />
 					{/if}
-				{/if}
 				{/each}
 			<DatePicker />
 			</section>

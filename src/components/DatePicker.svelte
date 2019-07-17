@@ -83,8 +83,6 @@ $: releaseSet = $majorReleases === undefined ? [] : $majorReleases.filter(({date
 }
 
 .date-picker-controls {
-    /* display: flex;
-    justify-content: flex-end; */
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: var(--pad);

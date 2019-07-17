@@ -10,10 +10,11 @@ import {fetchExploreData} from './fetchData'
 const cacheObj = writable({})
 
 // simply put, if $q is in the cacheObj, then return true.
-export const queryIsCached = derived([queryString, queryStringWithoutLocalOpts, cacheObj], ([_, $q, $cacheObj]) => {
+export const queryIsCached = derived([queryStringWithoutLocalOpts, cacheObj], ([$q, $cacheObj]) => {
     // this requires looking at the entire queryString to see if anything has changed,
     // though we will by default want to only use queryStringWithoutLocalOpts for the cache check.
     // hence the _ - we weant this to fire when queryString changes, but we don't need it.
+    // console.log('   queryIsCached', $q in $cacheObj)
     return $q in $cacheObj
 })
 
@@ -25,21 +26,30 @@ const removeLocalParams = (obj) => {
     toRemove.forEach(r=>delete obj[r])
 }
 
-const cachedRequest = derived([cacheObj, queryIsCached, queryStringWithoutLocalOpts, queryParameters], async ([$cacheObj, $isCached, $q, $qp, ]) => {
+const cachedRequest = derived([cacheObj, queryStringWithoutLocalOpts, queryParameters], ([$cacheObj, $q, $qp, ]) => {
     if ($qp.mode !== 'explore') return undefined;
-    if (!$isCached) {
+    // this removes queryIsCached. Right idea? I dunno. TIme to figure that iout!
+    if (!($q in $cacheObj)) {
         // save the fetch request here as a promise.
         const query = Object.assign({}, $qp)
         removeLocalParams(query)
-        $cacheObj[$q] = fetchExploreData(query);
+        $cacheObj[$q] = fetchExploreData(query, $q);
     }
+    // console.log('      cachedRequest')
     return $cacheObj[$q]
 })
 
 const dataset = derived([cachedRequest], async ([$data])=> {
     //const data = $data.then(set)
     // if (!data) return []
-    const resultset = await $data
+    // console.log('         dataset')
+    let resultset;
+    try {
+        resultset = await $data
+    } catch(err) {
+        console.error(err)
+    }
+    
     if (!resultset) return []
     return resultset
 })

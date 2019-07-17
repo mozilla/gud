@@ -38,6 +38,11 @@ export let xMin;
 export let xMax;
 export let yMin;
 export let yMax;
+
+console.log(xMin, xMax)
+
+$: console.log(title, size);
+
 // markers are thin, vertical lines that
 // denote special events & annotations on a graph.
 export let markers = [];

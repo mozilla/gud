@@ -15,7 +15,6 @@ import AnnotationsAndRemarks from './AnnotationsAndRemarks.svelte'
 export let data;
 export let title;
 
-let metrics;
 let outdata;
 
 const formatKeyString = timeFormat('%Y-%m-%d')
@@ -26,18 +25,19 @@ let metricSet = optionSet.metricOptions.setter;
 const start = optionSet.startOptions.setter;
 const end = optionSet.endOptions.setter;
 
+console.log('start/end', $start, $end)
+
 const getMetricInformation = (m) => {
     return optionSet.metricOptions.values.find(v=> v.key === m);
 }
 
-if ($mode === 'explore') {
-    // this is where we filter?
-    metrics = Object.keys(data[0]).filter(m => {
+function fetchData(rawData, visibleMetrics) {
+    let metrics = Object.keys(rawData[0]).filter(m => {
         return !m.includes('_low') && !m.includes('_high') && !m.includes('date')
     }).filter(m => {
         // take out everything not in the $metricsSet, or default to all if $metricSet === 'all'
-        if ($metricSet === 'all') return true
-        return $metricSet === m
+        if (visibleMetrics === 'all') return true
+        return visibleMetrics === m
     })
     // get start an end date of data, and filter accordingly?
     // FIXME: add filter when we are not on metric=all
@@ -59,7 +59,7 @@ if ($mode === 'explore') {
             yMax: metricInfo.yMax,
             yMin: metricInfo.yMin,
             yRangeGroup: `${$queryString}-${metricInfo.yRangeGroup}`,
-            data: data.map(d=> {
+            data: rawData.map(d=> {
                 const di = {date: d.date}
                 di.value = d[m]
                 di.lower = Math.max(d[`${m}_low`], 0)
@@ -69,7 +69,11 @@ if ($mode === 'explore') {
             })
         }
     })
+    return outdata
 }
+
+$: outdata = fetchData(data, $metricSet)
+$: console.log('$metricSet', $metricSet)
 
 </script>
 
