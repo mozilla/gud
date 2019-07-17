@@ -38,9 +38,11 @@ html, body {
 	--multiselector-list-item-pad: calc(var(--pad) / 2);
     --multiselector-list-item-size: 25px;
 	--multiselector-border-color: transparent;
-	--multiselector-bg: #00b3f4;
+	--multiselector-bg: var(--default-button-bg-color);
+	/* --multiselector-bg: #00b3f4; */
     --multiselector-button-text-color: white;
-    --multiselector-selected-bg: tomato;
+	--multiselector-selected-bg: tomato;
+
 
 	/* modal features */
 	--modal-border-radius: 5px;

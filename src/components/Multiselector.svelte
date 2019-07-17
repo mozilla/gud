@@ -165,7 +165,10 @@ button.dropdown {
 }
 
 button.dropdown:hover {
-    box-shadow: 4px 4px 0px orange;
+    /* box-shadow: 0px 0px 10px rgba(0,0,0,.3) */
+    box-shadow: 
+        4px 4px 0px rgb(248, 178, 178),
+        0px 0px 10px rgba(0,0,0,.25);
 }
 
 button.dropdown.isActive {
