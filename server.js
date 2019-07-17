@@ -21,7 +21,6 @@ function initializeCache() {
 const CACHE = initializeCache();
 
 function checkForCachedVersion(querystring, cache) {
-    console.log('checking')
     const TODAY = getDateString(new Date());
     if (querystring in cache && cache[querystring].lastRan === TODAY) return cache[querystring]
     return undefined
@@ -113,6 +112,12 @@ date;
 `)
     }
 
+// report a server error?
+
+function reportError(res, message) {
+    res.status(500).json(JSON.stringify(message))
+}
+
 app.use(express.json())
 app.use('/', express.static('public'));
 
@@ -121,12 +126,19 @@ app.post('/fetch-data', async (req, res) => {
     let out;
     const cachedVersion = checkForCachedVersion(querystring, CACHE);
     if (!cachedVersion) {
-        out = await exploreQuery(params).then(data => {
-            data.forEach(d => {
-                d.date = d.date.value
+        try {
+            
+            out = await exploreQuery(params).then(data => {
+                data.forEach(d => {
+                    d.date = d.date.value
+                })
+                return data;
             })
-            return data;
-        })
+        } catch(err) {
+            console.log(err)
+            return reportError(res, err.message)
+        }
+
         cacheResultSet(querystring, CACHE, out)
     } else {
         out = cachedVersion.data

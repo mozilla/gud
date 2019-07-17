@@ -3,10 +3,6 @@ import { readable, derived } from 'svelte/store'
 
 const usage = optionSet.usageCriteriaOptions.setter;
 
-console.log(usage,'osnfsonf')
-
-
-
 const productDetails = readable(undefined, async(set) => {
     //if (!hasLoaded) {
     const request = await fetch('https://product-details.mozilla.org/1.0/all.json');

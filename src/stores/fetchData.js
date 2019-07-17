@@ -44,18 +44,28 @@ function convertExploreData(inputs, dateKey='date', bucketKey='id_bucket') {
 }
 
 export async function fetchExploreData(params, querystring) {
-    const dataset = await fetch('/fetch-data', {
+    let payload;
+    const response = await fetch('/fetch-data', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({params, querystring})
     })
-        .then((r) => r.json())
-        .then(json => JSON.parse(json))
-        .then(convertExploreData)
+    if (response.status === 500) {
+        const message = await response.json()
+        throw new Error(message)
+    } else {
+        try {
+            payload = await response.json()
+                .then(json => JSON.parse(json))
+                .then(convertExploreData)
+        } catch(err) {
+            throw new Error('the data appears to be malformed :(')
+        }
+    }
 
-    return dataset
+    return payload
 }
 
 export { sumBucketsWithCI }

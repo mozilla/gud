@@ -158,10 +158,10 @@
 					<img  in:fly="{{y:-10, duration: 600, delay: 200}}" class='ff-logo' alt='Firefox Logo' src='firefox-logo.png' />
 					{name} <span>{` / ${$mode}`}</span>
 			</h1>
-			{#await $cache then data}
-			<div class=fulfillment-buttons in:fly={{x:20, duration:400, delay: 100}}>
-				<FulfillmentButton on:click={() => downloadString(csvFormat(data), 'text', 'GUD–BigQuery-dataset.csv')} />
-			</div>
+			{#await $cache then response}
+				<div class=fulfillment-buttons in:fly={{x:20, duration:400, delay: 100}}>
+					<FulfillmentButton on:click={() => downloadString(csvFormat(response), 'text', 'GUD–BigQuery-dataset.csv')} />
+				</div>
 			{/await}
 		</div>
 		<!-- content -->
