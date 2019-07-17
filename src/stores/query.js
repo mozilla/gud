@@ -1,5 +1,5 @@
 import { derived } from 'svelte/store'
-import { allOptions, allStores, rawStart, rawEnd } from './stores'
+import { allOptions, allStores, rawStart, rawEnd, disabledDimensions } from './stores'
 import optionSet from './options.json'
 
 const start = optionSet.startOptions.setter;
@@ -12,10 +12,12 @@ export const queryParameters = derived(allStores, (stores) => {
     stores.forEach(($store,i) => {
         outs[allOptions[i].key] = $store;
     })
+    //console.log('----------')
+    // console.log('queryParameters hit', outs);
     return outs
 })
 
-const toQueryStringParts = ($store,i) => {
+const toQueryStringParts = ($store, i) => {
     const opt = allOptions[i]
     if (opt.type === 'multi') {
         return `${opt.key}=${encodeURIComponent(JSON.stringify($store.sort()))}`
@@ -28,6 +30,7 @@ const queryString = derived(
         (stores) => {
     const outs = stores.map(toQueryStringParts)
     const currentQuery = outs.join('&')
+    // console.log('queryString hit', currentQuery);
     return currentQuery
 })
 
@@ -41,6 +44,7 @@ export const queryStringWithoutLocalOpts = derived(allStores, (stores) => {
     const outs = stores
         .map(toQueryStringParts)
         .filter((_, i) => !allOptions[i].onlyLocal)
+    // console.log('queryStringWithoutLocalOpts hit', outs.join('&'));
     return outs.join('&')
 })
 
@@ -76,6 +80,7 @@ export const resetQuery = () => {
     // these are specifically for the datepicker object.
     rawStart.set('');
     rawEnd.set('');
+    disabledDimensions.set([]);
 }
 
 export default queryString

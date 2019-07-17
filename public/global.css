@@ -6,6 +6,7 @@ html, body {
 
 :root {
 	--default-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	--default-font-size: 14px;
 	--pad: 20px;
 	--subsection-margin: 30px;
 	--left-pane: 350px;
@@ -20,10 +21,28 @@ html, body {
 	--default-button-text-color: white;
 	--default-button-bg-color: rgb(146, 146, 212);
 
-	/* menu features */
+	/* menu / tooltip features */
 	--tooltip-trigger-width: 20px;
 	--left-pane-grid-pad: var(--pad);
 	--menu-width: calc(var(--left-pane) - var(--pad) - var(--pad) - var(--left-pane-grid-pad) - var(--tooltip-trigger-width));
+	--tooltip-background: rgb(235, 235, 235);
+	--modal-fill: var(--tooltip-background);
+	--modal-tt-pad: 15px;
+	
+	/* date-picker */
+	--dp-default-color: #888;
+	--dp-active-color: #444;
+
+	/* multiselector	 */
+	--multiselector-horiz-pad: 8px;
+	--multiselector-list-item-pad: calc(var(--pad) / 2);
+    --multiselector-list-item-size: 25px;
+	--multiselector-border-color: transparent;
+	--multiselector-bg: var(--default-button-bg-color);
+	/* --multiselector-bg: #00b3f4; */
+    --multiselector-button-text-color: white;
+	--multiselector-selected-bg: tomato;
+
 
 	/* modal features */
 	--modal-border-radius: 5px;
@@ -38,7 +57,7 @@ html, body {
 
 	--secondary-color: #0097B2;
 	--faint-text: lightgray;
-	--tooltip-background: rgb(235, 235, 235);
+
 
 }
 

@@ -76,6 +76,20 @@ $: releaseSet = $majorReleases === undefined ? [] : $majorReleases.filter(({date
     --selector-metadata-font-size: 15px;
 }
 
+
+.date-picker {
+    margin-top: var(--footer-height);
+    text-align: right;
+}
+
+.date-picker-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: var(--pad);
+    justify-content: end;
+}
+
+
 h2 {
     font-size: 20px;
     font-weight: normal;
@@ -85,49 +99,55 @@ input {
     background-color: transparent;
     border: none;
     border-bottom: 1px solid tomato;
-    padding: 6px;
-    font-weight: 600;
+    padding:0;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: var(--dp-default-color);
     font-family: var(--default-font-family);
+    font-size: var(--default-font-size);
     transition: border-bottom 100ms;
     cursor: pointer;
+    width: 100%;
 }
 
 input:hover {
     border-bottom: 1px solid black;
 }
 
-/* div.days-since {
-    margin-top: var(--pad);
-    font-size: var(--selector-metadata-font-size)
-} */
+input:focus {
+    color: var(--dp-active-color)
+}
+
+.date-picker-input-label {
+    font-size:12px;
+    text-align:left;
+    color: tomato;
+}
+
 
 </style>
 
-<div>
+<div class=date-picker>
 
     <h2>Time Period</h2>
 
+    <div class='date-picker-controls'>
+
+    <div>
+    <div class='date-picker-input-label'>Start</div>
     <input type="date" id="start" name="range-start"
         value="2018-07-22"
-        min={START} max={$end === '' ? TODAY : $end} bind:value={$rawStart}>
-
-    <input type="date" id="end" name="range-end"
+        min={START} max={$end === '' ? TODAY : $end} bind:value={$rawStart} />
+    </div>
+    <div>
+    <div class='date-picker-input-label'>End</div>
+    <input type="date" id="end" class=date-end name="range-end"
         value="2018-07-22"
         min={
             $start === '' ? 
                 START :
                 ($start)
-        } max={TODAY} bind:value={$rawEnd}> 
-
-    <!-- {#if days !== NaN}
-        <div class=days-since>
-            {#if $start === '' && $end === ''}
-                default
-            {/if}
-            {days} days 
-            {#if releaseSet.length > 1}
-                ({releaseSet.length} releases)
-            {/if}
-        </div>
-    {/if} -->
+        } max={TODAY} bind:value={$rawEnd} /> 
+    </div>
+    </div>
 </div>

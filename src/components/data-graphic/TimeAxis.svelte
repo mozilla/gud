@@ -31,18 +31,20 @@ function getQuarters(scale) {
     return timeMonth.range(start, end, 3)   
 }
 
+
+
 let resolution = 'years';
+let r = getRange(scale);
+$: r = getRange(scale)
 
-const r = getRange(scale)
+$: years = timeYear.range(...scale.domain());
+$: halves = timeMonth.range(...scale.domain(), 6);
+$: quarters = timeMonth.range(...scale.domain(), 3);
+$: months = timeMonth.range(...scale.domain());
+$: weeks = timeWeek.range(...scale.domain(), 2);
+$: days = timeDay.range(...scale.domain())
 
-let years = timeYear.range(...scale.domain());
-let halves = timeMonth.range(...scale.domain(), 6);
-let quarters = timeMonth.range(...scale.domain(), 3);
-let months = timeMonth.range(...scale.domain());
-let weeks = timeWeek.range(...scale.domain(), 2);
-let days = timeDay.range(...scale.domain())
-
-if (r >= 365 * 1.5) {
+$: if (r >= 365 * 1.5) {
     resolution = 'years';
     // status quo.
     // let's plot quarters + years.

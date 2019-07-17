@@ -37,22 +37,26 @@
         {   
             "label":"Any Firefox Activity",
             "key": "Any Firefox Desktop Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Firefox Desktop on the day in question"
+            "shortDescription": "The profile has sent a telemetry ping from Firefox Desktop on the day in question",
+            "markerSet": "productDetails"
         }, 
         { 
             "label": "New Firefox Desktop Profile Created",
             "key": "New Firefox Desktop Profile Created",
-            "shortDescription": "The count of the number of new profiles created on the day in question"
+            "shortDescription": "The count of the number of new profiles created on the day in question",
+            "markerSet": "productDetails"
         },
         { 
             "label": "Visited 5 URIs",
             "key": "Firefox Desktop Visited 5 URI",
-            "shortDescription": "The profile sent a main ping on the day in question that indicates that the developer tools feature was activated at least once"
+            "shortDescription": "The profile sent a main ping on the day in question that indicates that the developer tools feature was activated at least once",
+            "markerSet": "productDetails"
         },
         { 
             "label": "Opened DevTools",
             "key": "Firefox Desktop Opened Dev Tools",
-            "shortDescription": "The profile sent a main ping on the day in question that indicates that the profile opened at least 5 URIs"
+            "shortDescription": "The profile sent a main ping on the day in question that indicates that the profile opened at least 5 URIs",
+            "markerSet": "productDetails"
         },
         {
             "itemType": "divider"
@@ -64,12 +68,16 @@
         {
             "label": "Any Fennec Android Activity",
             "key": "Any Fennec Android Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Fennec Android on the day in question"
+            "shortDescription": "The profile has sent a telemetry ping from Fennec Android on the day in question",
+            "disabledDimensions": ["os", "channel"],
+            "markerSet": "productDetails"
         },
         {
             "label": "Any Fennec iOS Activity",
             "key": "Any Fennec iOS Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Fennec iOS on the day in question"
+            "shortDescription": "The profile has sent a telemetry ping from Fennec iOS on the day in question",
+            "disabledDimensions": ["os", "channel"],
+            "markerSet": "productDetails"
         },
         {
             "itemType": "divider"
@@ -81,12 +89,14 @@
         {
             "label": "Any Focus Android Activity",
             "key": "Any Focus Android Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Focus Android on the day in question"
+            "shortDescription": "The profile has sent a telemetry ping from Focus Android on the day in question",
+            "disabledDimensions": ["os", "channel"]
         },
         {
             "label": "Any Focus iOS Activity",
             "key": "Any Focus iOS Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Focus iOS on the day in question"
+            "shortDescription": "The profile has sent a telemetry ping from Focus iOS on the day in question",
+            "disabledDimensions": ["os", "channel"]
         },
         {
             "itemType": "divider"
@@ -94,12 +104,16 @@
         {
             "label": "Any Firefox Lite Activity",
             "key": "Any Firefox Lite Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Firefox Lite on the day in question"
+            "shortDescription": "The profile has sent a telemetry ping from Firefox Lite on the day in question",
+            "disabledDimensions": ["os", "channel"]
+
         },
         {
             "label": "Any Firefox for FireTV Activity",
             "key": "Any FirefoxForFireTV Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Firefox for FireTV on the day in question"
+            "shortDescription": "The profile has sent a telemetry ping from Firefox for FireTV on the day in question",
+            "disabledDimensions": ["os", "channel"]
+
         }
     ]},
     "metricOptions": {
@@ -110,7 +124,7 @@
         "inMenu": true,
         "values": [
             {
-                "label": "All", "key": "all",
+                "label": "All Available Metrics", "key": "all",
                 "shortDescription": "Shows all the below metrics on one page"
             },
             {
@@ -210,6 +224,7 @@
         "key": "channel",
         "type": "multi",
         "inMenu": true,
+        "variant": "radio-group",
         "values": [
             {"label": "Release", "key": "release"},
             {"label": "Beta", "key": "beta"},

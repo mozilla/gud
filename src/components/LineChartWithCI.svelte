@@ -1,6 +1,10 @@
 <script context="module">
     let ORDER = 0;
+    // maintain the globalX value.
     let globalX = writable(undefined);
+    // maintain the maximum y-range value for
+    // a given grouping, and use  that max y for
+    // all the graphs in that grouping (such as dau / wau / mau)
     let yRangeStore = writable({});
 </script>
 
@@ -21,7 +25,6 @@ import GraphicHeader from './data-graphic/GraphicHeader.svelte'
 import NumericYAxis from './data-graphic/NumericYAxis.svelte'
 import TimeAxis from './data-graphic/TimeAxis.svelte'
 import Tooltip from './Tooltip.svelte'
-import { majorReleases } from '../stores/productDetails'
 
 // props
 export let title;
@@ -35,6 +38,12 @@ export let xMin;
 export let xMax;
 export let yMin;
 export let yMax;
+export let markers = [];
+
+// markers are thin, vertical lines that
+// denote special events & annotations on a graph.
+export let filterMarkerCallback = () => true;
+
 export let yRangeGroup;
 
 export let onDragFinish = (startVal, endVal) => {}
@@ -49,9 +58,9 @@ function getGraphWidth(size) {
     return new Number(value.split('px')[0])
 }
 
+// for fade-ins etc.
 let order = ORDER;
 ORDER += 1;
-
 let orderStagger = 50;
 
 let updateTooltipPosition;
@@ -64,8 +73,6 @@ const inBounds = (xmin, xmax) => {
         return (xmin !== '' ? d.date >= xmindate : true) && (xmax !== '' ? d.date <= xmaxdate : true)
     }
 }
-
-let intermediateData = data.filter(inBounds(xMin, xMax))
 
 const daysBetween = (firstDate, secondDate) => {
     const oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
@@ -82,9 +89,6 @@ const W = getGraphWidth(size) //size === 'small' ? 350 : 900;
 const H = size==='small' ? W * .625 : W*.5;
 
 const formatKeyString = timeFormat('%Y-%m-%d')
-const xAxisDate = timeFormat('%d');
-const xAxisMonth = timeFormat('%b');
-const xAxisYear = timeFormat('%Y');
 const xRollover = timeFormat('%b %d, %Y')
 
 const M = {
@@ -107,6 +111,8 @@ const PL = {
     bottom: H - M.bottom - M.buffer
 }
 
+let intermediateData = data.filter(inBounds(xMin, xMax));
+//$: intermediateData = data.filter(inBounds(xMin, xMax));
 const MAX_Y = yMax ? yMax : Math.max(...intermediateData.map(v=>v.upper))
 
 // if this graph has a yRangeGroup key, let's log if it beats the current max Y for the group.
@@ -124,21 +130,17 @@ let graphXMax;
 
 $: graphXMin = xMin !== '' ? new Date(xMin) : new Date(Math.min(...intermediateData.map(v=>v.date)))
 $: graphXMax = xMax !== '' ? new Date(xMax) : new Date(Math.max(...intermediateData.map(v=>v.date)))
+
 $: xScale = scaleLinear().domain([
         graphXMin, graphXMax])
     .range([PL.left,PL.right])
 
 // sift throuh releases here.
-const ONE_YEAR = 1000 * 60 * 60 * 24 * (365  * (size === 'large' ? 2 : 1))
-let markers = []
-$: markers = $majorReleases.filter(release => {
-    const onlyEveryFive = graphXMax - graphXMin >= ONE_YEAR ? parseInt(release.version) % 5 === 0 : true
-    return onlyEveryFive 
-        && (release.date >= graphXMin && release.date <= graphXMax)
-})
+let filteredMarkers = []
+$: filteredMarkers = markers.filter(marker => filterMarkerCallback(marker, graphXMin, graphXMax))
 
 let showReleaseMarkersOnHover = true;
-$: showReleaseMarkersOnHover = markers.filter(m=> {
+$: showReleaseMarkersOnHover = filteredMarkers.filter(m=> {
     return m.date >= graphXMin && m.date <= graphXMax;
 }).length >= 3
 
@@ -149,11 +151,10 @@ $: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : FINAL_MAX_Y])
 
 // finalData is the element that gets plotted.
 let finalData = intermediateData;
-// $: finalData = intermediateData.filter((d) => {
-//     return d.date <= graphXMax && d.date >= graphXMin
-// })
 
-let areaShape = area()
+
+let areaShape;
+$: areaShape = area()
     .x(d=> xScale(d.date))
     .y0(d=> yScale(d.lower))
     .y1(d=> yScale(d.upper))
@@ -161,7 +162,7 @@ let areaShape = area()
 $: path = `M${finalData.map(p => `${xScale(p.date)},${yScale(p.value)}`).join('L')}`;
 // for whatever reason, ciArea doesn't update gracefully,.
 $: ciArea = areaShape(finalData.filter(d => d.date <= graphXMax && d.date >= graphXMin));
-$: xTicks = xScale.ticks()
+
 $: yTicks = yScale.ticks(5)
 
 let graph;
@@ -189,35 +190,68 @@ function setPoint(pt) {
 // this performs the rollover if $globalX has meaningfully changed.
 // note: this functionality happens to all graphs because $globalX is
 // a store shared in all component namespaces.
-$: if ($globalX) {
-    yPoint = intermediateData.find(d => d.date.getTime() === $globalX.getTime())//last(data.filter(d =>  d.date <= $globalX));
-    $coords.x = xScale(yPoint.date);
-    $coords.y = yScale(yPoint.value);
-    mouseXValue = xRollover(yPoint.date);
-    mouseYValue = `  ${yPoint.value}`
-    mouseYLow = yPoint.lower;
-    mouseYHigh = yPoint.upper;
-    mouseVersionValue = last($majorReleases.filter(release => {
-        return release.date <= yPoint.date;
-    }))
-    if (mouseVersionValue) {
-        mouseVersionValue.end = $majorReleases.find(release => {
-            return release.date > mouseVersionValue.date;
-        })
-        if (mouseVersionValue.end) mouseVersionValue.end = mouseVersionValue.end.date
-        mouseVersionValue.start = xScale(mouseVersionValue.date)
-        mouseVersionValue.end = mouseVersionValue.end ? xScale(mouseVersionValue.end) : PL.right
+
+function updateRollover(gbx) {
+    if (gbx) {
+        yPoint = intermediateData.find(d => d.date.getTime() === gbx.getTime())//last(data.filter(d =>  d.date <= $globalX));
+        $coords.x = xScale(yPoint.date);
+        $coords.y = yScale(yPoint.value);
+        mouseXValue = xRollover(yPoint.date);
+        mouseYValue = `  ${yPoint.value}`
+        mouseYLow = yPoint.lower;
+        mouseYHigh = yPoint.upper;
+        mouseVersionValue = last(markers.filter(release => {
+            return release.date <= yPoint.date;
+        }))
+        if (mouseVersionValue) {
+            mouseVersionValue.end = markers.find(release => {
+                return release.date > mouseVersionValue.date;
+            })
+            if (mouseVersionValue.end) mouseVersionValue.end = mouseVersionValue.end.date
+            mouseVersionValue.start = xScale(mouseVersionValue.date)
+            mouseVersionValue.end = mouseVersionValue.end ? xScale(mouseVersionValue.end) : PL.right
+        }
+    } else {
+        $coords.x = -150;
+        $coords.y = -150;
+        mouseXValue = undefined;
+        mouseYValue = undefined;
+        mouseYLow = undefined;
+        mouseYHigh = undefined;
+        mouseVersionValue = undefined;
     }
-    
-} else {
-    $coords.x = -150;
-    $coords.y = -150;
-    mouseXValue = undefined;
-    mouseYValue = undefined;
-    mouseYLow = undefined;
-    mouseYHigh = undefined;
-    mouseVersionValue = undefined;
 }
+$: updateRollover($globalX)
+// DELETE WHEN WE VERIFY THIS IS GOOD TO GET RID OF.
+// $: if ($globalX) {
+//     yPoint = intermediateData.find(d => d.date.getTime() === $globalX.getTime())//last(data.filter(d =>  d.date <= $globalX));
+//     $coords.x = xScale(yPoint.date);
+//     $coords.y = yScale(yPoint.value);
+//     mouseXValue = xRollover(yPoint.date);
+//     mouseYValue = `  ${yPoint.value}`
+//     mouseYLow = yPoint.lower;
+//     mouseYHigh = yPoint.upper;
+//     mouseVersionValue = last(markers.filter(release => {
+//         return release.date <= yPoint.date;
+//     }))
+//     if (mouseVersionValue) {
+//         mouseVersionValue.end = markers.find(release => {
+//             return release.date > mouseVersionValue.date;
+//         })
+//         if (mouseVersionValue.end) mouseVersionValue.end = mouseVersionValue.end.date
+//         mouseVersionValue.start = xScale(mouseVersionValue.date)
+//         mouseVersionValue.end = mouseVersionValue.end ? xScale(mouseVersionValue.end) : PL.right
+//     }
+    
+// } else {
+//     $coords.x = -150;
+//     $coords.y = -150;
+//     mouseXValue = undefined;
+//     mouseYValue = undefined;
+//     mouseYLow = undefined;
+//     mouseYHigh = undefined;
+//     mouseVersionValue = undefined;
+// }
 
 // these values are used for dragging.
 let isDragging = false;
@@ -236,9 +270,6 @@ onMount(() => {
     svg.on('mouseup', (e) => {
         if (isDragging) {
             const [x, y] = mouse(svg.node())
-            // mouseDownEndValue = last(data.filter(d => d.date <= xScale.invert(x)))
-            // if (mouseDownEndValue) mouseDownEndValue = mouseDownEndValue.date
-            // send something to the date store here?
             if (mouseDownStartValue && mouseDownEndValue) {
                 onDragFinish(mouseDownStartValue, mouseDownEndValue)
                 $globalX = undefined;
@@ -296,17 +327,13 @@ afterUpdate(() => {
 
 let coords = writable({ x: -150, y: -150 });
 
-$: xTicks = timeMonth.range(...xScale.domain(), 3)
-
-$: years = timeYear.range(...xScale.domain())
-
 // handle scale size.
+
+
 
 </script>
 
 <style>
-
-
 
 .graphic-container {
     display: block;
@@ -332,7 +359,6 @@ svg.large-graph {
 }
 
 </style>
-
 {#if intermediateData.length}
 <div
     class=graphic-container
@@ -424,7 +450,7 @@ svg.large-graph {
             <path  style="clip-path: url(#clip-path);" in:draw={{duration: 500, easing: linear}} class:loaded={available} class=path-line d={path} />
         </g>
         <g class=markers>
-            {#each markers as marker, i}
+            {#each filteredMarkers as marker, i}
                 <line 
                     x1={xScale(marker.date)}
                     x2={xScale(marker.date)}

@@ -6,47 +6,41 @@ import { mode } from '../stores/stores'
 import { modeIsImplemented } from '../stores/stores'
 import optionSet from '../stores/options.json'
 import queryString, { setDateRange } from '../stores/query'
-import { majorReleases } from '../stores/productDetails';
+import { majorReleases, showProductDetails } from '../stores/productDetails';
 
 import AnnotationsAndRemarks from './AnnotationsAndRemarks.svelte'
-
 
 // these are the markers.
 
 export let data;
 export let title;
 
-let metrics;
 let outdata;
 
 const formatKeyString = timeFormat('%Y-%m-%d')
 
 let metricSet = optionSet.metricOptions.setter;
+let usage = optionSet.usageCriteriaOptions.setter;
+let showProductMarkers = true;
 
 // filter majorReleases according to start and end.
 const start = optionSet.startOptions.setter;
 const end = optionSet.endOptions.setter;
 
+$: console.log({$showProductDetails});
+
 const getMetricInformation = (m) => {
     return optionSet.metricOptions.values.find(v=> v.key === m);
 }
 
-if ($mode === 'explore') {
-    // this is where we filter?
-    metrics = Object.keys(data[0]).filter(m => {
+function carveData(rawData, visibleMetrics) {
+    let metrics = Object.keys(rawData[0]).filter(m => {
         return !m.includes('_low') && !m.includes('_high') && !m.includes('date')
     }).filter(m => {
         // take out everything not in the $metricsSet, or default to all if $metricSet === 'all'
-        if ($metricSet === 'all') return true
-        return $metricSet === m
+        if (visibleMetrics === 'all') return true
+        return visibleMetrics === m
     })
-    // get start an end date of data, and filter accordingly?
-    // FIXME: add filter when we are not on metric=all
-    // const intermediateData = data.filter(d => { 
-    //     return ($start !== '' ? d.date >= new Date($start): true) && ($end !== '' ? d.date <= new Date($end) : true)
-    // }).map(d => {
-    //     return Object.assign({}, d)
-    // })
     
     outdata = metrics.map(m => {
         const metricInfo = getMetricInformation(m)
@@ -60,7 +54,7 @@ if ($mode === 'explore') {
             yMax: metricInfo.yMax,
             yMin: metricInfo.yMin,
             yRangeGroup: `${$queryString}-${metricInfo.yRangeGroup}`,
-            data: data.map(d=> {
+            data: rawData.map(d=> {
                 const di = {date: d.date}
                 di.value = d[m]
                 di.lower = Math.max(d[`${m}_low`], 0)
@@ -70,7 +64,10 @@ if ($mode === 'explore') {
             })
         }
     })
+    return outdata
 }
+
+$: outdata = carveData(data, $metricSet)
 
 </script>
 
@@ -108,7 +105,10 @@ if ($mode === 'explore') {
             class:all-graphics={$metricSet === 'all'}
             class:one-graphic={$metricSet !== 'all'}
         >
-            {#each outdata as dataset, i (dataset.title)}
+            <!-- changing the ID to include all of the relevant local-but-requires-redraw
+                seems like a hack, but it does work pretty elegantly.
+             -->
+            {#each outdata as dataset, i (dataset.title + $metricSet)}
             <LineChartWithCI 
                 size={$metricSet === 'all' ? 'small' : 'large'} 
                 title={dataset.title} 
@@ -117,6 +117,16 @@ if ($mode === 'explore') {
                 rolloverLabel={dataset.rolloverLabel}
                 yType={dataset.format}
                 data={dataset.data} 
+                markers={$showProductDetails ? $majorReleases : []}
+                filterMarkerCallback={ // filters by range.
+                    (release, graphXMin, graphXMax) => {
+                        const size = $metricSet === 'all' ? 'small' : 'large';
+                        const ONE_YEAR = 1000 * 60 * 60 * 24 * (365  * (size === 'large' ? 2 : 1))
+                        const onlyEveryFive = graphXMax - graphXMin >= ONE_YEAR ? parseInt(release.version) % 5 === 0 : true
+                        return onlyEveryFive 
+                            && (release.date >= graphXMin && release.date <= graphXMax)
+                    }
+                }
                 xMin={$start} 
                 xMax={$end}
                 yMin={dataset.yMin}

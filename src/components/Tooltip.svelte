@@ -37,11 +37,6 @@ onMount(() => {
 
 <style>
 
-:root {
-    --fill: var(--tooltip-background);
-    --tt-pad: 15px;
-}
-
 div.tooltip-trigger {
     width: max-content;
     opacity: .35;
@@ -53,8 +48,8 @@ div.tooltip-trigger {
 
 div.tooltip-element {
     max-width: 300px;
-    padding: var(--tt-pad);
-    background-color: var(--fill);
+    padding: var(--modal-tt-pad);
+    background-color: var(--modal-fill);
     font-size:13px;
     line-height:1.4;
     /* border: 1px solid lightgray; */
@@ -87,7 +82,7 @@ div.tooltip-element.active {
 	width: 0;
 	height: 0;
 	border: 16px solid transparent;
-	border-top-color:var(--fill);
+	border-top-color:var(--modal-fill);
 	border-bottom: 0;
 	margin-left: -16px;
 	margin-bottom: -16px;
@@ -101,7 +96,7 @@ div.tooltip-element.active {
 	width: 0;
 	height: 0;
 	border: 16px solid transparent;
-	border-bottom-color: var(--fill);
+	border-bottom-color: var(--modal-fill);
 	border-top: 0;
 	margin-left: -16px;
 	margin-top: -16px;
@@ -115,7 +110,7 @@ div.tooltip-element.active {
 	width: 0;
 	height: 0;
 	border: 16px solid transparent;
-	border-left-color: var(--fill);
+	border-left-color: var(--modal-fill);
 	border-right: 0;
 	margin-top: -16px;
 	margin-right: -16px;
@@ -129,7 +124,7 @@ div.tooltip-element.active {
 	width: 0;
 	height: 0;
 	border: 16px solid transparent;
-	border-left-color: var(--fill);
+	border-left-color: var(--modal-fill);
 	border-right: 0;
 	margin-top: -16px;
 	margin-right: -16px;
