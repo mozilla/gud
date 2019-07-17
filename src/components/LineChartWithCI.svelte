@@ -39,9 +39,7 @@ export let xMax;
 export let yMin;
 export let yMax;
 
-console.log(xMin, xMax)
-
-$: console.log(title, size);
+$: console.log(xMin, xMax)
 
 // markers are thin, vertical lines that
 // denote special events & annotations on a graph.
@@ -95,9 +93,6 @@ const W = getGraphWidth(size) //size === 'small' ? 350 : 900;
 const H = size==='small' ? W * .625 : W*.5;
 
 const formatKeyString = timeFormat('%Y-%m-%d')
-const xAxisDate = timeFormat('%d');
-const xAxisMonth = timeFormat('%b');
-const xAxisYear = timeFormat('%Y');
 const xRollover = timeFormat('%b %d, %Y')
 
 const M = {
@@ -143,11 +138,6 @@ $: xScale = scaleLinear().domain([
 
 // sift throuh releases here.
 let filteredMarkers = []
-// $: filteredMarkers = markers.filter(release => {
-//     const onlyEveryFive = graphXMax - graphXMin >= ONE_YEAR ? parseInt(release.version) % 5 === 0 : true
-//     return onlyEveryFive 
-//         && (release.date >= graphXMin && release.date <= graphXMax)
-// })
 $: filteredMarkers = markers.filter(marker => filterMarkerCallback(marker, graphXMin, graphXMax))
 
 let showReleaseMarkersOnHover = true;

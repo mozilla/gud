@@ -25,13 +25,14 @@ let metricSet = optionSet.metricOptions.setter;
 const start = optionSet.startOptions.setter;
 const end = optionSet.endOptions.setter;
 
-console.log('start/end', $start, $end)
+console.log('start/end', $start, $end);
 
 const getMetricInformation = (m) => {
     return optionSet.metricOptions.values.find(v=> v.key === m);
 }
 
-function fetchData(rawData, visibleMetrics) {
+function carveData(rawData, visibleMetrics) {
+    console.log('carving data ...')
     let metrics = Object.keys(rawData[0]).filter(m => {
         return !m.includes('_low') && !m.includes('_high') && !m.includes('date')
     }).filter(m => {
@@ -39,13 +40,6 @@ function fetchData(rawData, visibleMetrics) {
         if (visibleMetrics === 'all') return true
         return visibleMetrics === m
     })
-    // get start an end date of data, and filter accordingly?
-    // FIXME: add filter when we are not on metric=all
-    // const intermediateData = data.filter(d => { 
-    //     return ($start !== '' ? d.date >= new Date($start): true) && ($end !== '' ? d.date <= new Date($end) : true)
-    // }).map(d => {
-    //     return Object.assign({}, d)
-    // })
     
     outdata = metrics.map(m => {
         const metricInfo = getMetricInformation(m)
@@ -72,7 +66,7 @@ function fetchData(rawData, visibleMetrics) {
     return outdata
 }
 
-$: outdata = fetchData(data, $metricSet)
+$: outdata = carveData(data, $metricSet)
 $: console.log('$metricSet', $metricSet)
 
 </script>
@@ -111,7 +105,10 @@ $: console.log('$metricSet', $metricSet)
             class:all-graphics={$metricSet === 'all'}
             class:one-graphic={$metricSet !== 'all'}
         >
-            {#each outdata as dataset, i (dataset.title)}
+            <!-- changing the ID to include all of the relevant local-but-requires-redraw
+                seems like a hack, but it does work pretty elegantly.
+             -->
+            {#each outdata as dataset, i (dataset.title + $metricSet)}
             <LineChartWithCI 
                 size={$metricSet === 'all' ? 'small' : 'large'} 
                 title={dataset.title} 
