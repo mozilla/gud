@@ -49,13 +49,13 @@
         { 
             "label": "Visited 5 URIs",
             "key": "Firefox Desktop Visited 5 URI",
-            "shortDescription": "The profile sent a main ping on the day in question that indicates that the developer tools feature was activated at least once",
+            "shortDescription": "The profile sent a main ping on the day in question that indicates that the profile opened at least 5 URIs",
             "markerSet": "productDetails"
         },
         { 
             "label": "Opened DevTools",
             "key": "Firefox Desktop Opened Dev Tools",
-            "shortDescription": "The profile sent a main ping on the day in question that indicates that the profile opened at least 5 URIs",
+            "shortDescription": "The profile sent a main ping on the day in question that indicates that the developer tools feature was activated at least once",
             "markerSet": "productDetails"
         },
         {
@@ -70,6 +70,18 @@
             "key": "Any Fenix Activity",
             "disabledDimensions": ["os", "channel"],
             "shortDescription": "The profile has sent a telemetry ping from Fenix on the day in question"
+        },
+        {
+            "itemType": "divider"
+        },
+        {
+            "itemType": "section",
+            "label": "Firefox Accounts"
+        },
+        {   "label": "Any Firefox Account Activity",
+            "key": "Any Firefox Account Activity",
+            "shortDescription": "The profile has sent a telemetry ping from Firefox Account on the day in question",
+            "disabledDimensions": ["os", "channel"]
         },
         {
             "itemType": "divider"
@@ -126,7 +138,12 @@
             "key": "Any FirefoxForFireTV Activity",
             "shortDescription": "The profile has sent a telemetry ping from Firefox for FireTV on the day in question",
             "disabledDimensions": ["os", "channel"]
-
+        },
+        {
+            "label": "Any FirefoxConnect Activity",
+            "key": "Any FirefoxConnect Activity",
+            "shortDescription": "The profile has sent a telemetry ping from FirefoxConnect on the day in question",
+            "disabledDimensions": ["os", "channel"]
         }
     ]},
     "metricOptions": {

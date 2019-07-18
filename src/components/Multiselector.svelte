@@ -271,7 +271,7 @@ ul.active {
 }
 
 .menu-content li:hover {
-    background-color: gainsboro;
+    background-color: #eee;
 }
 
 .dropdown-status {
