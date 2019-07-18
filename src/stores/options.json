@@ -63,6 +63,19 @@
         },
         {
             "itemType": "section",
+            "label": "Fenix"
+        },
+        { 
+            "label": "Any Fenix Activity",
+            "key": "Any Fenix Activity",
+            "disabledDimensions": ["os", "channel"],
+            "shortDescription": "The profile has sent a telemetry ping from Fenix on the day in question"
+        },
+        {
+            "itemType": "divider"
+        },
+        {
+            "itemType": "section",
             "label": "Fennec"
         },
         {

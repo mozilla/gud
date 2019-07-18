@@ -147,7 +147,7 @@ $: showReleaseMarkersOnHover = filteredMarkers.filter(m=> {
 let yScale;
 
 $: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : FINAL_MAX_Y])
-    .range([PL.bottom, PL.top])
+    .range([PL.bottom, PL.top]).clamp(yType === 'percentage')
 
 // finalData is the element that gets plotted.
 let finalData = intermediateData;

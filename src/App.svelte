@@ -189,9 +189,9 @@
 		<footer>
 			<h3>Inquiries</h3>
 			<ul>
-				<li><strong>OVERALL</strong> –  jmccrosky@mozilla.com</li>
-				<li><strong>DATA</strong> – jklukas@mozilla.com</li>
-				<li><strong>FRONTEND</strong> – hulmer@mozilla.com</li>
+				<li>overall /  jmccrosky@mozilla.com</li>
+				<li>data /  jklukas@mozilla.com</li>
+				<li>frontend /  hulmer@mozilla.com</li>
 			</ul>
 		</footer>
 	</div>
