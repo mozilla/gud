@@ -27,8 +27,6 @@ let showProductMarkers = true;
 const start = optionSet.startOptions.setter;
 const end = optionSet.endOptions.setter;
 
-$: console.log({$showProductDetails});
-
 const getMetricInformation = (m) => {
     return optionSet.metricOptions.values.find(v=> v.key === m);
 }

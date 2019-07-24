@@ -93,8 +93,8 @@
 		{#if $mode === 'explore' && visible}
 			<section class=control-selectors>
 				{#each menuOptions as selector, i (selector.key)}
-					<!-- {#if selector.variant === 'radio-group'}
-						<RadioGroup 
+					<!-- {#if selector.variant === 'radio-group'} -->
+						<!-- <RadioGroup 
 							title={selector.label}
 							options={selector.values} 
 							setter={selector.setter}

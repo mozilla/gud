@@ -54,14 +54,14 @@ function sumBucketsWithCI(counts_per_bucket, agg='sum') {
     var jk_means = resamples.map(x => array_avg(x));
     var mean_errs = jk_means.map(x => Math.pow(x - mean, 2));
     var bucket_std_err = Math.sqrt((n-1) * array_avg(mean_errs));
-    var std_err = n * bucket_std_err;
+    var std_err = (agg === 'sum' ? n : 1) * bucket_std_err;
     var z_score = Math.sqrt(2.0) * erfinv(0.90);
     // shouldn't these be mean?
     let value;
     if (agg === 'sum') value = total;
     else if (agg === 'mean') value = mean;
-    var high = value + z_score * std_err;
-    var low = value - z_score * std_err;
+    var high = z_score * std_err;
+    var low = z_score * std_err;
     return {
         value,
         sum: total,

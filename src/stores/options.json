@@ -161,14 +161,12 @@
                 "itemType": "divider"
             },
             {
-                "label": "Monthly Active Users", 
+                "label": "Daily Active Users", 
                 "subtitle": "Count of Unique Profiles",
                 "shortsub": "count",
                 "yRangeGroup": "*au",
-                "key": "mau", 
-                "short": "MAU", 
-                "agg": "sum",
-                "shortDescription": "The number of unique profiles that met the usage criterion at least once during the 28-day window ending on the specified day",
+                "key": "dau", "short": "DAU", "agg": "sum",
+                "shortDescription": "The number of unique profiles that meet the usage criterion on each day",
                 "format": "count"
             },
             {
@@ -181,12 +179,14 @@
                 "format": "count"
             },
             {
-                "label": "Daily Active Users", 
+                "label": "Monthly Active Users", 
                 "subtitle": "Count of Unique Profiles",
                 "shortsub": "count",
                 "yRangeGroup": "*au",
-                "key": "dau", "short": "DAU", "agg": "sum",
-                "shortDescription": "The number of unique profiles that meet the usage criterion on each day",
+                "key": "mau", 
+                "short": "MAU", 
+                "agg": "sum",
+                "shortDescription": "The number of unique profiles that met the usage criterion at least once during the 28-day window ending on the specified day",
                 "format": "count"
             },
             {
@@ -197,7 +197,9 @@
                 "yMax": 7,
                 "key": "intensity", "short": "intensity", "agg": "mean",
                 "shortDescription": "Among profiles that meet the usage criterion at least once in the week ending on the date specified, how many days on average do they meet the usage criterion during that one-week window",
-                "format": "ratio"
+                "format": "ratio",
+                "numeratorKey": "active_days_in_week",
+                "denominatorKey": "wau"
             },
             {
                 "label": "1-Week New Profile Retention", 
@@ -205,7 +207,9 @@
                 "shortsub": "Perc.",
                 "key": "retention_1_week_new_profile", "short": "1-wk. retention", "agg": "mean",
                 "shortDescription": "Among new profiles created on the day specified, what proportion (out of 1) meet the usage criterion during the week beginning one week after the day specified",
-                "format": "percentage"
+                "format": "percentage",
+                "numeratorKey": "active_in_week_1",
+                "denominatorKey": "new_profiles"
             },
             {
                 "label": "1-Week Retention", 
@@ -213,7 +217,9 @@
                 "shortsub": "Perc.",
                 "key": "retention_1_week_active_in_week_0", "short": "1-wk. retention", "agg": "mean",
                 "shortDescription": "Among profiles that were active in the specified usage criterion at least once in the week starting on the specified day, what proportion (out of 1) meet the usage criterion during the following week",
-                "format": "percentage"
+                "format": "percentage",
+                "numeratorKey": "active_in_weeks_0_and_1",
+                "denominatorKey": "active_in_week_0"
             }
         ]
     },

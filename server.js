@@ -96,17 +96,23 @@ id_bucket,
 SUM(dau) AS dau,
 SUM(wau) AS wau,
 SUM(mau) AS mau,
+SUM(active_days_in_week) AS active_days_in_week,
+SUM(active_in_week_1) AS active_in_week_1,
+SUM(active_in_weeks_0_and_1) AS active_in_weeks_0_and_1,
+SUM(active_in_week_0) AS active_in_week_0,
+SUM(new_profiles) AS new_profiles,
 SAFE_DIVIDE(SUM(active_days_in_week),
-  SUM(wau)) AS intensity,
+    SUM(wau)) AS intensity,
 SAFE_DIVIDE(SUM(active_in_week_1),
-  SUM(new_profiles)) AS retention_1_week_new_profile,
+    SUM(new_profiles)) AS retention_1_week_new_profile,
 SAFE_DIVIDE(SUM(active_in_weeks_0_and_1),
-  SUM(active_in_week_0)) AS retention_1_week_active_in_week_0
+    SUM(active_in_week_0)) AS retention_1_week_active_in_week_0
 FROM
 telemetry.smoot_usage_all_mtr_v1
-${WHERE}
+${WHERE}  
 GROUP BY
-date, id_bucket
+date,
+id_bucket
 ORDER BY
 date;
 `)
