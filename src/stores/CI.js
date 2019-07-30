@@ -1,4 +1,5 @@
-
+/* NOTE – these functions were migrated over from BQ.
+*/
 function erfinv(x){
     var z;
     var a  = 0.147;
