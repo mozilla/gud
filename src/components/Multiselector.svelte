@@ -238,7 +238,7 @@ ul.menu-content {
     max-width: 425px;
     min-width: 200px;
     overflow: auto;
-    max-height: 95vh;
+    max-height: calc(100vh - 64px);
 
 }
 
