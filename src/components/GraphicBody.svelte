@@ -116,6 +116,7 @@ $: outdata = carveData(data, $metricSet)
                 yType={dataset.format}
                 data={dataset.data} 
                 markers={$showProductDetails ? $majorReleases : []}
+                splitCriterion={d => d.value === 0}
                 filterMarkerCallback={ // filters by range.
                     (release, graphXMin, graphXMax) => {
                         const size = $metricSet === 'all' ? 'small' : 'large';

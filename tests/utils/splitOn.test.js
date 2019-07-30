@@ -69,5 +69,4 @@ describe('splitOn', () => {
         expect(split6[0].length).toBe(1);
         expect(split6[0][0].a).toBe(1);
     })
-
 })

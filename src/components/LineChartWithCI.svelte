@@ -26,6 +26,8 @@ import NumericYAxis from './data-graphic/NumericYAxis.svelte'
 import TimeAxis from './data-graphic/TimeAxis.svelte'
 import Tooltip from './Tooltip.svelte'
 
+import splitOn from '../utils/splitOn'
+
 // props
 export let title;
 export let rolloverLabel = 'value';
@@ -39,6 +41,7 @@ export let xMax;
 export let yMin;
 export let yMax;
 export let markers = [];
+export let splitCriterion = undefined;
 
 // markers are thin, vertical lines that
 // denote special events & annotations on a graph.
@@ -64,7 +67,6 @@ ORDER += 1;
 let orderStagger = 50;
 
 let updateTooltipPosition;
-
 
 const inBounds = (xmin, xmax) => {
     const xmindate = new Date(xmin)
@@ -114,12 +116,10 @@ const PL = {
 let intermediateData = data.filter(inBounds(xMin, xMax));
 //$: intermediateData = data.filter(inBounds(xMin, xMax));
 const MAX_Y = yMax ? yMax : Math.max(...intermediateData.map(v=>v.upper))
-
 // if this graph has a yRangeGroup key, let's log if it beats the current max Y for the group.
 if (yRangeGroup) {
     $yRangeStore[yRangeGroup] = Math.max($yRangeStore[yRangeGroup] || 0, MAX_Y)
 }
-
 $: FINAL_MAX_Y = (yRangeGroup ? $yRangeStore[yRangeGroup] : MAX_Y)
 
 $: yFormat = makeFormatter(FINAL_MAX_Y, yType);
@@ -145,13 +145,17 @@ $: showReleaseMarkersOnHover = filteredMarkers.filter(m=> {
 }).length >= 3
 
 let yScale;
-
-$: yScale = scaleLinear().domain([0, yType === 'percentage' ? 1 : FINAL_MAX_Y])
+$: yScale = scaleLinear().domain([0, yMax ? yMax : (yType === 'percentage' ? 1 : FINAL_MAX_Y)])
     .range([PL.bottom, PL.top]).clamp(yType === 'percentage')
 
 // finalData is the element that gets plotted.
-let finalData = intermediateData;
+let finalData;
 
+if (!splitCriterion) {
+    finalData = [intermediateData]
+} else {
+    finalData = splitOn(intermediateData, splitCriterion)
+}
 
 let areaShape;
 $: areaShape = area()
@@ -159,9 +163,11 @@ $: areaShape = area()
     .y0(d=> yScale(d.lower))
     .y1(d=> yScale(d.upper))
 
-$: path = `M${finalData.map(p => `${xScale(p.date)},${yScale(p.value)}`).join('L')}`;
+$: path = finalData.map(segment=>`M${segment.map(p => `${xScale(p.date)},${yScale(p.value)}`).join('L')}`); 
 // for whatever reason, ciArea doesn't update gracefully,.
-$: ciArea = areaShape(finalData.filter(d => d.date <= graphXMax && d.date >= graphXMin));
+$: ciArea = finalData.map(segment => areaShape(segment.filter(d => d.date <= graphXMax && d.date >= graphXMin)));
+
+// all right. we need PATHS and ciAreas!
 
 $: yTicks = yScale.ticks(5)
 
@@ -329,8 +335,6 @@ let coords = writable({ x: -150, y: -150 });
 
 // handle scale size.
 
-
-
 </script>
 
 <style>
@@ -446,8 +450,14 @@ svg.large-graph {
             {/if}
         </g>
         <g in:fade={{duration:300}} class=plot-area>
-            <path  style="clip-path: url(#clip-path);" in:fade={{duration:1000}} d={ciArea}  fill='rgba(0,0,0,.1)' />
-            <path  style="clip-path: url(#clip-path);" in:draw={{duration: 500, easing: linear}} class:loaded={available} class=path-line d={path} />
+            {#each path as p, i}
+                <path style="clip-path: url(#clip-path);" in:draw={{duration: 500}} class:loaded={available} class=path-line d={p} />
+            {/each}
+            {#each ciArea as ci, i}
+                <path  style="clip-path: url(#clip-path);" in:fade={{duration:1000}} d={ci}  fill='rgba(0,0,0,.1)' />
+            {/each}
+            
+            
         </g>
         <g class=markers>
             {#each filteredMarkers as marker, i}
