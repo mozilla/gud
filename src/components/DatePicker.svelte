@@ -124,6 +124,15 @@ input:focus {
     color: tomato;
 }
 
+@media (max-width: 1301px) {
+
+	.date-picker-controls {
+        display: block;
+        padding-bottom: var(--pad);
+	}
+
+}
+
 
 </style>
 

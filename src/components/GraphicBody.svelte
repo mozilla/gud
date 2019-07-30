@@ -69,31 +69,6 @@ $: outdata = carveData(data, $metricSet)
 
 </script>
 
-<style>
-
-.all-graphics {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr;
-    grid-row-gap: var(--subsection-margin);
-}
-
-.one-graphic {
-    display: block;
-}
-
-.coming-soon {
-    display: grid;
-    margin: auto;
-    height: 100%;
-    text-align: center;
-    font-size:25px;
-    font-weight: 900;
-    color: var(--faint-text);
-}
-
-</style>
-
 <div class=graphic-body>
     {#if $modeIsImplemented}
         <!-- <h2 class=graphic-body-header>
