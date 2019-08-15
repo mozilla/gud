@@ -23,7 +23,7 @@
         { "label": "Table", "key": "table" }
     ]},
     "usageCriteriaOptions": {
-        "label": "Usage Criteria",
+        "label": "Product / Usage Criteria",
         "description": "any product, feature, or population subset for which we wish to calculate growth metrics",
         "key": "usage",
         "type": "single",

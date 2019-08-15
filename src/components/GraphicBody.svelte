@@ -31,6 +31,9 @@ const getMetricInformation = (m) => {
     return optionSet.metricOptions.values.find(v=> v.key === m);
 }
 
+const TWO_WEEKS_AGO = new Date();
+TWO_WEEKS_AGO.setDate(TWO_WEEKS_AGO.getDate() - 15 );
+
 function carveData(rawData, visibleMetrics) {
     let metrics = Object.keys(rawData[0]).filter(m => {
         return !m.includes('_low') && !m.includes('_high') && !m.includes('date')
@@ -51,6 +54,7 @@ function carveData(rawData, visibleMetrics) {
             format: metricInfo.format,
             yMax: metricInfo.yMax,
             yMin: metricInfo.yMin,
+            key: metricInfo.key,
             yRangeGroup: `${$queryString}-${metricInfo.yRangeGroup}`,
             data: rawData.map(d=> {
                 const di = {date: d.date}
@@ -90,8 +94,12 @@ $: outdata = carveData(data, $metricSet)
                 rolloverLabel={dataset.rolloverLabel}
                 yType={dataset.format}
                 data={dataset.data} 
+                splitCriterion={
+                    dataset.key.includes('retention') ? d => {
+                        return d.date >= TWO_WEEKS_AGO;
+                    } : false
+                }
                 markers={$showProductDetails ? $majorReleases : []}
-                splitCriterion={d => d.value === 0}
                 filterMarkerCallback={ // filters by range.
                     (release, graphXMin, graphXMax) => {
                         const size = $metricSet === 'all' ? 'small' : 'large';
