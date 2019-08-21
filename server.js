@@ -80,10 +80,22 @@ const exploreQuery =(params) => {
             return (k !== 'mode' && !isDefaultValue(k, params[k])) || k === 'usage'//params[k] !== defaultValue
         })
         .map(paramKey => {
-            // get default param
+            
             const opt = getParamInfo(paramKey)
+
             const values = opt.type === 'multi' ? params[paramKey] : [params[paramKey]]
-            if (opt.key === 'usage') return `${paramKey} = '${params[paramKey]}'`
+
+            // whereStyle – these are special-case
+            if (opt.whereStyle === 'like') {
+                const key = opt.columnName || paramKey;
+                // this should short circuit the whole thing.
+                // it must be array already?
+                // requires a likeTemplate: `${paramKey} LIKE ''`
+                return `REGEXP_CONTAINS(${key}, '^(${values.join('|')})')`
+            }
+
+            if (opt.type === 'single') return `${paramKey} = '${params[paramKey]}'`
+            
             return `${paramKey} IN (${values.map(v=>`"${v}"`).join(',')})`
         })
     WHEREClauses.push(`date >= '2017-06-17'`)
