@@ -244,15 +244,15 @@
         "inMenu": true,
         "values": [
             {"label": "English", "key": "en", "shortDescription": "en-US, en-GB, en-CA, en-ZA"},
-            {"label": "German", "key": "de"},
+            {"label": "German", "key": "de", "shortDescription": "de"},
             {"label": "Spanish", "key": "es", "shortDescription": "es-ES, es-MX, es-AR, es-CL"},
-            {"label": "French", "key": "fr"},
-            {"label": "Russian", "key": "ru"},
+            {"label": "French", "key": "fr", "shortDescription": "fr"},
+            {"label": "Russian", "key": "ru", "shortDescription": "ru"},
             {"label": "Chinese", "key": "zh", "shortDescription": "zh-CN, zh-TW"},
             {"label": "Portuguese", "key": "pt", "shortDescription": "pt-BR, pt-PT"},
-            {"label": "Polish", "key": "pl"},
-            {"label": "Japanese", "key": "ja"},
-            {"label": "Italian", "key": "it"}
+            {"label": "Polish", "key": "pl", "shortDescription": "pl"},
+            {"label": "Japanese", "key": "ja", "shortDescription": "ja"},
+            {"label": "Italian", "key": "it", "shortDescription": "it"}
     ]},
     "countryOptions": {
         "label": "Country",
