@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 const metrics = ['MAU', 'DAU', 'Retention', 'Revenue', 'etc.']
 const timeRange = timeDay.range(new Date('2018-12-01'), new Date('2019-03-25'))
+const path = require('path')
 
 // var sqlite3 = require('sqlite3').verbose();
 
@@ -138,6 +139,18 @@ function reportError(res, message) {
 
 app.use(express.json())
 app.use('/', express.static('public'));
+
+app.get('/__heartbeat__', (req, res) => {
+    res.send({ status: "ok" })
+})
+
+app.get('/__lbheartbeat__', (req, res) => {
+    res.sendStatus(200)
+})
+
+app.get('/__version__', (req, res) => {
+    res.sendFile(path.join(__dirname, 'version.json'))
+})
 
 app.post('/fetch-data', async (req, res) => {
     const {params, querystring} = req.body
