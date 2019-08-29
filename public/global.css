@@ -195,6 +195,8 @@ h1 span {
 	grid-column: header-buttons;
 	height: var(--title-height);
 	display: grid;
+	align-items: center;
+	grid-template-columns: max-content max-content;
 	margin-top: auto;
 	margin-bottom: auto;
 	/* padding-bottom: var(--pad); */
@@ -317,7 +319,8 @@ footer {
 	height: 100%;
 	text-align:center;
 	display: grid;
-	grid-template-columns: max-content max-content;
+	grid-template-columns: max-content max-content auto;
+	grid-column-gap: var(--pad);
 	align-items: center;
 	justify-content: center;
 }
@@ -328,13 +331,13 @@ footer h3 {
 	padding:0;
 	margin:0;
 	font-weight: normal;
-	padding-left:  var(--pad);
-	padding-right: var(--pad);
 }
 
 footer ul {
 	margin: 0;
 	display: flex;
+	width: 100%;
+	padding-right: var(--subsection-margin);
 }
 
 footer ul li {
@@ -359,11 +362,16 @@ footer.control-foot div {
 	margin: auto;
 }
 
+footer.body-foot {
+	outline: 1px solid black;
+}
+
 /* button styles */
 
 .bt {
 	--bt-outline-border: #aaa;
 	--bt-text-color: blue;
+	text-decoration: none;
 	background-color: white;
 	border: 1px solid transparent;
 	padding: var(--ui-pad);
@@ -405,6 +413,13 @@ footer.control-foot div {
 .bt.bt-text:hover {
 	background-color: rgba(0,0,0,.2);
 	border-radius: var(--ui-radius);
+}
+
+.bt.bt-text-with-icon {
+	display: grid;
+    grid-template-columns: max-content max-content;
+    grid-column-gap: calc(var(--ui-pad) / 2);
+    align-items: center;
 }
 
 /* ANNOTATIONS AND REMARKS */

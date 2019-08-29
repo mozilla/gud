@@ -18,8 +18,9 @@
 	import NoData from './components/NoData.svelte'
 	// import AnnotationModal from './components/AnnotationModal.svelte';
 	
-	import FulfillmentButton from './components/FulfillmentButton.svelte'
-
+	import FulfillmentButton from './components/FulfillmentButton.svelte';
+	import GoToDocsButton from './components/GoToDocsButton.svelte';
+	import ArrowForward from './components/icons/ArrowForward.svelte';
 	// experiments
 	// import MouseMove from './Components/MouseMove.svelte';
 	// import AdjustableDate from './components/AdjustableDate.svelte';
@@ -158,11 +159,15 @@
 					<img  in:fly="{{y:-10, duration: 600, delay: 200}}" class='ff-logo' alt='Firefox Logo' src='firefox-logo.png' />
 					{name} <span>{` / ${$mode}`}</span>
 			</h1>
-			{#await $cache then response}
-				<div class=fulfillment-buttons in:fly={{x:20, duration:400, delay: 100}}>
-					<FulfillmentButton on:click={() => downloadString(csvFormat(response), 'text', 'GUD–BigQuery-dataset.csv')} />
+				<div class=fulfillment-buttons in:fly={{x:20, duration:400,
+				delay: 100}}>
+				{#await $cache then response}
+					<FulfillmentButton on:click={() =>
+					downloadString(csvFormat(response), 'text',
+					'GUD–BigQuery-dataset.csv')} />
+				{/await}
+					<GoToDocsButton />
 				</div>
-			{/await}
 		</div>
 		<!-- content -->
 		{#await $cache}
@@ -186,13 +191,18 @@
 			<ErrorMessage error={error} />
 		{/await}
 		<!-- foot -->
-		<footer>
+		<footer class=body-foot>
 			<h3>Inquiries</h3>
 			<ul>
 				<li>overall /  jmccrosky@mozilla.com</li>
 				<li>data /  jklukas@mozilla.com</li>
 				<li>frontend /  hulmer@mozilla.com</li>
 			</ul>
+			<div style='width:100%'>
+			<a class="bt bt-text bt-text-with-icon" target="_blank"
+			href='https://docs.google.com/document/d/1sIHCCaJhtfxj-dnbInfuIjlMRhCFbEhFiBESaezIRwM/edit?usp=sharing'>Documentation
+			<ArrowForward /></a>
+			</div>
 		</footer>
 	</div>
 {/if}
