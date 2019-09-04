@@ -41,12 +41,6 @@
             "markerSet": "productDetails"
         }, 
         { 
-            "label": "New Firefox Desktop Profile Created",
-            "key": "New Firefox Desktop Profile Created",
-            "shortDescription": "The count of the number of new profiles created on the day in question",
-            "markerSet": "productDetails"
-        },
-        { 
             "label": "Visited 5 URIs",
             "key": "Firefox Desktop Visited 5 URI",
             "shortDescription": "The profile sent a main ping on the day in question that indicates that the profile opened at least 5 URIs",
