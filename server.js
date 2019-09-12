@@ -103,6 +103,7 @@ const exploreQuery =(params) => {
     const WHERE = WHEREClauses.length ? `WHERE ${WHEREClauses.length > 1 ? WHEREClauses.join(' AND\n') : WHEREClauses}` : '';
      
     return query(`
+WITH day_0 AS (
 SELECT
 date,
 id_bucket,
@@ -110,24 +111,43 @@ SUM(dau) AS dau,
 SUM(wau) AS wau,
 SUM(mau) AS mau,
 SUM(active_days_in_week) AS active_days_in_week,
-SUM(active_in_week_1) AS active_in_week_1,
-SUM(active_in_weeks_0_and_1) AS active_in_weeks_0_and_1,
-SUM(active_in_week_0) AS active_in_week_0,
-SUM(new_profiles) AS new_profiles,
 SAFE_DIVIDE(SUM(active_days_in_week),
-    SUM(wau)) AS intensity,
-SAFE_DIVIDE(SUM(active_in_week_1),
-    SUM(new_profiles)) AS retention_1_week_new_profile,
-SAFE_DIVIDE(SUM(active_in_weeks_0_and_1),
-    SUM(active_in_week_0)) AS retention_1_week_active_in_week_0
+    SUM(wau)) AS intensity
 FROM
-telemetry.smoot_usage_all_mtr_v1
-${WHERE}  
+  \`moz-fx-data-shared-prod.telemetry.smoot_usage_day_0\`
+${WHERE}
 GROUP BY
 date,
-id_bucket
+id_bucket),
+--
+day_13 AS (
+SELECT
+date,
+id_bucket,
+SUM(new_profiles) AS new_profiles,
+SUM(new_profile_active_in_week_1) AS active_in_week_1,
+SUM(new_profile_active_in_weeks_0_and_1) AS active_in_weeks_0_and_1,
+SUM(new_profile_active_in_week_0) AS active_in_week_0,
+SAFE_DIVIDE(SUM(new_profile_active_in_week_1),
+    SUM(new_profiles)) AS retention_1_week_new_profile,
+SAFE_DIVIDE(SUM(new_profile_active_in_weeks_0_and_1),
+    SUM(new_profile_active_in_week_0)) AS retention_1_week_active_in_week_0
+FROM
+  \`moz-fx-data-shared-prod.telemetry.smoot_usage_day_13\`
+${WHERE}
+GROUP BY
+date,
+id_bucket)
+--
+SELECT
+  *
+FROM
+  day_0
+FULL JOIN
+  day_13
+  USING(date, id_bucket)
 ORDER BY
-date;
+  date
 `)
     }
 
