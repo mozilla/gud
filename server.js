@@ -101,11 +101,12 @@ const exploreQuery =(params) => {
         })
     WHEREClauses.push(`date >= '2017-06-17'`)
     const WHERE = WHEREClauses.length ? `WHERE ${WHEREClauses.length > 1 ? WHEREClauses.join(' AND\n') : WHEREClauses}` : '';
-     
+
     return query(`
 WITH day_0 AS (
 SELECT
 date,
+ANY_VALUE(usage) AS usage,
 id_bucket,
 SUM(dau) AS dau,
 SUM(wau) AS wau,
@@ -130,19 +131,45 @@ SUM(new_profile_active_in_weeks_0_and_1) AS active_in_weeks_0_and_1,
 SUM(new_profile_active_in_week_0) AS active_in_week_0,
 SAFE_DIVIDE(SUM(new_profile_active_in_week_1),
     SUM(new_profiles)) AS retention_1_week_new_profile,
-SAFE_DIVIDE(SUM(new_profile_active_in_weeks_0_and_1),
-    SUM(new_profile_active_in_week_0)) AS retention_1_week_active_in_week_0
+SAFE_DIVIDE(SUM(active_in_weeks_0_and_1),
+    SUM(active_in_week_0)) AS retention_1_week_active_in_week_0
 FROM
   \`moz-fx-data-shared-prod.telemetry.smoot_usage_day_13\`
 ${WHERE}
 GROUP BY
 date,
-id_bucket)
---
+id_bucket),
+  --
+  day_0_windowed AS (
+  SELECT
+    *,
+    COUNT(*) OVER (PARTITION BY id_bucket ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS c,
+    SUM(dau) OVER (PARTITION BY id_bucket ORDER BY date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS dau_sum_7_day,
+    SUM(dau) OVER (PARTITION BY id_bucket ORDER BY date ROWS BETWEEN 27 PRECEDING AND CURRENT ROW) AS dau_sum_28_day
+  FROM
+    day_0 ),
+  --
+  day_0_replaced AS (
+  SELECT
+    * EXCEPT (usage, c, dau_sum_7_day, dau_sum_28_day)
+      REPLACE (
+    IF
+      (c >= 7
+        AND usage LIKE 'New %',
+        dau_sum_7_day,
+        wau) AS wau,
+    IF
+      (c >= 28
+        AND usage LIKE 'New %',
+        dau_sum_28_day,
+        mau) AS mau)
+  FROM
+    day_0_windowed )
+  --
 SELECT
   *
 FROM
-  day_0
+  day_0_replaced
 FULL JOIN
   day_13
   USING(date, id_bucket)
