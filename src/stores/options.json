@@ -61,6 +61,9 @@
             "shortDescription": "The profile has sent a telemetry ping from any of Fennec Android, Fennec iOS, Firefox Lite, FirefoxConnect, Firefox Reality (Google, Oculus, Wave, noapi), Focus Android, or Focus iOS on the day in question."
         },
         {
+            "itemType": "divider"
+        },
+        {
             "itemType": "section",
             "label": "Fenix"
         },
