@@ -202,7 +202,7 @@
                 "key": "retention_1_week_new_profile", "short": "1-wk. retention", "agg": "mean",
                 "shortDescription": "Among new profiles created on the day specified, what proportion (out of 1) meet the usage criterion during the week beginning one week after the day specified",
                 "format": "percentage",
-                "numeratorKey": "active_in_week_1",
+                "numeratorKey": "new_profile_active_in_week_1",
                 "denominatorKey": "new_profiles"
             },
             {
