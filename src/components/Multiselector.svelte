@@ -50,6 +50,7 @@ onMount(() => {
                 },
             preventOverflow: {
                 boundariesElement: container,
+                padding: 36
             },
             }
     });
@@ -207,7 +208,7 @@ button.dropdown div.active-icon {
     transition: 100ms;
     /* max-height: 95vh;
     overflow: auto; */
-    box-shadow: 0px 0px 20px rgba(0,0,0,.1);
+    box-shadow: 0px 4px 20px rgba(0,0,0,.1);
 }
 
 div {
