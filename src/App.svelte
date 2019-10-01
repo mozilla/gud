@@ -39,6 +39,14 @@
 	// get usage name.
 	const usageCriterion = optionSet.usageCriteriaOptions.setter;
 
+	function filterMetricsOnUsageCriterion(values) {
+		const disabledMetrics = optionSet.usageCriteriaOptions.values.find(v=> v.key === $usageCriterion).disabledMetrics;
+		if (disabledMetrics !== undefined) {
+			return values.filter(v => !disabledMetrics.includes(v.key))
+		} 
+		return values;
+	}
+
 	export let name;
 
 	let visible = false;
@@ -116,7 +124,8 @@
 							description={selector.description || selector.label}
 							showDescriptionOnSelect={selector.showDescriptionOnSelect}
 							selectType={selector.type || 'single'} 
-							options={selector.values} 
+						options={($usageCriterion && selector.key === 'metric') ?
+						filterMetricsOnUsageCriterion(selector.values) : selector.values} 
 							setter={selector.setter}
 							onSelection={(option) =>{
 								if (selector.key === 'usage') {

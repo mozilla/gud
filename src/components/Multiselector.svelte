@@ -75,7 +75,6 @@ function removeSelection(key) {
 }
 
 function handleSelection(key) {
-    console.log('-----------------------------Multiselector: ', title, key)
     const thisOption = options.find(k=>k.key===key);
     if (selectType === 'multi') {
             if (!$setter.includes(key)) {
