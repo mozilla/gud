@@ -38,6 +38,7 @@
 
 	// get usage name.
 	const usageCriterion = optionSet.usageCriteriaOptions.setter;
+	const metric = optionSet.metricOptions.setter;
 
 	function filterMetricsOnUsageCriterion(values) {
 		const disabledMetrics = optionSet.usageCriteriaOptions.values.find(v=> v.key === $usageCriterion).disabledMetrics;
@@ -129,6 +130,11 @@
 							setter={selector.setter}
 							onSelection={(option) =>{
 								if (selector.key === 'usage') {
+									if (option.disabledMetrics !== undefined) {
+										// make sure to set metric option to 'all'
+										// if usage criterion has limits.
+										optionSet.metricOptions.setter.set(optionSet.metricOptions.values[0].key)
+									}
 									// aside from assigning the selection value to (or pushing to)
 									// $setter, any additional callbacks should go here.
 									if (option.disabledDimensions) {

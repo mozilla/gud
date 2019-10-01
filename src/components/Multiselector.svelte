@@ -74,8 +74,11 @@ function removeSelection(key) {
     $setter = $setter.filter(k=>k!==key)
 }
 
-function handleSelection(key) {
+async function handleSelection(key) {
     const thisOption = options.find(k=>k.key===key);
+    if (onSelection) {
+        await onSelection(thisOption)
+    }
     if (selectType === 'multi') {
             if (!$setter.includes(key)) {
             $setter = [...$setter, key];
@@ -87,9 +90,6 @@ function handleSelection(key) {
         $setter = key;
         // if single, collapse.
         isActive = false;
-    }
-    if (onSelection) {
-        onSelection(thisOption)
     }
 }
 

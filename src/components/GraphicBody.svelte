@@ -46,7 +46,8 @@ function carveData(rawData, visibleMetrics) {
         return !disabledMetrics.includes(m);
     })
     outdata = metrics.map(m => {
-        const metricInfo = getMetricInformation(m)
+        const metricInfo = getMetricInformation(m);
+
         return {
             metric: m,
             title: metricInfo.label,
