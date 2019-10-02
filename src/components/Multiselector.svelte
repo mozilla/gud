@@ -50,6 +50,7 @@ onMount(() => {
                 },
             preventOverflow: {
                 boundariesElement: container,
+                padding: 36
             },
             }
     });
@@ -74,9 +75,11 @@ function removeSelection(key) {
     $setter = $setter.filter(k=>k!==key)
 }
 
-function handleSelection(key) {
-    console.log('-----------------------------Multiselector: ', title, key)
+async function handleSelection(key) {
     const thisOption = options.find(k=>k.key===key);
+    if (onSelection) {
+        await onSelection(thisOption)
+    }
     if (selectType === 'multi') {
             if (!$setter.includes(key)) {
             $setter = [...$setter, key];
@@ -88,9 +91,6 @@ function handleSelection(key) {
         $setter = key;
         // if single, collapse.
         isActive = false;
-    }
-    if (onSelection) {
-        onSelection(thisOption)
     }
 }
 
@@ -208,7 +208,7 @@ button.dropdown div.active-icon {
     transition: 100ms;
     /* max-height: 95vh;
     overflow: auto; */
-    box-shadow: 0px 0px 20px rgba(0,0,0,.1);
+    box-shadow: 0px 4px 20px rgba(0,0,0,.1);
 }
 
 div {

@@ -35,16 +35,19 @@ const TWO_WEEKS_AGO = new Date();
 TWO_WEEKS_AGO.setDate(TWO_WEEKS_AGO.getDate() - 15 );
 
 function carveData(rawData, visibleMetrics) {
+    let disabledMetrics = optionSet.usageCriteriaOptions.values.find(v => v.key === $usage).disabledMetrics || [];
     let metrics = Object.keys(rawData[0]).filter(m => {
         return !m.includes('_low') && !m.includes('_high') && !m.includes('date')
     }).filter(m => {
         // take out everything not in the $metricsSet, or default to all if $metricSet === 'all'
         if (visibleMetrics === 'all') return true
         return visibleMetrics === m
+    }).filter(m => {
+        return !disabledMetrics.includes(m);
     })
-    
     outdata = metrics.map(m => {
-        const metricInfo = getMetricInformation(m)
+        const metricInfo = getMetricInformation(m);
+
         return {
             metric: m,
             title: metricInfo.label,
