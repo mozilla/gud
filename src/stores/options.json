@@ -101,6 +101,18 @@
         },
         {
             "itemType": "section",
+            "label": "Lockwise"
+        },
+        {   "label": "Any Lockwise Android Activity",
+            "key": "Any Lockwise Android Activity",
+            "shortDescription": "The profile has sent a telemetry ping from Lockwise Android on the day in question",
+            "disabledDimensions": ["os", "channel"]
+        },
+        {
+            "itemType": "divider"
+        },
+        {
+            "itemType": "section",
             "label": "Fennec"
         },
         {
@@ -298,7 +310,14 @@
             {"label": "Release", "key": "release"},
             {"label": "Beta", "key": "beta"},
             {"label": "Nightly", "key": "nightly"},
-            {"label": "ESR", "key": "esr"}
+            {"label": "ESR", "key": "esr"},
+            {
+                "itemType": "divider"
+            }, 
+            {
+                "itemType": "section",
+                "label": "Developer Edition"
+            }
         ]
     }
 }
