@@ -310,14 +310,7 @@
             {"label": "Release", "key": "release"},
             {"label": "Beta", "key": "beta"},
             {"label": "Nightly", "key": "nightly"},
-            {"label": "ESR", "key": "esr"},
-            {
-                "itemType": "divider"
-            }, 
-            {
-                "itemType": "section",
-                "label": "Developer Edition"
-            }
+            {"label": "ESR", "key": "esr"}
         ]
     }
 }
