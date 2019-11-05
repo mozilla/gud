@@ -101,6 +101,18 @@
         },
         {
             "itemType": "section",
+            "label": "Lockwise"
+        },
+        {   "label": "Any Lockwise Android Activity",
+            "key": "Any Lockwise Android Activity",
+            "shortDescription": "The profile has sent a telemetry ping from Lockwise Android on the day in question",
+            "disabledDimensions": ["os", "channel"]
+        },
+        {
+            "itemType": "divider"
+        },
+        {
+            "itemType": "section",
             "label": "Fennec"
         },
         {
