@@ -297,7 +297,8 @@
             {"label": "Italy", "key": "IT"},
             {"label": "Canada", "key": "CA"},
             {"label": "Spain", "key": "ES"},
-            {"label": "Indonesia", "key": "ID"}
+            {"label": "Indonesia", "key": "ID"},
+            {"label": "Kenya", "key": "KE"}
         ]
     },
     "channelOptions": {
