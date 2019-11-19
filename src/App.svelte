@@ -1,112 +1,131 @@
 <script>
-	import { onMount } from 'svelte';
-	import { fly, fade } from 'svelte/transition';
-	import { flip } from 'svelte/animate';
+  import { onMount } from "svelte";
+  import { fly, fade } from "svelte/transition";
+  import { flip } from "svelte/animate";
 
-	// 3rd parties
+  // 3rd parties
 
-	import { csvFormat } from 'd3-dsv';
+  import { csvFormat } from "d3-dsv";
 
-	// components
-	import NavMenu from './components/NavMenu.svelte';
-	import ControlModes from './components/ControlModes.svelte';
-	import GraphicBody from './components/GraphicBody.svelte';
-	import Multiselector from './components/Multiselector.svelte';
-	// import RadioGroup from './components/RadioGroup.svelte';
-	import DatePicker from './components/DatePicker.svelte';
-	import ErrorMessage from './components/ErrorMessage.svelte';
-	import NoData from './components/NoData.svelte'
-	// import AnnotationModal from './components/AnnotationModal.svelte';
-	
-	import FulfillmentButton from './components/FulfillmentButton.svelte';
-	import GoToDocsButton from './components/GoToDocsButton.svelte';
-	import ArrowForward from './components/icons/ArrowForward.svelte';
-	// experiments
-	// import MouseMove from './Components/MouseMove.svelte';
-	// import AdjustableDate from './components/AdjustableDate.svelte';
+  // components
+  import NavMenu from "./components/NavMenu.svelte";
+  import ControlModes from "./components/ControlModes.svelte";
+  import GraphicBody from "./components/GraphicBody.svelte";
+  import Multiselector from "./components/Multiselector.svelte";
+  // import RadioGroup from './components/RadioGroup.svelte';
+  import DatePicker from "./components/DatePicker.svelte";
+  import ErrorMessage from "./components/ErrorMessage.svelte";
+  import NoData from "./components/NoData.svelte";
+  // import AnnotationModal from './components/AnnotationModal.svelte';
 
-	// stores
-	import {
-		menuOptions, allOptions, mode, modeIsImplemented, disabledDimensions
-	} from './stores/stores'
-	import cache from './stores/cache'
-	import currentQuery, { isNotDefaultQueryset, resetQuery } from './stores/query'
-	import optionSet from './stores/options.json'
+  import FulfillmentButton from "./components/FulfillmentButton.svelte";
+  import GoToDocsButton from "./components/GoToDocsButton.svelte";
+  import ArrowForward from "./components/icons/ArrowForward.svelte";
+  // experiments
+  // import MouseMove from './Components/MouseMove.svelte';
+  // import AdjustableDate from './components/AdjustableDate.svelte';
 
-	// annotations
-	import { annotationModalIsActive } from './stores/annotations'
+  // stores
+  import {
+    menuOptions,
+    allOptions,
+    mode,
+    modeIsImplemented,
+    disabledDimensions
+  } from "./stores/stores";
+  import cache from "./stores/cache";
+  import currentQuery, {
+    isNotDefaultQueryset,
+    resetQuery
+  } from "./stores/query";
+  import optionSet from "./stores/options.json";
 
-	// get usage name.
-	const usageCriterion = optionSet.usageCriteriaOptions.setter;
-	const metric = optionSet.metricOptions.setter;
+  // annotations
+  import { annotationModalIsActive } from "./stores/annotations";
 
-	function filterMetricsOnUsageCriterion(values) {
-		const disabledMetrics = optionSet.usageCriteriaOptions.values.find(v=> v.key === $usageCriterion).disabledMetrics;
-		if (disabledMetrics !== undefined) {
-			return values.filter(v => !disabledMetrics.includes(v.key))
-		} 
-		return values;
-	}
+  // get usage name.
+  const usageCriterion = optionSet.usageCriteriaOptions.setter;
+  const metric = optionSet.metricOptions.setter;
 
-	export let name;
+  function filterMetricsOnUsageCriterion(values) {
+    const disabledMetrics = optionSet.usageCriteriaOptions.values.find(
+      v => v.key === $usageCriterion
+    ).disabledMetrics;
+    if (disabledMetrics !== undefined) {
+      return values.filter(v => !disabledMetrics.includes(v.key));
+    }
+    return values;
+  }
 
-	let visible = false;
+  export let name;
 
-	// FIXME: this and all the buttons around exporting should be
-	// in some other file!!!
-	function downloadString(text, fileType = 'text', fileName) {
-		const blob = new Blob([text], { type: fileType });
-		const a = document.createElement('a');
-		a.download = fileName;
-		a.href = URL.createObjectURL(blob);
-		a.dataset.downloadurl = [fileType, a.download, a.href].join(':');
-		a.style.display = "none";
-		document.body.appendChild(a);
-		a.click();
-		document.body.removeChild(a);
-		setTimeout(function() { URL.revokeObjectURL(a.href); }, 1500);
-	}
+  let visible = false;
 
+  // FIXME: this and all the buttons around exporting should be
+  // in some other file!!!
+  function downloadString(text, fileType = "text", fileName) {
+    const blob = new Blob([text], { type: fileType });
+    const a = document.createElement("a");
+    a.download = fileName;
+    a.href = URL.createObjectURL(blob);
+    a.dataset.downloadurl = [fileType, a.download, a.href].join(":");
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function() {
+      URL.revokeObjectURL(a.href);
+    }, 1500);
+  }
 
-	onMount(() => {
-		visible = true;
-	})
+  onMount(() => {
+    visible = true;
+  });
 
-	function updateQueryString(value) {
-		if (history.pushState) {
-			const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `?${$currentQuery}`;
-			window.history.pushState({path:newurl},'', newurl);
-		}
-	}
+  function updateQueryString(value) {
+    if (history.pushState) {
+      const newurl =
+        window.location.protocol +
+        "//" +
+        window.location.host +
+        window.location.pathname +
+        `?${$currentQuery}`;
+      window.history.pushState({ path: newurl }, "", newurl);
+    }
+  }
 
-	$: if (visible) {
-		updateQueryString($currentQuery);
-	}
-	
+  $: if (visible) {
+    updateQueryString($currentQuery);
+  }
 </script>
+
 <!-- PLUGINS ETC. GO RIGHT HERE -->
 <!-- <AnnotationModal active={$annotationModalIsActive} /> -->
 
 <!-- MAIN BODY -->
 <main>
-	<div class=controls>
-		<section class=control-modes>
-			<ControlModes />
-		</section>
-		{#if $isNotDefaultQueryset && $modeIsImplemented}
-			<section class=app-button transition:fly={{x: -30, duration: 300}}>
-				<button on:click={() => {
-					resetQuery()
-				}}>reset selections <span>✖</span></button>
-			</section>
-		{/if}
-		{#if $mode === 'explore' && visible}
-			<section class=control-selectors>
-				{#each menuOptions as selector, i (selector.key)}
-					<!-- {#if selector.variant === 'radio-group'} -->
-						<!-- <RadioGroup 
+  <div class="controls">
+    <section class="control-modes">
+      <ControlModes />
+    </section>
+    {#if $isNotDefaultQueryset && $modeIsImplemented}
+      <section class="app-button" transition:fly={{ x: -30, duration: 300 }}>
+        <button
+          on:click={() => {
+            resetQuery();
+          }}>
+          reset selections
+          <span>✖</span>
+        </button>
+      </section>
+    {/if}
+    {#if $mode === 'explore' && visible}
+      <section class="control-selectors">
+        {#each menuOptions as selector, i (selector.key)}
+          <!-- {#if selector.variant === 'radio-group'} -->
+          <!-- <RadioGroup
 							title={selector.label}
-							options={selector.values} 
+							options={selector.values}
 							setter={selector.setter}
 							onSelection={(option) =>{
 								// aside from assigning the selection value to (or pushing to)
@@ -118,107 +137,109 @@
 								}
 							}}
 						/> -->
-						{#if selector.type !== 'date'}
-						<Multiselector
-							enabled={!$disabledDimensions.includes(selector.key)}
-							title={selector.label} 
-							description={selector.description || selector.label}
-							showDescriptionOnSelect={selector.showDescriptionOnSelect}
-							selectType={selector.type || 'single'} 
-						options={($usageCriterion && selector.key === 'metric') ?
-						filterMetricsOnUsageCriterion(selector.values) : selector.values} 
-							setter={selector.setter}
-							onSelection={(option) =>{
-								if (selector.key === 'usage') {
-									if (option.disabledMetrics !== undefined) {
-										// make sure to set metric option to 'all'
-										// if usage criterion has limits.
-										optionSet.metricOptions.setter.set(optionSet.metricOptions.values[0].key)
-									}
-									// aside from assigning the selection value to (or pushing to)
-									// $setter, any additional callbacks should go here.
-									if (option.disabledDimensions) {
-										$disabledDimensions = [...option.disabledDimensions];
-										// reset setter to default.
-										Object.keys(optionSet).filter(k=> $disabledDimensions.includes(optionSet[k].key))
-											.forEach(k => {
-												if (optionSet[k].type === 'multi') optionSet[k].setter.set([])
-												else if (optionSet[k].type === 'single') optionSet[k].setter.set(optionSet[k].values[0])
-											})
-									} else {
-										$disabledDimensions = []
-									}
-								}
-							}}
-							 />
-					{/if}
-				{/each}
-			<DatePicker />
-			</section>
-		{/if}
-		{#if $mode === 'Compare'}
-			<section class=control-selectors></section>
-		{/if}
-		<footer class=control-foot>
-			{#if visible}
-				<div>Made by Mozilla Data Engineering + Data Science.</div>	
-			{/if}
-		</footer>
-	</div>
+          {#if selector.type !== 'date'}
+            <Multiselector
+              enabled={!$disabledDimensions.includes(selector.key)}
+              title={selector.label}
+              description={selector.description || selector.label}
+              showDescriptionOnSelect={selector.showDescriptionOnSelect}
+              selectType={selector.type || 'single'}
+              options={$usageCriterion && selector.key === 'metric' ? filterMetricsOnUsageCriterion(selector.values) : selector.values}
+              setter={selector.setter}
+              onSelection={option => {
+                if (selector.key === 'usage') {
+                  if (option.disabledMetrics !== undefined) {
+                    optionSet.metricOptions.setter.set(optionSet.metricOptions.values[0].key);
+                  }
+                  if (option.disabledDimensions) {
+                    $disabledDimensions = [...option.disabledDimensions];
+                    Object.keys(optionSet)
+                      .filter(k =>
+                        $disabledDimensions.includes(optionSet[k].key)
+                      )
+                      .forEach(k => {
+                        if (optionSet[k].type === 'multi') optionSet[k].setter.set([]);
+                        else if (optionSet[k].type === 'single') optionSet[k].setter.set(optionSet[k].values[0]);
+                      });
+                  } else {
+                    $disabledDimensions = [];
+                  }
+                }
+              }} />
+          {/if}
+        {/each}
+        <DatePicker />
+      </section>
+    {/if}
+    {#if $mode === 'Compare'}
+      <section class="control-selectors" />
+    {/if}
+    <footer class="control-foot">
+      {#if visible}
+        <div>Made by Mozilla Data Engineering + Data Science.</div>
+      {/if}
+    </footer>
+  </div>
 
-{#if visible}
-	<div class=content>
-		<div class=header>
-			<h1 
-				in:fly="{{y:-20, duration: 400, delay: 150}}">
-					<img  in:fly="{{y:-10, duration: 600, delay: 200}}" class='ff-logo' alt='Firefox Logo' src='firefox-logo.png' />
-					{name} <span>{` / ${$mode}`}</span>
-			</h1>
-				<div class=fulfillment-buttons in:fly={{x:20, duration:400,
-				delay: 100}}>
-				{#await $cache then response}
-					<FulfillmentButton on:click={() =>
-					downloadString(csvFormat(response), 'text',
-					'GUD–BigQuery-dataset.csv')} />
-				{/await}
-					<GoToDocsButton />
-				</div>
-		</div>
-		<!-- content -->
-		{#await $cache}
-			<div 
-				in:fly={{y:30, duration: 200}} 
-				class='loading-data'>
-				<div class=loading-message>
-					Loading data ...
-				</div>
-				<div class=loading-spinner>
-					<svg viewBox="25 25 50 50"><circle cx="50" cy="50" r="20"></circle></svg>
-				</div>
-			</div>
-		{:then value}
-			{#if value.length}
-				<GraphicBody data={value} title={$usageCriterion} />
-			{:else}
-				<NoData />
-			{/if}
-		{:catch error}
-			<ErrorMessage error={error} />
-		{/await}
-		<!-- foot -->
-		<footer class=body-foot>
-			<h3>Inquiries</h3>
-			<ul>
-				<li>overall /  jmccrosky@mozilla.com</li>
-				<li>data /  jklukas@mozilla.com</li>
-				<li>frontend /  hulmer@mozilla.com</li>
-			</ul>
-			<div style='width:100%'>
-			<a class="bt bt-text bt-text-with-icon" target="_blank"
-			href='https://docs.google.com/document/d/1sIHCCaJhtfxj-dnbInfuIjlMRhCFbEhFiBESaezIRwM/edit?usp=sharing'>Documentation
-			<ArrowForward /></a>
-			</div>
-		</footer>
-	</div>
-{/if}
+  {#if visible}
+    <div class="content">
+      <div class="header">
+        <h1 in:fly={{ y: -20, duration: 400, delay: 150 }}>
+          <img
+            in:fly={{ y: -10, duration: 600, delay: 200 }}
+            class="ff-logo"
+            alt="Firefox Logo"
+            src="firefox-logo.png" />
+          {name}
+          <span>{` / ${$mode}`}</span>
+        </h1>
+        <div
+          class="fulfillment-buttons"
+          in:fly={{ x: 20, duration: 400, delay: 100 }}>
+          {#await $cache then response}
+            <FulfillmentButton
+              on:click={() => downloadString(csvFormat(response), 'text', 'GUD–BigQuery-dataset.csv')} />
+          {/await}
+          <GoToDocsButton />
+        </div>
+      </div>
+      <!-- content -->
+      {#await $cache}
+        <div in:fly={{ y: 30, duration: 200 }} class="loading-data">
+          <div class="loading-message">Loading data ...</div>
+          <div class="loading-spinner">
+            <svg viewBox="25 25 50 50">
+              <circle cx="50" cy="50" r="20" />
+            </svg>
+          </div>
+        </div>
+      {:then value}
+        {#if value.length}
+          <GraphicBody data={value} title={$usageCriterion} />
+        {:else}
+          <NoData />
+        {/if}
+      {:catch error}
+        <ErrorMessage {error} />
+      {/await}
+      <!-- foot -->
+      <footer class="body-foot">
+        <h3>Inquiries</h3>
+        <ul>
+          <li>overall / jmccrosky@mozilla.com</li>
+          <li>data / jklukas@mozilla.com</li>
+          <li>frontend / hulmer@mozilla.com</li>
+        </ul>
+        <div style="width:100%">
+          <a
+            class="bt bt-text bt-text-with-icon"
+            target="_blank"
+            href="https://docs.google.com/document/d/1sIHCCaJhtfxj-dnbInfuIjlMRhCFbEhFiBESaezIRwM/edit?usp=sharing">
+            Documentation
+            <ArrowForward />
+          </a>
+        </div>
+      </footer>
+    </div>
+  {/if}
 </main>

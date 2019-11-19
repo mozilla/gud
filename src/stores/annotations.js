@@ -1,30 +1,26 @@
-import {writable} from 'svelte/store'
+import { writable } from "svelte/store";
 
-const annotations = writable([])
-export const annotationModalIsActive = writable(true)
+const annotations = writable([]);
+export const annotationModalIsActive = writable(true);
 
-let ID=0;
-
-
+let ID = 0;
 
 export function activateAnnotationModal() {
-    annotationModalIsActive.set(true)
+  annotationModalIsActive.set(true);
 }
 
 export function deactivateAnnotationModal() {
-    annotationModalIsActive.set(false)
+  annotationModalIsActive.set(false);
 }
 
 export function addAnnotation(annotation) {
-    annotation.id = ID;
-    ID += 1;
-    annotations.update(anns => [...anns, annotation])
+  annotation.id = ID;
+  ID += 1;
+  annotations.update(anns => [...anns, annotation]);
 }
 
 export function removeAnnotation(annotationID) {
-    annotations.update(anns => anns.filter(ann => ann.id !== annotationID))
-
+  annotations.update(anns => anns.filter(ann => ann.id !== annotationID));
 }
 
-
-export default annotations
+export default annotations;
