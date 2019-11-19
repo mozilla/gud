@@ -1,318 +1,351 @@
 {
-    "startOptions": {
-        "label": "Start",
-        "type": "date",
-        "key": "start",
-        "onlyLocal" : true,
-        "inMenu": true
-    },
-    "endOptions": {
-        "label": "End",
-        "type": "date",
-        "key": "end",
-        "onlyLocal" : true,
-        "inMenu": true
-    },
-    "modeOptions": {
-        "label": "Mode",
-        "key": "mode",
-        "type": "single",
-        "inMenu": false,
-        "values": [
-        { "label": "Explore", "key": "explore" }, 
-        { "label": "Table", "key": "table" }
-    ]},
-    "usageCriteriaOptions": {
-        "label": "Product / Usage Criteria",
-        "description": "any product, feature, or population subset for which we wish to calculate growth metrics",
-        "key": "usage",
-        "type": "single",
-        "inMenu": true,
-        "showDescriptionOnSelect" : true,
-        "values": [
-        {
-            "itemType": "section",
-            "label": "Firefox (Desktop)"
-        },
-        {   
-            "label":"Any Firefox Activity",
-            "key": "Any Firefox Desktop Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Firefox Desktop on the day in question",
-            "markerSet": "productDetails"
-        }, 
-        { 
-            "label": "New Firefox Desktop Profile Created",
-            "key": "New Firefox Desktop Profile Created",
-            "shortDescription": "The count of the number of new profiles created on the day in question",
-            "markerSet": "productDetails",
-            "disabledMetrics": ["mau", "intensity", "retention_1_week_new_profile", "retention_1_week_active_in_week_0"]
-        },
-        { 
-            "label": "Visited 5 URIs",
-            "key": "Firefox Desktop Visited 5 URI",
-            "shortDescription": "The profile sent a main ping on the day in question that indicates that the profile opened at least 5 URIs",
-            "markerSet": "productDetails"
-        },
-        { 
-            "label": "Opened DevTools",
-            "key": "Firefox Desktop Opened Dev Tools",
-            "shortDescription": "The profile sent a main ping on the day in question that indicates that the developer tools feature was activated at least once",
-            "markerSet": "productDetails"
-        },
-        {
-            "itemType": "divider"
-        },
-        {
-            "itemType": "section",
-            "label": "All Mobile"
-        },
-        {
-            "label": "Any Mobile Activity",
-            "key": "Any Firefox Non-desktop Activity",
-            "shortDescription": "The profile has sent a telemetry ping from any of apps considered for the 2019 Mobile Reach KPI (Fenix, Fennec Android, Fennec iOS, Firefox Lite, FirefoxConnect, Focus Android, and Focus iOS) on the day in question."
-        },
-        {
-            "itemType": "divider"
-        },
-        {
-            "itemType": "section",
-            "label": "Fenix"
-        },
-        { 
-            "label": "Any Fenix Activity",
-            "key": "Any Fenix Activity",
-            "disabledDimensions": ["os", "channel"],
-            "shortDescription": "The profile has sent a telemetry ping from Fenix on the day in question"
-        },
-        {
-            "itemType": "divider"
-        },
-        {
-            "itemType": "section",
-            "label": "Firefox Accounts"
-        },
-        {   "label": "Any Firefox Account Activity",
-            "key": "Any Firefox Account Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Firefox Account on the day in question",
-            "disabledDimensions": ["os", "channel"]
-        },
-        {
-            "itemType": "divider"
-        },
-        {
-            "itemType": "section",
-            "label": "Lockwise"
-        },
-        {   "label": "Any Lockwise Android Activity",
-            "key": "Any Lockwise Android Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Lockwise Android on the day in question",
-            "disabledDimensions": ["os", "channel"]
-        },
-        {
-            "itemType": "divider"
-        },
-        {
-            "itemType": "section",
-            "label": "Fennec"
-        },
-        {
-            "label": "Any Fennec Android Activity",
-            "key": "Any Fennec Android Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Fennec Android on the day in question",
-            "disabledDimensions": ["os", "channel"],
-            "markerSet": "productDetails"
-        },
-        {
-            "label": "Any Fennec iOS Activity",
-            "key": "Any Fennec iOS Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Fennec iOS on the day in question",
-            "disabledDimensions": ["os", "channel"],
-            "markerSet": "productDetails"
-        },
-        {
-            "itemType": "divider"
-        }, 
-        {
-            "itemType": "section",
-            "label": "Focus"
-        },
-        {
-            "label": "Any Focus Android Activity",
-            "key": "Any Focus Android Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Focus Android on the day in question",
-            "disabledDimensions": ["os", "channel"]
-        },
-        {
-            "label": "Any Focus iOS Activity",
-            "key": "Any Focus iOS Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Focus iOS on the day in question",
-            "disabledDimensions": ["os", "channel"]
-        },
-        {
-            "itemType": "divider"
-        }, 
-        {
-            "label": "Any Firefox Lite Activity",
-            "key": "Any Firefox Lite Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Firefox Lite on the day in question",
-            "disabledDimensions": ["os", "channel"]
-
-        },
-        {
-            "label": "Any Firefox for FireTV Activity",
-            "key": "Any FirefoxForFireTV Activity",
-            "shortDescription": "The profile has sent a telemetry ping from Firefox for FireTV on the day in question",
-            "disabledDimensions": ["os", "channel"]
-        },
-        {
-            "label": "Any FirefoxConnect Activity",
-            "key": "Any FirefoxConnect Activity",
-            "shortDescription": "The profile has sent a telemetry ping from FirefoxConnect on the day in question",
-            "disabledDimensions": ["os", "channel"]
-        }
-    ]},
-    "metricOptions": {
-        "label": "Metric",
-        "type": "single",
-        "key": "metric",
-        "onlyLocal": true,
-        "inMenu": true,
-        "values": [
-            {
-                "label": "All Available Metrics", "key": "all",
-                "shortDescription": "Shows all the below metrics on one page"
-            },
-            {
-                "itemType": "divider"
-            },
-            {
-                "label": "Daily Active Users", 
-                "subtitle": "Count of Unique Profiles",
-                "shortsub": "count",
-                "yRangeGroup": "*au",
-                "key": "dau", "short": "DAU", "agg": "sum",
-                "shortDescription": "The number of unique profiles that meet the usage criterion on each day",
-                "format": "count"
-            },
-            {
-                "label": "Weekly Active Users", 
-                "subtitle": "Count of Unique Profiles",
-                "shortsub": "count",
-                "yRangeGroup": "*au",
-                "key": "wau", "short": "WAU", "agg": "sum",
-                "shortDescription": "The number of unique profiles that met the usage criterion at least once during the 7-day window ending on the specified day",
-                "format": "count"
-            },
-            {
-                "label": "Monthly Active Users", 
-                "subtitle": "Count of Unique Profiles",
-                "shortsub": "count",
-                "yRangeGroup": "*au",
-                "key": "mau", 
-                "short": "MAU", 
-                "agg": "sum",
-                "shortDescription": "The number of unique profiles that met the usage criterion at least once during the 28-day window ending on the specified day",
-                "format": "count"
-            },
-            {
-                "label": "Intensity",
-                "subtitle": "Ratio of Days Used",
-                "shortsub": "ratio of days used",
-                "needsExplanation" : true,
-                "yMax": 7,
-                "key": "intensity", "short": "intensity", "agg": "mean",
-                "shortDescription": "Among profiles that meet the usage criterion at least once in the week ending on the date specified, how many days on average do they meet the usage criterion during that one-week window",
-                "format": "ratio",
-                "numeratorKey": "active_days_in_week",
-                "denominatorKey": "wau"
-            },
-            {
-                "label": "1-Week New Profile Retention", 
-                "subtitle": "Perc. Retained",
-                "shortsub": "Perc.",
-                "key": "retention_1_week_new_profile", "short": "1-wk. retention", "agg": "mean",
-                "shortDescription": "Among new profiles created on the day specified, what proportion (out of 1) meet the usage criterion during the week beginning one week after the day specified",
-                "format": "percentage",
-                "numeratorKey": "new_profile_active_in_week_1",
-                "denominatorKey": "new_profiles"
-            },
-            {
-                "label": "1-Week Retention", 
-                "subtitle": "Perc. Retained (Usage Criterion Pop.)",
-                "shortsub": "Perc.",
-                "key": "retention_1_week_active_in_week_0", "short": "1-wk. retention", "agg": "mean",
-                "shortDescription": "Among profiles that were active in the specified usage criterion at least once in the week starting on the specified day, what proportion (out of 1) meet the usage criterion during the following week",
-                "format": "percentage",
-                "numeratorKey": "active_in_weeks_0_and_1",
-                "denominatorKey": "active_in_week_0"
-            }
+  "startOptions": {
+    "label": "Start",
+    "type": "date",
+    "key": "start",
+    "onlyLocal": true,
+    "inMenu": true
+  },
+  "endOptions": {
+    "label": "End",
+    "type": "date",
+    "key": "end",
+    "onlyLocal": true,
+    "inMenu": true
+  },
+  "modeOptions": {
+    "label": "Mode",
+    "key": "mode",
+    "type": "single",
+    "inMenu": false,
+    "values": [
+      { "label": "Explore", "key": "explore" },
+      { "label": "Table", "key": "table" }
+    ]
+  },
+  "usageCriteriaOptions": {
+    "label": "Product / Usage Criteria",
+    "description": "any product, feature, or population subset for which we wish to calculate growth metrics",
+    "key": "usage",
+    "type": "single",
+    "inMenu": true,
+    "showDescriptionOnSelect": true,
+    "values": [
+      {
+        "itemType": "section",
+        "label": "Firefox (Desktop)"
+      },
+      {
+        "label": "Any Firefox Activity",
+        "key": "Any Firefox Desktop Activity",
+        "shortDescription": "The profile has sent a telemetry ping from Firefox Desktop on the day in question",
+        "markerSet": "productDetails"
+      },
+      {
+        "label": "New Firefox Desktop Profile Created",
+        "key": "New Firefox Desktop Profile Created",
+        "shortDescription": "The count of the number of new profiles created on the day in question",
+        "markerSet": "productDetails",
+        "disabledMetrics": [
+          "mau",
+          "intensity",
+          "retention_1_week_new_profile",
+          "retention_1_week_active_in_week_0"
         ]
-    },
-    "platformOptions": {
-        "label": "OS",
-        "key": "os",
-        "description": "available operating systems",
-        "type": "multi",
-        "inMenu": true,
-        "values": [
-        {"label": "Windows", "key": "Windows_NT"},
-        {"label": "Mac", "key": "Darwin"},
-        {"label": "Linux", "key": "Linux"}
-    ]},
-    "languageOptions": {
-        "label": "Language",
-        "key": "language",
-        "description": "available languages",
-        "columnName": "locale",
-        "type": "multi",
-        "whereStyle": "like",
-        "inMenu": true,
-        "values": [
-            {"label": "English", "key": "en", "shortDescription": "en-US, en-GB, en-CA, en-ZA"},
-            {"label": "German", "key": "de", "shortDescription": "de"},
-            {"label": "Spanish", "key": "es", "shortDescription": "es-ES, es-MX, es-AR, es-CL"},
-            {"label": "French", "key": "fr", "shortDescription": "fr"},
-            {"label": "Russian", "key": "ru", "shortDescription": "ru"},
-            {"label": "Chinese", "key": "zh", "shortDescription": "zh-CN, zh-TW"},
-            {"label": "Portuguese", "key": "pt", "shortDescription": "pt-BR, pt-PT"},
-            {"label": "Polish", "key": "pl", "shortDescription": "pl"},
-            {"label": "Japanese", "key": "ja", "shortDescription": "ja"},
-            {"label": "Italian", "key": "it", "shortDescription": "it"}
-    ]},
-    "countryOptions": {
-        "label": "Country",
-        "key": "country",
-        "type": "multi",
-        "inMenu": true,
-        "values": [
-            {"label": "United States", "key": "US"},
-            {"label": "Germany", "key": "DE"},
-            {"label": "Great Britain", "key": "GB"},
-            {"label": "France", "key": "FR"},
-            {"label": "Brazil", "key": "BR"},
-            {"label": "Russia", "key": "RU"},
-            {"label": "Poland", "key": "PL"},
-            {"label": "China", "key": "CN"},
-            {"label": "India", "key": "IN"},
-            {"label": "Italy", "key": "IT"},
-            {"label": "Canada", "key": "CA"},
-            {"label": "Spain", "key": "ES"},
-            {"label": "Indonesia", "key": "ID"},
-            {"label": "Kenya", "key": "KE"}
-        ]
-    },
-    "channelOptions": {
-        "label": "Channel",
-        "key": "channel",
-        "type": "multi",
-        "inMenu": true,
-        "variant": "radio-group",
-        "values": [
-            {"label": "Release", "key": "release"},
-            {"label": "Beta", "key": "beta"},
-            {"label": "Nightly", "key": "nightly"},
-            {"label": "ESR", "key": "esr"},
-            {"label": "Developer Edition", "key": "aurora"}
-        ]
-    }
+      },
+      {
+        "label": "Visited 5 URIs",
+        "key": "Firefox Desktop Visited 5 URI",
+        "shortDescription": "The profile sent a main ping on the day in question that indicates that the profile opened at least 5 URIs",
+        "markerSet": "productDetails"
+      },
+      {
+        "label": "Opened DevTools",
+        "key": "Firefox Desktop Opened Dev Tools",
+        "shortDescription": "The profile sent a main ping on the day in question that indicates that the developer tools feature was activated at least once",
+        "markerSet": "productDetails"
+      },
+      {
+        "itemType": "divider"
+      },
+      {
+        "itemType": "section",
+        "label": "All Mobile"
+      },
+      {
+        "label": "Any Mobile Activity",
+        "key": "Any Firefox Non-desktop Activity",
+        "shortDescription": "The profile has sent a telemetry ping from any of apps considered for the 2019 Mobile Reach KPI (Fenix, Fennec Android, Fennec iOS, Firefox Lite, FirefoxConnect, Focus Android, and Focus iOS) on the day in question."
+      },
+      {
+        "itemType": "divider"
+      },
+      {
+        "itemType": "section",
+        "label": "Fenix"
+      },
+      {
+        "label": "Any Fenix Activity",
+        "key": "Any Fenix Activity",
+        "disabledDimensions": ["os", "channel"],
+        "shortDescription": "The profile has sent a telemetry ping from Fenix on the day in question"
+      },
+      {
+        "itemType": "divider"
+      },
+      {
+        "itemType": "section",
+        "label": "Firefox Accounts"
+      },
+      {
+        "label": "Any Firefox Account Activity",
+        "key": "Any Firefox Account Activity",
+        "shortDescription": "The profile has sent a telemetry ping from Firefox Account on the day in question",
+        "disabledDimensions": ["os", "channel"]
+      },
+      {
+        "itemType": "divider"
+      },
+      {
+        "itemType": "section",
+        "label": "Lockwise"
+      },
+      {
+        "label": "Any Lockwise Android Activity",
+        "key": "Any Lockwise Android Activity",
+        "shortDescription": "The profile has sent a telemetry ping from Lockwise Android on the day in question",
+        "disabledDimensions": ["os", "channel"]
+      },
+      {
+        "itemType": "divider"
+      },
+      {
+        "itemType": "section",
+        "label": "Fennec"
+      },
+      {
+        "label": "Any Fennec Android Activity",
+        "key": "Any Fennec Android Activity",
+        "shortDescription": "The profile has sent a telemetry ping from Fennec Android on the day in question",
+        "disabledDimensions": ["os", "channel"],
+        "markerSet": "productDetails"
+      },
+      {
+        "label": "Any Fennec iOS Activity",
+        "key": "Any Fennec iOS Activity",
+        "shortDescription": "The profile has sent a telemetry ping from Fennec iOS on the day in question",
+        "disabledDimensions": ["os", "channel"],
+        "markerSet": "productDetails"
+      },
+      {
+        "itemType": "divider"
+      },
+      {
+        "itemType": "section",
+        "label": "Focus"
+      },
+      {
+        "label": "Any Focus Android Activity",
+        "key": "Any Focus Android Activity",
+        "shortDescription": "The profile has sent a telemetry ping from Focus Android on the day in question",
+        "disabledDimensions": ["os", "channel"]
+      },
+      {
+        "label": "Any Focus iOS Activity",
+        "key": "Any Focus iOS Activity",
+        "shortDescription": "The profile has sent a telemetry ping from Focus iOS on the day in question",
+        "disabledDimensions": ["os", "channel"]
+      },
+      {
+        "itemType": "divider"
+      },
+      {
+        "label": "Any Firefox Lite Activity",
+        "key": "Any Firefox Lite Activity",
+        "shortDescription": "The profile has sent a telemetry ping from Firefox Lite on the day in question",
+        "disabledDimensions": ["os", "channel"]
+      },
+      {
+        "label": "Any Firefox for FireTV Activity",
+        "key": "Any FirefoxForFireTV Activity",
+        "shortDescription": "The profile has sent a telemetry ping from Firefox for FireTV on the day in question",
+        "disabledDimensions": ["os", "channel"]
+      },
+      {
+        "label": "Any FirefoxConnect Activity",
+        "key": "Any FirefoxConnect Activity",
+        "shortDescription": "The profile has sent a telemetry ping from FirefoxConnect on the day in question",
+        "disabledDimensions": ["os", "channel"]
+      }
+    ]
+  },
+  "metricOptions": {
+    "label": "Metric",
+    "type": "single",
+    "key": "metric",
+    "onlyLocal": true,
+    "inMenu": true,
+    "values": [
+      {
+        "label": "All Available Metrics",
+        "key": "all",
+        "shortDescription": "Shows all the below metrics on one page"
+      },
+      {
+        "itemType": "divider"
+      },
+      {
+        "label": "Daily Active Users",
+        "subtitle": "Count of Unique Profiles",
+        "shortsub": "count",
+        "yRangeGroup": "*au",
+        "key": "dau",
+        "short": "DAU",
+        "agg": "sum",
+        "shortDescription": "The number of unique profiles that meet the usage criterion on each day",
+        "format": "count"
+      },
+      {
+        "label": "Weekly Active Users",
+        "subtitle": "Count of Unique Profiles",
+        "shortsub": "count",
+        "yRangeGroup": "*au",
+        "key": "wau",
+        "short": "WAU",
+        "agg": "sum",
+        "shortDescription": "The number of unique profiles that met the usage criterion at least once during the 7-day window ending on the specified day",
+        "format": "count"
+      },
+      {
+        "label": "Monthly Active Users",
+        "subtitle": "Count of Unique Profiles",
+        "shortsub": "count",
+        "yRangeGroup": "*au",
+        "key": "mau",
+        "short": "MAU",
+        "agg": "sum",
+        "shortDescription": "The number of unique profiles that met the usage criterion at least once during the 28-day window ending on the specified day",
+        "format": "count"
+      },
+      {
+        "label": "Intensity",
+        "subtitle": "Ratio of Days Used",
+        "shortsub": "ratio of days used",
+        "needsExplanation": true,
+        "yMax": 7,
+        "key": "intensity",
+        "short": "intensity",
+        "agg": "mean",
+        "shortDescription": "Among profiles that meet the usage criterion at least once in the week ending on the date specified, how many days on average do they meet the usage criterion during that one-week window",
+        "format": "ratio",
+        "numeratorKey": "active_days_in_week",
+        "denominatorKey": "wau"
+      },
+      {
+        "label": "1-Week New Profile Retention",
+        "subtitle": "Perc. Retained",
+        "shortsub": "Perc.",
+        "key": "retention_1_week_new_profile",
+        "short": "1-wk. retention",
+        "agg": "mean",
+        "shortDescription": "Among new profiles created on the day specified, what proportion (out of 1) meet the usage criterion during the week beginning one week after the day specified",
+        "format": "percentage",
+        "numeratorKey": "new_profile_active_in_week_1",
+        "denominatorKey": "new_profiles"
+      },
+      {
+        "label": "1-Week Retention",
+        "subtitle": "Perc. Retained (Usage Criterion Pop.)",
+        "shortsub": "Perc.",
+        "key": "retention_1_week_active_in_week_0",
+        "short": "1-wk. retention",
+        "agg": "mean",
+        "shortDescription": "Among profiles that were active in the specified usage criterion at least once in the week starting on the specified day, what proportion (out of 1) meet the usage criterion during the following week",
+        "format": "percentage",
+        "numeratorKey": "active_in_weeks_0_and_1",
+        "denominatorKey": "active_in_week_0"
+      }
+    ]
+  },
+  "platformOptions": {
+    "label": "OS",
+    "key": "os",
+    "description": "available operating systems",
+    "type": "multi",
+    "inMenu": true,
+    "values": [
+      { "label": "Windows", "key": "Windows_NT" },
+      { "label": "Mac", "key": "Darwin" },
+      { "label": "Linux", "key": "Linux" }
+    ]
+  },
+  "languageOptions": {
+    "label": "Language",
+    "key": "language",
+    "description": "available languages",
+    "columnName": "locale",
+    "type": "multi",
+    "whereStyle": "like",
+    "inMenu": true,
+    "values": [
+      {
+        "label": "English",
+        "key": "en",
+        "shortDescription": "en-US, en-GB, en-CA, en-ZA"
+      },
+      { "label": "German", "key": "de", "shortDescription": "de" },
+      {
+        "label": "Spanish",
+        "key": "es",
+        "shortDescription": "es-ES, es-MX, es-AR, es-CL"
+      },
+      { "label": "French", "key": "fr", "shortDescription": "fr" },
+      { "label": "Russian", "key": "ru", "shortDescription": "ru" },
+      { "label": "Chinese", "key": "zh", "shortDescription": "zh-CN, zh-TW" },
+      {
+        "label": "Portuguese",
+        "key": "pt",
+        "shortDescription": "pt-BR, pt-PT"
+      },
+      { "label": "Polish", "key": "pl", "shortDescription": "pl" },
+      { "label": "Japanese", "key": "ja", "shortDescription": "ja" },
+      { "label": "Italian", "key": "it", "shortDescription": "it" }
+    ]
+  },
+  "countryOptions": {
+    "label": "Country",
+    "key": "country",
+    "type": "multi",
+    "inMenu": true,
+    "values": [
+      { "label": "United States", "key": "US" },
+      { "label": "Germany", "key": "DE" },
+      { "label": "Great Britain", "key": "GB" },
+      { "label": "France", "key": "FR" },
+      { "label": "Brazil", "key": "BR" },
+      { "label": "Russia", "key": "RU" },
+      { "label": "Poland", "key": "PL" },
+      { "label": "China", "key": "CN" },
+      { "label": "India", "key": "IN" },
+      { "label": "Italy", "key": "IT" },
+      { "label": "Canada", "key": "CA" },
+      { "label": "Spain", "key": "ES" },
+      { "label": "Indonesia", "key": "ID" },
+      { "label": "Kenya", "key": "KE" }
+    ]
+  },
+  "channelOptions": {
+    "label": "Channel",
+    "key": "channel",
+    "type": "multi",
+    "inMenu": true,
+    "variant": "radio-group",
+    "values": [
+      { "label": "Release", "key": "release" },
+      { "label": "Beta", "key": "beta" },
+      { "label": "Nightly", "key": "nightly" },
+      { "label": "ESR", "key": "esr" },
+      { "label": "Developer Edition", "key": "aurora" }
+    ]
+  }
 }
