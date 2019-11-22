@@ -1,4 +1,5 @@
 const { BigQuery } = require("@google-cloud/bigquery");
+const { promisify } = require('util');
 const allOptions = require("./src/stores/options.json");
 const timeDay = require("d3-time").timeDay;
 const express = require("express");
@@ -6,31 +7,36 @@ const app = express();
 const metrics = ["MAU", "DAU", "Retention", "Revenue", "etc."];
 const timeRange = timeDay.range(new Date("2018-12-01"), new Date("2019-03-25"));
 const path = require("path");
+const redis = require('redis');
 
-// var sqlite3 = require('sqlite3').verbose();
 
-function getDateString(dt) {
-  return dt.toISOString().slice(0, 10);
+// Set up Redis cache.
+
+const redisClient = redis.createClient({url: process.env.REDIS_URL, max_attempts: 8});
+const getAsync = promisify(redisClient.get).bind(redisClient);
+
+redisClient.on("error", function (err) {
+    console.log("Redis Error: " + err);
+});
+
+async function checkForCachedVersion(key) {
+    let value;
+    if (redisClient.connected) {
+        let result = await getAsync(`data:${key}`);
+        if (result) {
+            value = JSON.parse(result);
+            redisClient.incr(`count:${key}`);
+        }
+    }
+    return value;
 }
 
-// initialize
-
-function initializeCache() {
-  return {};
-}
-
-const CACHE = initializeCache();
-
-function checkForCachedVersion(querystring, cache) {
-  const TODAY = getDateString(new Date());
-  if (querystring in cache && cache[querystring].lastRan === TODAY)
-    return cache[querystring];
-  return undefined;
-}
-
-function cacheResultSet(querystring, cache, data) {
-  const lastRan = getDateString(new Date());
-  cache[querystring] = { lastRan, data };
+function cacheResultSet(key, data) {
+    if (redisClient.connected) {
+        let ttl = 60 * 60 * 24;
+        redisClient.set(`data:${key}`, JSON.stringify(data), 'EX', ttl);
+        redisClient.incr(`count:${key}`);
+    }
 }
 
 // FIXME: this is preeeeetty awkward
@@ -218,7 +224,7 @@ app.get("/__version__", (req, res) => {
 app.post("/fetch-data", async (req, res) => {
   const { params, querystring } = req.body;
   let out;
-  const cachedVersion = checkForCachedVersion(querystring, CACHE);
+  const cachedVersion = await checkForCachedVersion(querystring);
   if (!cachedVersion) {
     try {
       out = await exploreQuery(params).then(data => {
@@ -232,7 +238,7 @@ app.post("/fetch-data", async (req, res) => {
       return reportError(res, err.message);
     }
 
-    cacheResultSet(querystring, CACHE, out);
+    cacheResultSet(querystring, out);
   } else {
     out = cachedVersion.data;
   }
