@@ -167,7 +167,20 @@ id_bucket),
     day_0_windowed )
   --
 SELECT
-  *
+  * REPLACE(
+    -- Data is missing for 2019-05-03 to 2019-05-10 due to the Armag-addon incident,
+    -- so we insert nulls for any days that include this range in their windows.
+    IF(date between '2019-05-03' AND '2019-05-10', NULL, dau) AS dau,
+    IF(date between '2019-05-03' AND '2019-05-17', NULL, wau) AS wau,
+    IF(date between '2019-05-03' AND '2019-06-06', NULL, mau) AS mau,
+    IF(date between '2019-05-03' AND '2019-05-17', NULL, intensity) AS intensity,
+    IF(date between '2019-04-13' AND '2019-05-17', NULL, new_profile_active_in_week_1) AS new_profile_active_in_week_1,
+    IF(date between '2019-04-13' AND '2019-05-17', NULL, new_profiles) AS new_profiles,
+    IF(date between '2019-04-13' AND '2019-05-17', NULL, active_in_weeks_0_and_1) AS active_in_weeks_0_and_1,
+    IF(date between '2019-04-13' AND '2019-05-17', NULL, active_in_week_0) AS active_in_week_0,
+    IF(date between '2019-04-13' AND '2019-05-17', NULL, retention_1_week_new_profile) AS retention_1_week_new_profile,
+    IF(date between '2019-04-13' AND '2019-05-17', NULL, retention_1_week_active_in_week_0) AS retention_1_week_active_in_week_0
+    )
 FROM
   day_0_replaced
 FULL JOIN
