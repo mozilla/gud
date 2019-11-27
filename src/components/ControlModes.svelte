@@ -2,15 +2,14 @@
   import { fly } from "svelte/transition";
   import { onMount } from "svelte";
 
-  import { mode, modeOptions } from "../stores/stores";
+  import { store } from "../stores/store";
+  import { modeOptions } from "../stores/options";
 
   let visible = false;
 
   onMount(() => {
     visible = true;
   });
-
-  let currentOption = $mode;
 </script>
 
 <style>
@@ -102,10 +101,10 @@
           id={option.key}
           name="mode"
           value={option.key}
-          on:select={opt => mode.store.set(opt.key)}
+          on:select={opt => store.mode.set(opt.key)}
           class:coming-soon={option.key !== 'explore'}
           disabled={option.key !== 'explore'}
-          bind:group={$mode} />
+          bind:group={$store.mode} />
         <label for={option.key}>{option.label}</label>
       </div>
     {/each}

@@ -1,7 +1,7 @@
-import optionSet from "./options.json";
 import { readable, derived } from "svelte/store";
 
-const usage = optionSet.usageCriteriaOptions.setter;
+import optionSet from "./options.json";
+import { store } from "./store";
 
 const productDetails = readable(undefined, async set => {
   //if (!hasLoaded) {
@@ -21,9 +21,9 @@ const productDetails = readable(undefined, async set => {
 //     return $productDetails
 // })
 
-export const showProductDetails = derived(usage, $usage => {
+export const showProductDetails = derived(store, $store => {
   const thisCriterion = optionSet.usageCriteriaOptions.values.find(
-    opt => opt.key === $usage
+    opt => opt.key === $store.usage
   );
   return thisCriterion && thisCriterion.markerSet === "productDetails";
 });

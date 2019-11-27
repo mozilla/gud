@@ -120,9 +120,7 @@
     bottom: H - M.bottom - M.buffer
   };
 
-  let intermediateData = data.filter(inBounds(xMin, xMax));
-  //$: intermediateData = data.filter(inBounds(xMin, xMax));
-  const MAX_Y = yMax ? yMax : Math.max(...intermediateData.map(v => v.upper));
+  const MAX_Y = yMax ? yMax : Math.max(...data.map(v => v.upper));
   // if this graph has a yRangeGroup key, let's log if it beats the current max Y for the group.
   if (yRangeGroup) {
     $yRangeStore[yRangeGroup] = Math.max($yRangeStore[yRangeGroup] || 0, MAX_Y);
@@ -136,13 +134,9 @@
   // let dateRangeMode = 'years';
 
   $: graphXMin =
-    xMin !== ""
-      ? new Date(xMin)
-      : new Date(Math.min(...intermediateData.map(v => v.date)));
+    xMin !== "" ? new Date(xMin) : new Date(Math.min(...data.map(v => v.date)));
   $: graphXMax =
-    xMax !== ""
-      ? new Date(xMax)
-      : new Date(Math.max(...intermediateData.map(v => v.date)));
+    xMax !== "" ? new Date(xMax) : new Date(Math.max(...data.map(v => v.date)));
 
   $: xScale = scaleLinear()
     .domain([graphXMin, graphXMax])
@@ -170,9 +164,9 @@
   let finalData;
 
   if (!splitCriterion) {
-    finalData = [intermediateData];
+    finalData = [data];
   } else {
-    finalData = splitOn(intermediateData, splitCriterion);
+    finalData = splitOn(data, splitCriterion);
   }
 
   let areaShape;
@@ -222,7 +216,7 @@
 
   function updateRollover(gbx) {
     if (gbx) {
-      yPoint = intermediateData.find(d => d.date.getTime() === gbx.getTime()); //last(data.filter(d =>  d.date <= $globalX));
+      yPoint = data.find(d => d.date.getTime() === gbx.getTime()); //last(data.filter(d =>  d.date <= $globalX));
       $coords.x = xScale(yPoint.date);
       $coords.y = yScale(yPoint.value);
       mouseXValue = xRollover(yPoint.date);
@@ -256,36 +250,6 @@
     }
   }
   $: updateRollover($globalX);
-  // DELETE WHEN WE VERIFY THIS IS GOOD TO GET RID OF.
-  // $: if ($globalX) {
-  //     yPoint = intermediateData.find(d => d.date.getTime() === $globalX.getTime())//last(data.filter(d =>  d.date <= $globalX));
-  //     $coords.x = xScale(yPoint.date);
-  //     $coords.y = yScale(yPoint.value);
-  //     mouseXValue = xRollover(yPoint.date);
-  //     mouseYValue = `  ${yPoint.value}`
-  //     mouseYLow = yPoint.lower;
-  //     mouseYHigh = yPoint.upper;
-  //     mouseVersionValue = last(markers.filter(release => {
-  //         return release.date <= yPoint.date;
-  //     }))
-  //     if (mouseVersionValue) {
-  //         mouseVersionValue.end = markers.find(release => {
-  //             return release.date > mouseVersionValue.date;
-  //         })
-  //         if (mouseVersionValue.end) mouseVersionValue.end = mouseVersionValue.end.date
-  //         mouseVersionValue.start = xScale(mouseVersionValue.date)
-  //         mouseVersionValue.end = mouseVersionValue.end ? xScale(mouseVersionValue.end) : PL.right
-  //     }
-
-  // } else {
-  //     $coords.x = -150;
-  //     $coords.y = -150;
-  //     mouseXValue = undefined;
-  //     mouseYValue = undefined;
-  //     mouseYLow = undefined;
-  //     mouseYHigh = undefined;
-  //     mouseVersionValue = undefined;
-  // }
 
   // these values are used for dragging.
   let isDragging = false;
@@ -298,9 +262,7 @@
     svg.on("mousedown", e => {
       isDragging = true;
       const [x, y] = mouse(svg.node());
-      mouseDownStartValue = last(
-        intermediateData.filter(d => d.date <= xScale.invert(x))
-      );
+      mouseDownStartValue = last(data.filter(d => d.date <= xScale.invert(x)));
       if (mouseDownStartValue) mouseDownStartValue = mouseDownStartValue.date;
     });
     svg.on("mouseup", e => {
@@ -321,9 +283,7 @@
       if (x >= PL.left && x <= PL.right) {
         const invertedX = xScale.invert(x);
         //const invertedX = formatKeyString(xScale.invert(x)
-        const currentPoint = last(
-          intermediateData.filter(d => d.date <= invertedX)
-        );
+        const currentPoint = last(data.filter(d => d.date <= invertedX));
         //const currentPoint = last(data.filter(d => d.key === invertedX))
         setPoint(currentPoint);
         if (isDragging) {
@@ -392,7 +352,7 @@
   }
 </style>
 
-{#if intermediateData.length}
+{#if data.length}
   <div class="graphic-container">
     <GraphicHeader {title} {shortDescription} {size} {order} {orderStagger} />
     <svg

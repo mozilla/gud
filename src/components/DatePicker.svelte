@@ -1,80 +1,31 @@
 <script>
   import { onMount } from "svelte";
   import { timeFormat } from "d3-time-format";
-  import { majorReleases } from "../stores/productDetails";
+
   import optionSet from "../stores/options.json";
-  import { rawStart, rawEnd } from "../stores/stores";
+  import { majorReleases } from "../stores/productDetails";
+  import { store } from "../stores/store";
 
-  let start = optionSet.startOptions.setter;
-  let end = optionSet.endOptions.setter;
-
-  onMount(() => {
-    if ($start !== "") $rawStart = $start;
-    if ($end !== "") $rawEnd = $end;
-  });
-
-  let tf = timeFormat("%Y-%m-%d");
-
-  let TODAY = tf(new Date());
+  const timeFormatter = timeFormat("%Y-%m-%d");
 
   const dayBefore = d => {
     const di = new Date(d);
-    return di;
+    return timeFormatter(di);
   };
 
   const dayAfter = d => {
     const di = new Date(d);
     di.setDate(di.getDate() + 2);
-    return di;
+    return timeFormatter(di);
   };
 
-  // FIXME: replace this with something else?
-  let START = "2017-06-13";
+  $: startMin = $store.minStartDate;
+  $: startMax = dayBefore($store.endDate);
+  $: endMin = dayAfter($store.startDate);
+  const endMax = $store.maxEndDate;
 
-  // check boundary conditions.
-  $: if ($rawStart !== "") {
-    if ($rawStart < START) $start = START;
-    if ($rawStart > START) $start = $rawStart;
-    if ($rawEnd !== "" && $rawStart > rawEnd) $start = tf(dayBefore($rawEnd));
-    if ($rawStart > TODAY) $start = tf(dayBefore(TODAY));
-  } else {
-    $start = "";
-  }
-
-  $: if ($rawEnd !== "") {
-    if ($rawEnd > TODAY) $end = TODAY;
-    if ($rawEnd < TODAY) $end = $rawEnd;
-    if ($rawStart !== "" && $rawEnd <= $rawStart)
-      $end = tf(dayAfter($rawStart));
-    if ($rawEnd < START) $end = tf(dayAfter(START));
-  } else {
-    $end = "";
-  }
-
-  $: currentStart = new Date($start === "" ? START : $start);
-  $: currentEnd = new Date($end === "" ? TODAY : $end);
-
-  // this is where the store gets set, y'all.
-  $: if ($start !== "" && $start < START) $start = START;
-  $: if ($end !== "" && $start !== "" && $start > $end) $start = $end;
-
-  const daysBetween = (s, e) =>
-    Math.round(Math.abs((e.getTime() - s.getTime()) / (24 * 60 * 60 * 1000)));
-
-  $: days = daysBetween(currentStart, currentEnd);
-
-  // let's limit the total major releaess of FF?
-
-  let releaseSet = [];
-  $: releaseSet =
-    $majorReleases === undefined
-      ? []
-      : $majorReleases.filter(({ date }) => {
-          return (
-            ($start !== "" ? date >= $start : true) &&
-            ($end !== "" ? date <= $end : true)
-          );
-        });
+  $: currentStart = $store.startDate;
+  $: currentEnd = $store.endDate;
 </script>
 
 <style>
@@ -141,29 +92,43 @@
   <h2>Time Period</h2>
 
   <div class="date-picker-controls">
-
     <div>
       <div class="date-picker-input-label">Start</div>
       <input
         type="date"
-        id="start"
+        id="startDate"
         name="range-start"
-        value="2018-07-22"
-        min={START}
-        max={$end === '' ? TODAY : $end}
-        bind:value={$rawStart} />
+        bind:value={currentStart}
+        min={startMin}
+        max={startMax}
+        on:change={evt => {
+          let date = evt.target.value;
+          if (date === '' || date < startMin) {
+            date = startMin;
+          } else if (date > startMax) {
+            date = startMax;
+          }
+          store.setField('startDate', date);
+        }} />
     </div>
     <div>
       <div class="date-picker-input-label">End</div>
       <input
         type="date"
-        id="end"
-        class="date-end"
+        id="endDate"
         name="range-end"
-        value="2018-07-22"
-        min={$start === '' ? START : $start}
-        max={TODAY}
-        bind:value={$rawEnd} />
+        bind:value={currentEnd}
+        min={endMin}
+        max={endMax}
+        on:change={evt => {
+          let date = evt.target.value;
+          if (date === '' || date > endMax) {
+            date = endMax;
+          } else if (date < endMin) {
+            date = endMin;
+          }
+          store.setField('endDate', date);
+        }} />
     </div>
   </div>
 </div>

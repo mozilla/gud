@@ -25,31 +25,16 @@
   // import MouseMove from './Components/MouseMove.svelte';
   // import AdjustableDate from './components/AdjustableDate.svelte';
 
-  // stores
-  import {
-    menuOptions,
-    allOptions,
-    mode,
-    modeIsImplemented,
-    disabledDimensions
-  } from "./stores/stores";
-  import cache from "./stores/cache";
-  import currentQuery, {
-    isNotDefaultQueryset,
-    resetQuery
-  } from "./stores/query";
   import optionSet from "./stores/options.json";
+  import cache, { storeToQuery } from "./stores/cache";
+  import { store, settingChanged, modeIsImplemented } from "./stores/store";
 
   // annotations
   import { annotationModalIsActive } from "./stores/annotations";
 
-  // get usage name.
-  const usageCriterion = optionSet.usageCriteriaOptions.setter;
-  const metric = optionSet.metricOptions.setter;
-
   function filterMetricsOnUsageCriterion(values) {
     const disabledMetrics = optionSet.usageCriteriaOptions.values.find(
-      v => v.key === $usageCriterion
+      v => v.key === $store.usage
     ).disabledMetrics;
     if (disabledMetrics !== undefined) {
       return values.filter(v => !disabledMetrics.includes(v.key));
@@ -59,6 +44,7 @@
 
   export let name;
 
+  const menuOptions = Object.values(optionSet).filter(v => v.inMenu);
   let visible = false;
 
   // FIXME: this and all the buttons around exporting should be
@@ -89,13 +75,13 @@
         "//" +
         window.location.host +
         window.location.pathname +
-        `?${$currentQuery}`;
+        `?${value}`;
       window.history.pushState({ path: newurl }, "", newurl);
     }
   }
 
   $: if (visible) {
-    updateQueryString($currentQuery);
+    updateQueryString(storeToQuery($store));
   }
 </script>
 
@@ -108,61 +94,48 @@
     <section class="control-modes">
       <ControlModes />
     </section>
-    {#if $isNotDefaultQueryset && $modeIsImplemented}
+    {#if $settingChanged && $modeIsImplemented}
       <section class="app-button" transition:fly={{ x: -30, duration: 300 }}>
         <button
           on:click={() => {
-            resetQuery();
+            store.resetQuery();
           }}>
           reset selections
           <span>✖</span>
         </button>
       </section>
     {/if}
-    {#if $mode === 'explore' && visible}
+    {#if $store.mode === 'explore' && visible}
       <section class="control-selectors">
         {#each menuOptions as selector, i (selector.key)}
-          <!-- {#if selector.variant === 'radio-group'} -->
-          <!-- <RadioGroup
-							title={selector.label}
-							options={selector.values}
-							setter={selector.setter}
-							onSelection={(option) =>{
-								// aside from assigning the selection value to (or pushing to)
-								// $setter, any additional callbacks should go here.
-								if (option.disabledDimensions) {
-									$disabledDimensions = [...option.disabledDimensions];
-								} else {
-									$disabledDimensions = []
-								}
-							}}
-						/> -->
           {#if selector.type !== 'date'}
             <Multiselector
-              enabled={!$disabledDimensions.includes(selector.key)}
+              enabled={!$store.disabledDimensions.includes(selector.key)}
               title={selector.label}
               description={selector.description || selector.label}
               showDescriptionOnSelect={selector.showDescriptionOnSelect}
               selectType={selector.type || 'single'}
-              options={$usageCriterion && selector.key === 'metric' ? filterMetricsOnUsageCriterion(selector.values) : selector.values}
-              setter={selector.setter}
+              options={$store.usage && selector.key === 'metric' ? filterMetricsOnUsageCriterion(selector.values) : selector.values}
+              storeKey={selector.key}
               onSelection={option => {
                 if (selector.key === 'usage') {
                   if (option.disabledMetrics !== undefined) {
-                    optionSet.metricOptions.setter.set(optionSet.metricOptions.values[0].key);
+                    $store.metric.set(optionSet.find(o => o.key === 'metric').values[0].key);
                   }
                   if (option.disabledDimensions) {
-                    $disabledDimensions = [...option.disabledDimensions];
+                    store.setField('disabledDimensions', [
+                      ...option.disabledDimensions
+                    ]);
                     Object.keys(optionSet)
                       .filter(k =>
-                        $disabledDimensions.includes(optionSet[k].key)
+                        $store.disabledDimensions.includes(optionSet[k].key)
                       )
                       .forEach(k => {
-                        if (optionSet[k].type === 'multi') optionSet[k].setter.set([]);
-                        else if (optionSet[k].type === 'single') optionSet[k].setter.set(optionSet[k].values[0]);
+                        if (optionSet[k].type === 'multi') store.setField(optionSet[k].key, []);
+                        else if (optionSet[k].type === 'single') store.setField(optionSet[k].key, optionSet[k].values[0]);
                       });
                   } else {
-                    $disabledDimensions = [];
+                    store.setField('disabledDimensions', []);
                   }
                 }
               }} />
@@ -171,7 +144,7 @@
         <DatePicker />
       </section>
     {/if}
-    {#if $mode === 'Compare'}
+    {#if $store.mode === 'Compare'}
       <section class="control-selectors" />
     {/if}
     <footer class="control-foot">
@@ -191,7 +164,7 @@
             alt="Firefox Logo"
             src="firefox-logo.png" />
           {name}
-          <span>{` / ${$mode}`}</span>
+          <span>{` / ${$store.mode}`}</span>
         </h1>
         <div
           class="fulfillment-buttons"
@@ -215,7 +188,7 @@
         </div>
       {:then value}
         {#if value.length}
-          <GraphicBody data={value} title={$usageCriterion} />
+          <GraphicBody data={value} title={$store.usage} />
         {:else}
           <NoData />
         {/if}

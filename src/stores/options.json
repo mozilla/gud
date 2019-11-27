@@ -2,14 +2,14 @@
   "startOptions": {
     "label": "Start",
     "type": "date",
-    "key": "start",
+    "key": "startDate",
     "onlyLocal": true,
     "inMenu": true
   },
   "endOptions": {
     "label": "End",
     "type": "date",
-    "key": "end",
+    "key": "endDate",
     "onlyLocal": true,
     "inMenu": true
   },

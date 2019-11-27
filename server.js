@@ -77,7 +77,18 @@ const exploreQuery = params => {
   // check for default param.
   const WHEREClauses = Object.keys(params)
     .filter(k => {
-      if (k === "start" || k === "end") return false;
+      if (
+        [
+          "startDate",
+          "endDate",
+          "minStartDate",
+          "maxEndDate",
+          "disabledDimensions",
+          "yMax"
+        ].includes(k)
+      ) {
+        return false;
+      }
       const defaultValue = getDefault(k).key;
       return (k !== "mode" && !isDefaultValue(k, params[k])) || k === "usage"; //params[k] !== defaultValue
     })

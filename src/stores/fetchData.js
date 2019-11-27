@@ -1,5 +1,6 @@
 import optionSet from "./options.json";
 import sumBucketsWithCI from "./CI";
+import { store } from "./store";
 
 const getMetricInformation = m => {
   return optionSet.metricOptions.values.find(v => v.key === m);

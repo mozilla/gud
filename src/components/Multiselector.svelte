@@ -10,6 +10,7 @@
 
   import Popper from "popper.js";
 
+  import { store } from "../stores/store";
   import SelectedCheckbox from "./SelectedCheckbox.svelte";
   import BlankCheckbox from "./BlankCheckbox.svelte";
   import Tooltip from "./Tooltip.svelte";
@@ -18,7 +19,7 @@
   export let description = title;
   export let showDescriptionOnSelect = false;
   export let options;
-  export let setter;
+  export let storeKey;
   export let selectType = "single";
   export let onSelection;
   export let enabled;
@@ -63,7 +64,7 @@
   let singleOptionLabel = options[0].label;
   let singleOptionDescription = options[0].shortDescription;
   $: if (selectType === "single") {
-    const opt = options.find(opt => opt.key === $setter);
+    const opt = options.find(opt => opt.key === $store[storeKey]);
     singleOptionLabel = opt.label;
     if (showDescriptionOnSelect) singleOptionDescription = opt.shortDescription;
   }
@@ -74,7 +75,10 @@
   }
 
   function removeSelection(key) {
-    $setter = $setter.filter(k => k !== key);
+    store.setField(
+      storeKey,
+      $store[storeKey].filter(k => k !== key)
+    );
   }
 
   async function handleSelection(key) {
@@ -83,20 +87,23 @@
       await onSelection(thisOption);
     }
     if (selectType === "multi") {
-      if (!$setter.includes(key)) {
-        $setter = [...$setter, key];
+      if (!$store[storeKey].includes(key)) {
+        store.setField(storeKey, [...$store[storeKey], key]);
       } else {
-        $setter = $setter.filter(k => k !== key);
+        store.setField(
+          storeKey,
+          $store[storeKey].filter(k => k !== key)
+        );
       }
     } else {
-      $setter = key;
+      store.setField(storeKey, key);
       // if single, collapse.
       isActive = false;
     }
   }
 
   function clearAllSelections() {
-    $setter = selectType === "multi" ? [] : options[0].key;
+    store.setField(storeKey, selectType === "multi" ? [] : options[0].key);
   }
 
   function handleKeydown(event) {
@@ -106,7 +113,10 @@
   }
 
   function addAllSelections() {
-    $setter = options.map(opt => opt.key);
+    store.setField(
+      storeKey,
+      options.map(opt => opt.key)
+    );
   }
 
   function hideOnClickOutside(element) {
@@ -398,14 +408,14 @@
   </div>
   {#if selectType === 'multi'}
     <ul class="selected-items">
-      {#if $setter.length === 0}
+      {#if $store[storeKey].length === 0}
         <div
           transition:fade={{ duration: 150 }}
           class="default-selected-item-message">
           All
         </div>
       {/if}
-      {#each $setter as key (key)}
+      {#each $store[storeKey] as key (key)}
         <li
           transition:fade={{ duration: 150 }}
           animate:flip={{ duration: 150 }}>
@@ -434,14 +444,14 @@
       {#if selectType === 'multi'}
         <li
           class="clear-all"
-          class:nothing-selected={!$setter.length}
+          class:nothing-selected={!$store[storeKey].length}
           on:click={clearAllSelections}>
           <div class="dropdown-status">
-            {#if $setter.length}╳{/if}
+            {#if $store[storeKey].length}╳{/if}
           </div>
           <div class="clear-all-label">
-            {#if $setter.length}
-              clear {$setter.length} item{$setter.length > 1 ? 's' : ''}
+            {#if $store[storeKey].length}
+              clear {$store[storeKey].length} item{$store[storeKey].length > 1 ? 's' : ''}
             {:else}default: showing all{/if}
           </div>
         </li>
@@ -454,17 +464,17 @@
         {:else}
           <li
             on:click={() => handleSelection(key)}
-            class:selected={$setter.includes(key)}>
-            <!-- <div class=dropdown-status>{$setter.includes(key) ? '✓' : ' '}</div> -->
+            class:selected={$store[storeKey].includes(key)}>
+            <!-- <div class=dropdown-status>{$store[storeKey].includes(key) ? '✓' : ' '}</div> -->
             <div class="dropdown-status">
               {#if selectType === 'multi'}
                 <div class="dropdown-status">
                   <svelte:component
-                    this={$setter.includes(key) ? SelectedCheckbox : BlankCheckbox} />
+                    this={$store[storeKey].includes(key) ? SelectedCheckbox : BlankCheckbox} />
                 </div>
               {:else}
                 <div class="dropdown-status">
-                  {$setter.includes(key) ? '✓' : ' '}
+                  {$store[storeKey].includes(key) ? '✓' : ' '}
                 </div>
               {/if}
             </div>
