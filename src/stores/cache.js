@@ -36,9 +36,12 @@ export const storeToQuery = $store => {
   return Object.entries($store)
     .filter(
       ([key]) =>
-        !["yMax", "minStartDate", "maxEndDate", "disabledDimensions"].includes(
-          key
-        )
+        ![
+          "activeUsersYMax",
+          "minStartDate",
+          "maxEndDate",
+          "disabledDimensions"
+        ].includes(key)
     )
     .map(([key, val]) => {
       return toQueryStringParts(key, val);
@@ -56,7 +59,7 @@ function setRanges(data) {
     store.setField("startDate", minDate);
   }
 
-  const yMax = Math.max(
+  const activeUsersYMax = Math.max(
     ...data.flatMap(({ dau_high, wau_high, mau_high }) => [
       dau_high,
       wau_high,
@@ -65,8 +68,11 @@ function setRanges(data) {
   );
 
   // Avoid infinite loop
-  if (!get(store).yMax || get(store).yMax !== yMax) {
-    store.setField("yMax", yMax);
+  if (
+    !get(store).activeUsersYMax ||
+    get(store).activeUsersYMax !== activeUsersYMax
+  ) {
+    store.setField("activeUsersYMax", activeUsersYMax);
   }
 
   return data;

@@ -54,7 +54,9 @@
         shortDescription: metricInfo.shortDescription,
         whatKind: metricInfo.needsExplanation ? metricInfo.shortsub : undefined,
         format: metricInfo.format,
-        yMax: ["dau", "wau", "mau"].includes(m) ? $store.yMax : metricInfo.yMax,
+        activeUsersYMax: ["dau", "wau", "mau"].includes(m)
+          ? $store.activeUsersYMax
+          : metricInfo.activeUsersYMax,
         yMin: 0,
         key: metricInfo.key,
         data: rawData.map(d => {
@@ -116,7 +118,7 @@
           xMin={$store.startDate}
           xMax={$store.endDate}
           yMin={dataset.yMin}
-          yMax={dataset.yMax}
+          activeUsersYMax={dataset.activeUsersYMax}
           yRangeGroup={$store.metric === 'all' ? dataset.yRangeGroup : undefined}
           onDragFinish={(mouseDownStartValue, mouseDownEndValue) => {
             const firstVal = mouseDownStartValue > mouseDownEndValue ? mouseDownEndValue : mouseDownStartValue;

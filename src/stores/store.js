@@ -94,9 +94,12 @@ export const settingChanged = derived(store, $store => {
   return Object.keys($store)
     .filter(
       f =>
-        !["disabledDimensions", "minStartDate", "maxEndDate", "yMax"].includes(
-          f
-        )
+        ![
+          "disabledDimensions",
+          "minStartDate",
+          "maxEndDate",
+          "activeUsersYMax"
+        ].includes(f)
     )
     .some(field => {
       const option = Object.values(options).find(o => o.key === field);

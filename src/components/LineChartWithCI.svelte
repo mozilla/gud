@@ -38,7 +38,7 @@
   export let xMin;
   export let xMax;
   export let yMin;
-  export let yMax;
+  export let activeUsersYMax;
   export let markers = [];
   export let splitCriterion = undefined;
 
@@ -120,7 +120,9 @@
     bottom: H - M.bottom - M.buffer
   };
 
-  const MAX_Y = yMax ? yMax : Math.max(...data.map(v => v.upper));
+  const MAX_Y = activeUsersYMax
+    ? activeUsersYMax
+    : Math.max(...data.map(v => v.upper));
   // if this graph has a yRangeGroup key, let's log if it beats the current max Y for the group.
   if (yRangeGroup) {
     $yRangeStore[yRangeGroup] = Math.max($yRangeStore[yRangeGroup] || 0, MAX_Y);
@@ -156,7 +158,14 @@
 
   let yScale;
   $: yScale = scaleLinear()
-    .domain([0, yMax ? yMax : yType === "percentage" ? 1 : FINAL_MAX_Y])
+    .domain([
+      0,
+      activeUsersYMax
+        ? activeUsersYMax
+        : yType === "percentage"
+        ? 1
+        : FINAL_MAX_Y
+    ])
     .range([PL.bottom, PL.top])
     .clamp(yType === "percentage");
 

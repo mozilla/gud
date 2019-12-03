@@ -232,7 +232,7 @@
         "subtitle": "Ratio of Days Used",
         "shortsub": "ratio of days used",
         "needsExplanation": true,
-        "yMax": 7,
+        "activeUsersYMax": 7,
         "key": "intensity",
         "short": "intensity",
         "agg": "mean",

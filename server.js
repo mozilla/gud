@@ -84,7 +84,7 @@ const exploreQuery = params => {
           "minStartDate",
           "maxEndDate",
           "disabledDimensions",
-          "yMax"
+          "activeUsersYMax"
         ].includes(k)
       ) {
         return false;
