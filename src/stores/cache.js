@@ -50,13 +50,18 @@ export const storeToQuery = $store => {
 };
 
 function setRanges(data) {
+  const $store = get(store);
   const timeFormatter = timeFormat("%Y-%m-%d");
-  const minDate = timeFormatter(data[0].date);
+  const earliestDateInData = timeFormatter(data[0].date);
 
   // Avoid infinite loop
-  if (!get(store).minStartDate || get(store).minStartDate !== minDate) {
-    store.setField("minStartDate", minDate);
-    store.setField("startDate", minDate);
+  if (!$store.minStartDate || $store.minStartDate !== earliestDateInData) {
+    store.setField("minStartDate", earliestDateInData);
+
+    // Don't overwrite the startDate if it's set in a query parameter
+    if (!$store.startDate) {
+      store.setField("startDate", earliestDateInData);
+    }
   }
 
   const activeUsersYMax = Math.max(
