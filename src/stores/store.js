@@ -91,32 +91,24 @@ export const store = {
 };
 
 export const settingChanged = derived(store, $store => {
-  return Object.keys($store)
-    .filter(
-      f =>
-        ![
-          "disabledDimensions",
-          "minStartDate",
-          "maxEndDate",
-          "activeUsersYMax"
-        ].includes(f)
-    )
-    .some(field => {
-      const option = Object.values(options).find(o => o.key === field);
-      if (option.type === "multi") {
-        return $store[field].length !== 0;
-      } else if (field === "startDate") {
-        if (!$store.minStartDate) {
-          return false;
-        } else {
-          return $store.startDate !== $store.minStartDate;
-        }
-      } else if (field === "endDate") {
-        return $store.endDate !== $store.maxEndDate;
+  return Object.keys($store).some(field => {
+    const option = Object.values(options).find(o => o.key === field);
+    if (!option) return false;
+
+    if (option.type === "multi") {
+      return $store[field].length !== 0;
+    } else if (field === "startDate") {
+      if (!$store.minStartDate) {
+        return false;
       } else {
-        return $store[field] !== option.values.filter(v => !v.itemType)[0].key;
+        return $store.startDate !== $store.minStartDate;
       }
-    });
+    } else if (field === "endDate") {
+      return $store.endDate !== $store.maxEndDate;
+    } else {
+      return $store[field] !== option.values.filter(v => !v.itemType)[0].key;
+    }
+  });
 });
 
 export const modeIsImplemented = derived(store, $store => {
