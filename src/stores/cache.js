@@ -72,10 +72,7 @@ function setRanges(data, options = { setMinStartDate: false }) {
   );
 
   // set the largest value seen for DAU / WAU / MAU
-  if (
-    !$store.activeUsersYMax ||
-    $store.activeUsersYMax !== activeUsersYMax
-  ) {
+  if (!$store.activeUsersYMax || $store.activeUsersYMax !== activeUsersYMax) {
     store.setField("activeUsersYMax", activeUsersYMax);
   }
 
