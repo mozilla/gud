@@ -19,7 +19,14 @@ redisClient.on("error", function (err) {
     console.log("Redis Error: " + err);
 });
 
-async function checkForCachedVersion(key) {
+function normalizeKey(key) {
+    // Assumes a querystring as key with parameters separated by "&".
+    return key.split("&").sort().join("&");
+}
+
+async function checkForCachedVersion(qs) {
+    const key = normalizeKey(qs);
+    console.log(key);
     let value;
     if (redisClient.connected) {
         let result = await getAsync(`data:${key}`);
@@ -31,7 +38,8 @@ async function checkForCachedVersion(key) {
     return value;
 }
 
-function cacheResultSet(key, data) {
+function cacheResultSet(qs, data) {
+    const key = normalizeKey(qs);
     if (redisClient.connected) {
         let ttl = 60 * 60 * 24;
         redisClient.set(`data:${key}`, JSON.stringify(data), 'EX', ttl);
