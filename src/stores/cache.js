@@ -55,7 +55,7 @@ function setRanges(data, options = { setMinStartDate: false }) {
   const timeFormatter = timeFormat("%Y-%m-%d");
   const earliestDateInData = timeFormatter(data[0].date);
 
-  // Avoid infinite loop
+  // with this dataset, let's set the start date if these conditions are not necessary
   if (!$store.minStartDate || $store.minStartDate !== earliestDateInData) {
     store.setField("minStartDate", earliestDateInData);
     if (options.setMinStartDate) {
@@ -71,10 +71,10 @@ function setRanges(data, options = { setMinStartDate: false }) {
     ])
   );
 
-  // Avoid infinite loop
+  // set the largest value seen for DAU / WAU / MAU
   if (
-    !get(store).activeUsersYMax ||
-    get(store).activeUsersYMax !== activeUsersYMax
+    !$store.activeUsersYMax ||
+    $store.activeUsersYMax !== activeUsersYMax
   ) {
     store.setField("activeUsersYMax", activeUsersYMax);
   }
