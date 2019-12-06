@@ -6,9 +6,6 @@ import options from "./options.json";
 import { fetchExploreData } from "./fetchData";
 import { store } from "./store";
 
-const cacheObj = {};
-let lastMetric;
-
 export const removeLocalParams = obj => {
   const toRemove = Object.keys(obj).filter(f => {
     return Object.keys(options)
@@ -79,22 +76,25 @@ function setRanges(data, options = { setMinStartDate: false }) {
   return data;
 }
 
-const cachedRequest = derived(store, $store => {
-  const queryParams = removeLocalParams($store);
-  const q = storeToQuery(queryParams);
-  const newMetric = queryParams.usage;
-  const metricChanged = lastMetric && lastMetric !== newMetric;
-  const setMinStartDate = !$store.startDate || metricChanged;
+export function createRequestCache() {
+  const cacheObj = {};
+  let lastMetric;
 
-  if ($store.mode !== "explore") return undefined;
-  if (!(q in cacheObj)) {
-    cacheObj[q] = fetchExploreData(queryParams, q);
-  }
-  const promise = cacheObj[q].then(data =>
-    setRanges(data, { setMinStartDate })
-  );
-  lastMetric = newMetric;
-  return promise;
-});
+  return derived(store, $store => {
+    const queryParams = removeLocalParams($store);
+    const q = storeToQuery(queryParams);
+    const newMetric = queryParams.usage;
+    const metricChanged = lastMetric && lastMetric !== newMetric;
+    const setMinStartDate = !$store.startDate || metricChanged;
 
-export default cachedRequest;
+    if ($store.mode !== "explore") return undefined;
+    if (!(q in cacheObj)) {
+      cacheObj[q] = fetchExploreData(queryParams, q);
+    }
+    const promise = cacheObj[q].then(data =>
+      setRanges(data, { setMinStartDate })
+    );
+    lastMetric = newMetric;
+    return promise;
+  });
+}

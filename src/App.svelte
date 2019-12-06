@@ -26,7 +26,7 @@
   // import AdjustableDate from './components/AdjustableDate.svelte';
 
   import optionSet from "./stores/options.json";
-  import cache, { storeToQuery } from "./stores/cache";
+  import { createRequestCache, storeToQuery } from "./stores/cache";
   import { store, settingChanged, modeIsImplemented } from "./stores/store";
 
   // annotations
@@ -45,6 +45,7 @@
   export let name;
 
   const menuOptions = Object.values(optionSet).filter(v => v.inMenu);
+  const cache = createRequestCache();
   let visible = false;
 
   // FIXME: this and all the buttons around exporting should be
