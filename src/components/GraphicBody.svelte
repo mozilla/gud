@@ -54,9 +54,10 @@
         shortDescription: metricInfo.shortDescription,
         whatKind: metricInfo.needsExplanation ? metricInfo.shortsub : undefined,
         format: metricInfo.format,
-        activeUsersYMax: ["dau", "wau", "mau"].includes(m)
-          ? $store.activeUsersYMax
-          : metricInfo.activeUsersYMax,
+        activeUsersYMax:
+          $store.metric === "all" && ["dau", "wau", "mau"].includes(m)
+            ? $store.activeUsersYMax
+            : metricInfo.activeUsersYMax,
         yMin: 0,
         key: metricInfo.key,
         data: rawData.map(d => {
