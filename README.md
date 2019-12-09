@@ -23,6 +23,4 @@ The GCP commands in these instructions will not work unless you work under Katie
 - To build / update the frontend, type `npm run dev`, which spins up another web server (that we're not going to use, sorry for the redundancy here) and builds the little dev version of the frontend.
 – I'll make it so you don't have to run two servers like this at some point, but this works for now!
 
-
-
 Ping me @hamilton on Slack for any other questions.
