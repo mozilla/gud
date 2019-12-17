@@ -4,7 +4,6 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   function fireClickMessage() {
-    console.log("yeah!");
     dispatch("click");
   }
 
