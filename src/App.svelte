@@ -120,9 +120,6 @@
               storeKey={selector.key}
               onSelection={option => {
                 if (selector.key === 'usage') {
-                  if (option.disabledMetrics !== undefined) {
-                    $store.metric.set(optionSet.find(o => o.key === 'metric').values[0].key);
-                  }
                   if (option.disabledDimensions) {
                     store.setField('disabledDimensions', [
                       ...option.disabledDimensions
