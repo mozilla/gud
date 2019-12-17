@@ -36,6 +36,7 @@
     const disabledMetrics = optionSet.usageCriteriaOptions.values.find(
       v => v.key === $store.usage
     ).disabledMetrics;
+    console.log('does this exist?')
     if (disabledMetrics !== undefined) {
       return values.filter(v => !disabledMetrics.includes(v.key));
     }
@@ -120,9 +121,13 @@
               storeKey={selector.key}
               onSelection={option => {
                 if (selector.key === 'usage') {
-                  if (option.disabledMetrics !== undefined) {
-                    $store.metric.set(optionSet.find(o => o.key === 'metric').values[0].key);
-                  }
+                  /* if (option.disabledMetrics !== undefined) {
+                    console.log(optionSet)
+                    const metrics = optionSet.find(o => o.key === 'metric')
+                    if (metrics) {
+                      $store.metric.set(metrics.values[0].key);
+                    }
+                  } */
                   if (option.disabledDimensions) {
                     store.setField('disabledDimensions', [
                       ...option.disabledDimensions
