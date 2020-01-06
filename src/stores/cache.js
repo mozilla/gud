@@ -1,53 +1,100 @@
-import { writable, derived } from 'svelte/store'
-import queryString, { queryStringWithoutLocalOpts, queryParameters } from './query'
-import options from './options.json'
+import produce from "immer";
+import { derived, get } from "svelte/store";
+import { timeFormat } from "d3-time-format";
 
-const start = options.startOptions.setter;
-const end = options.endOptions.setter;
+import options from "./options.json";
+import { fetchExploreData } from "./fetchData";
+import { store } from "./store";
 
-import {fetchExploreData} from './fetchData'
+export const removeLocalParams = obj => {
+  const toRemove = Object.keys(obj).filter(f => {
+    return Object.keys(options)
+      .filter(opt => options[opt].onlyLocal)
+      .map(opt => options[opt].key)
+      .includes(f);
+  });
 
-const cacheObj = writable({})
+  return produce(obj, draft => {
+    toRemove.forEach(r => {
+      delete draft[r];
+    });
+    delete draft.disabledDimensions;
+  });
+};
 
-// simply put, if $q is in the cacheObj, then return true.
-export const queryIsCached = derived([queryStringWithoutLocalOpts, cacheObj], ([$q, $cacheObj]) => {
-    // this requires looking at the entire queryString to see if anything has changed,
-    // though we will by default want to only use queryStringWithoutLocalOpts for the cache check.
-    // hence the _ - we weant this to fire when queryString changes, but we don't need it.
-    // console.log('   queryIsCached', $q in $cacheObj)
-    return $q in $cacheObj
-})
-
-const removeLocalParams = (obj) => {
-    const toRemove = Object.keys(obj).filter(f => {
-        return Object.keys(options).filter(opt => options[opt].onlyLocal).map(opt=>options[opt].key).includes(f)
-    })
-
-    toRemove.forEach(r=>delete obj[r])
+function toQueryStringParts(key, val) {
+  const opt = Object.values(options).find(o => o.key === key);
+  if (opt.type === "multi") {
+    return `${opt.key}=${encodeURIComponent(JSON.stringify([...val].sort()))}`;
+  }
+  return `${opt.key}=${encodeURIComponent(val)}`;
 }
 
-const cachedRequest = derived([cacheObj, queryStringWithoutLocalOpts, queryParameters], ([$cacheObj, $q, $qp, ]) => {
-    if ($qp.mode !== 'explore') return undefined;
-    // this removes queryIsCached. Right idea? I dunno. TIme to figure that iout!
-    if (!($q in $cacheObj)) {
-        // save the fetch request here as a promise.
-        const query = Object.assign({}, $qp)
-        removeLocalParams(query)
-        $cacheObj[$q] = fetchExploreData(query, $q);
-    }
-    // console.log('      cachedRequest')
-    return $cacheObj[$q]
-})
+export const storeToQuery = $store => {
+  return Object.entries($store)
+    .filter(
+      ([key]) =>
+        ![
+          "activeUsersYMax",
+          "minStartDate",
+          "maxEndDate",
+          "disabledDimensions"
+        ].includes(key)
+    )
+    .map(([key, val]) => {
+      return toQueryStringParts(key, val);
+    })
+    .join("&");
+};
 
-const dataset = derived([cachedRequest], async ([$data])=> {
-    let response;
-    try {
-        response = await $data
-    } catch(err) {
-        console.log('yep', err)
-        throw new Error(err.message)
-    }
-    return response
-})
+function setRanges(data, options = { setMinStartDate: false }) {
+  const $store = get(store);
+  const timeFormatter = timeFormat("%Y-%m-%d");
+  const earliestDateInData = timeFormatter(data[0].date);
 
-export default dataset
+  // with this dataset, let's set the start date if these conditions are not necessary
+  if (!$store.minStartDate || $store.minStartDate !== earliestDateInData) {
+    store.setField("minStartDate", earliestDateInData);
+    if (options.setMinStartDate) {
+      store.setField("startDate", earliestDateInData);
+    }
+  }
+
+  const activeUsersYMax = Math.max(
+    ...data.flatMap(({ dau_high, wau_high, mau_high }) => [
+      dau_high,
+      wau_high,
+      mau_high
+    ])
+  );
+
+  // set the largest value seen for DAU / WAU / MAU
+  if (!$store.activeUsersYMax || $store.activeUsersYMax !== activeUsersYMax) {
+    store.setField("activeUsersYMax", activeUsersYMax);
+  }
+
+  return data;
+}
+
+export function createRequestCache() {
+  const cacheObj = {};
+  let lastMetric;
+
+  return derived(store, $store => {
+    const queryParams = removeLocalParams($store);
+    const q = storeToQuery(queryParams);
+    const newMetric = queryParams.usage;
+    const metricChanged = lastMetric && lastMetric !== newMetric;
+    const setMinStartDate = !$store.startDate || metricChanged;
+
+    if ($store.mode !== "explore") return undefined;
+    if (!(q in cacheObj)) {
+      cacheObj[q] = fetchExploreData(queryParams, q);
+    }
+    const promise = cacheObj[q].then(data =>
+      setRanges(data, { setMinStartDate })
+    );
+    lastMetric = newMetric;
+    return promise;
+  });
+}
