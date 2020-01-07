@@ -1,4 +1,5 @@
 import optionSet from "./options.json";
+import { inArmagaddon } from "../utils/data-quality";
 import sumBucketsWithCI from "./CI";
 import { store } from "./store";
 
@@ -27,7 +28,12 @@ function fetchMetricPoints(p, numeratorKey, denominatorKey) {
   return [p[numeratorKey], p[denominatorKey]];
 }
 
-function convertExploreData(inputs, dateKey = "date", bucketKey = "id_bucket") {
+function convertExploreData(
+  inputs,
+  isDesktop = false,
+  dateKey = "date",
+  bucketKey = "id_bucket"
+) {
   const byDate = groupBy(inputs, dateKey);
   // this metrics thing should only be the high-level metrics?
   // why not just use the metrics definition in optionSet? This should include the key
@@ -41,10 +47,10 @@ function convertExploreData(inputs, dateKey = "date", bucketKey = "id_bucket") {
     let pt = { date: new Date(date) };
     metrics.forEach(m => {
       const info = getMetricInformation(m);
-      let metricPoints;
+      let metricPoints = [];
       let CIs;
       let metricValue;
-      let CIPoints;
+      let CIPoints = [];
       if (info.agg === "sum") {
         metricPoints = points.map(p => p[m]);
         CIs = sumBucketsWithCI(metricPoints, info.agg);
@@ -57,10 +63,13 @@ function convertExploreData(inputs, dateKey = "date", bucketKey = "id_bucket") {
         metricValue = weightedMean(metricPoints);
         CIs = sumBucketsWithCI(CIPoints, info.agg);
       }
+      let isNull = inArmagaddon(pt.date, m, isDesktop);
+      // if (CIPoints.some(d => d === null)) isNull = true;
+      // if (metricPoints.some(d => d === null)) isNull = true;
 
-      pt[m] = metricValue;
-      pt[`${m}_low`] = metricValue - CIs.margin;
-      pt[`${m}_high`] = metricValue + CIs.margin;
+      pt[m] = !isNull ? metricValue : null;
+      pt[`${m}_low`] = !isNull ? metricValue - CIs.margin : null;
+      pt[`${m}_high`] = !isNull ? metricValue + CIs.margin : null;
       if (Number.isNaN(pt[m])) pt[m] = 0;
       if (Number.isNaN(pt[`${m}_low`])) pt[`${m}_low`] = 0;
       if (Number.isNaN(pt[`${m}_high`])) pt[`${m}_high`] = 0;
@@ -84,10 +93,15 @@ export async function fetchExploreData(params, querystring) {
     throw new Error(message);
   } else {
     try {
+      let { usage } = params;
+      const isDesktop =
+        optionSet.usageCriteriaOptions.values.find(
+          v => v.key === usage && v.markerSet === "firefoxDesktopVersions"
+        ) !== undefined;
       payload = await response
         .json()
         .then(json => JSON.parse(json))
-        .then(convertExploreData);
+        .then(d => convertExploreData(d, isDesktop));
     } catch (err) {
       throw new Error("the data appears to be malformed :(");
     }
