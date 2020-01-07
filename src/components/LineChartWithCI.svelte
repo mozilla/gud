@@ -26,9 +26,11 @@
   import Tooltip from "./Tooltip.svelte";
 
   import splitOn from "../utils/splitOn";
+  import {inArmagaddon} from '../utils/data-quality';
 
   // props
   export let title;
+  export let key;
   export let rolloverLabel = "value";
   export let whatKind;
   export let shortDescription;
@@ -229,7 +231,7 @@
       $coords.x = xScale(yPoint.date);
       $coords.y = yScale(yPoint.value);
       mouseXValue = xRollover(yPoint.date);
-      mouseYValue = `  ${yPoint.value}`;
+      mouseYValue = yPoint.value;//`  ${yPoint.value}`;
       mouseYLow = yPoint.lower;
       mouseYHigh = yPoint.upper;
       mouseVersionValue = last(
@@ -332,7 +334,7 @@
   });
 
   let coords = writable({ x: -150, y: -150 });
-
+  
   // handle scale size.
 </script>
 
@@ -490,10 +492,21 @@
 
       <text opacity=".8" font-size="12" text-anchor="start" x={PL.left} y={12}>
         {#if mouseYValue !== undefined}
-          <tspan in:fade={{ duration: 100 }} font-weight="bold" fill="blue">
-            –
+          <tspan in:fade={{ duration: 100 }} font-size=8 fill="blue">
+            ●
           </tspan>
-          <tspan>{`   ${yFormat(mouseYValue)}   `}</tspan>
+
+          <tspan fill={mouseYValue === null ? 'gray' : 'black'}>
+              {#if mouseYValue === null}
+                {#if inArmagaddon(yPoint.date, key)}
+                  Armagaddon (no data)
+                {:else}
+                  no data
+                {/if}
+              {:else}
+                {`   ${yFormat(mouseYValue)}   `}
+              {/if}
+          </tspan>
         {/if}
       </text>
       <text opacity=".6" font-size="10" text-anchor="start" x={PL.left} y={26}>

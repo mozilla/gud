@@ -1,4 +1,5 @@
 import optionSet from "./options.json";
+import { inArmagaddon } from "../utils/data-quality";
 import sumBucketsWithCI from "./CI";
 import { store } from "./store";
 
@@ -41,10 +42,10 @@ function convertExploreData(inputs, dateKey = "date", bucketKey = "id_bucket") {
     let pt = { date: new Date(date) };
     metrics.forEach(m => {
       const info = getMetricInformation(m);
-      let metricPoints;
+      let metricPoints = [];
       let CIs;
       let metricValue;
-      let CIPoints;
+      let CIPoints = [];
       if (info.agg === "sum") {
         metricPoints = points.map(p => p[m]);
         CIs = sumBucketsWithCI(metricPoints, info.agg);
@@ -58,9 +59,13 @@ function convertExploreData(inputs, dateKey = "date", bucketKey = "id_bucket") {
         CIs = sumBucketsWithCI(CIPoints, info.agg);
       }
 
-      pt[m] = metricValue;
-      pt[`${m}_low`] = metricValue - CIs.margin;
-      pt[`${m}_high`] = metricValue + CIs.margin;
+      let isNull = inArmagaddon(pt.date, m);
+      // if (CIPoints.some(d => d === null)) isNull = true;
+      // if (metricPoints.some(d => d === null)) isNull = true;
+
+      pt[m] = !isNull ? metricValue : null;
+      pt[`${m}_low`] = !isNull ? metricValue - CIs.margin : null;
+      pt[`${m}_high`] = !isNull ? metricValue + CIs.margin : null;
       if (Number.isNaN(pt[m])) pt[m] = 0;
       if (Number.isNaN(pt[`${m}_low`])) pt[`${m}_low`] = 0;
       if (Number.isNaN(pt[`${m}_high`])) pt[`${m}_high`] = 0;

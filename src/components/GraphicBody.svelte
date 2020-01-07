@@ -46,7 +46,6 @@
       });
     outdata = metrics.map(m => {
       const metricInfo = getMetricInformation(m);
-
       return {
         metric: m,
         title: metricInfo.label,
@@ -99,6 +98,7 @@
              -->
       {#each outdata as dataset, i (dataset.title + $store.metric + storeToQuery(removeLocalParams($store)))}
         <LineChartWithCI
+          key={dataset.key}
           size={$store.metric === 'all' ? 'small' : 'large'}
           title={dataset.title}
           whatKind={dataset.whatKind}
@@ -106,9 +106,10 @@
           rolloverLabel={dataset.rolloverLabel}
           yType={dataset.format}
           data={dataset.data}
-          splitCriterion={dataset.key.includes('retention') ? d => {
-                return d.date >= TWO_WEEKS_AGO;
-              } : false}
+          splitCriterion={d => {
+              if (dataset.key.includes('retention')) return d.date >= TWO_WEEKS_AGO || d.value === null;
+              return d.value === null;
+              }}
           markers={showProductDetailsValue ? majorReleasesValue : []}
           filterMarkerCallback={(release, graphXMin, graphXMax) => {
             const size = $store.metric === 'all' ? 'small' : 'large';
