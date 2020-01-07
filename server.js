@@ -155,47 +155,48 @@ ${WHERE}
 GROUP BY
 date,
 id_bucket),
-  --
-  day_0_windowed AS (
-  SELECT
-    *,
-    COUNT(*) OVER (PARTITION BY id_bucket ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS c,
-    SUM(dau) OVER (PARTITION BY id_bucket ORDER BY date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS dau_sum_7_day,
-    SUM(dau) OVER (PARTITION BY id_bucket ORDER BY date ROWS BETWEEN 27 PRECEDING AND CURRENT ROW) AS dau_sum_28_day
-  FROM
-    day_0 ),
-  --
-  day_0_replaced AS (
-  SELECT
-    * EXCEPT (usage, c, dau_sum_7_day, dau_sum_28_day)
-      REPLACE (
-    IF
-      (c >= 7
-        AND usage LIKE 'New %',
-        dau_sum_7_day,
-        wau) AS wau,
-    IF
-      (c >= 28
-        AND usage LIKE 'New %',
-        dau_sum_28_day,
-        mau) AS mau)
-  FROM
-    day_0_windowed )
-  --
+--
+day_0_windowed AS (
 SELECT
-  * REPLACE(
-    -- Data is missing for 2019-05-03 to 2019-05-10 due to the Armag-addon incident,
+  *,
+  COUNT(*) OVER (PARTITION BY id_bucket ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS c,
+  SUM(dau) OVER (PARTITION BY id_bucket ORDER BY date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS dau_sum_7_day,
+  SUM(dau) OVER (PARTITION BY id_bucket ORDER BY date ROWS BETWEEN 27 PRECEDING AND CURRENT ROW) AS dau_sum_28_day
+FROM
+  day_0 ),
+--
+day_0_replaced AS (
+SELECT
+  * EXCEPT (c, dau_sum_7_day, dau_sum_28_day)
+    REPLACE (
+  IF
+    (c >= 7
+      AND usage LIKE 'New %',
+      dau_sum_7_day,
+      wau) AS wau,
+  IF
+    (c >= 28
+      AND usage LIKE 'New %',
+      dau_sum_28_day,
+      mau) AS mau)
+FROM
+  day_0_windowed )
+--
+SELECT
+  * EXCEPT (usage)
+    REPLACE(
+    -- Desktop data is missing for 2019-05-03 to 2019-05-10 due to the Armag-addon incident,
     -- so we insert nulls for any days that include this range in their windows.
-    IF(date between '2019-05-03' AND '2019-05-10', NULL, dau) AS dau,
-    IF(date between '2019-05-03' AND '2019-05-17', NULL, wau) AS wau,
-    IF(date between '2019-05-03' AND '2019-06-06', NULL, mau) AS mau,
-    IF(date between '2019-05-03' AND '2019-05-17', NULL, intensity) AS intensity,
-    IF(date between '2019-04-13' AND '2019-05-17', NULL, new_profile_active_in_week_1) AS new_profile_active_in_week_1,
-    IF(date between '2019-04-13' AND '2019-05-17', NULL, new_profiles) AS new_profiles,
-    IF(date between '2019-04-13' AND '2019-05-17', NULL, active_in_weeks_0_and_1) AS active_in_weeks_0_and_1,
-    IF(date between '2019-04-13' AND '2019-05-17', NULL, active_in_week_0) AS active_in_week_0,
-    IF(date between '2019-04-13' AND '2019-05-17', NULL, retention_1_week_new_profile) AS retention_1_week_new_profile,
-    IF(date between '2019-04-13' AND '2019-05-17', NULL, retention_1_week_active_in_week_0) AS retention_1_week_active_in_week_0
+    IF(usage LIKE '%Desktop%' AND date between '2019-05-03' AND '2019-05-10', NULL, dau) AS dau,
+    IF(usage LIKE '%Desktop%' AND date between '2019-05-03' AND '2019-05-17', NULL, wau) AS wau,
+    IF(usage LIKE '%Desktop%' AND date between '2019-05-03' AND '2019-06-06', NULL, mau) AS mau,
+    IF(usage LIKE '%Desktop%' AND date between '2019-05-03' AND '2019-05-17', NULL, intensity) AS intensity,
+    IF(usage LIKE '%Desktop%' AND date between '2019-04-13' AND '2019-05-17', NULL, new_profile_active_in_week_1) AS new_profile_active_in_week_1,
+    IF(usage LIKE '%Desktop%' AND date between '2019-04-13' AND '2019-05-17', NULL, new_profiles) AS new_profiles,
+    IF(usage LIKE '%Desktop%' AND date between '2019-04-13' AND '2019-05-17', NULL, active_in_weeks_0_and_1) AS active_in_weeks_0_and_1,
+    IF(usage LIKE '%Desktop%' AND date between '2019-04-13' AND '2019-05-17', NULL, active_in_week_0) AS active_in_week_0,
+    IF(usage LIKE '%Desktop%' AND date between '2019-04-13' AND '2019-05-17', NULL, retention_1_week_new_profile) AS retention_1_week_new_profile,
+    IF(usage LIKE '%Desktop%' AND date between '2019-04-13' AND '2019-05-17', NULL, retention_1_week_active_in_week_0) AS retention_1_week_active_in_week_0
     )
 FROM
   day_0_replaced
