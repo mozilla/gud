@@ -31,6 +31,7 @@
   // props
   export let title;
   export let key;
+  export let usage; // usage criteria
   export let rolloverLabel = "value";
   export let whatKind;
   export let shortDescription;
@@ -40,6 +41,7 @@
   export let xMin;
   export let xMax;
   export let yMin;
+  export let isDesktop = false;
   export let activeUsersYMax;
   export let markers = [];
   export let splitCriterion = undefined;
@@ -498,7 +500,7 @@
 
           <tspan fill={mouseYValue === null ? 'gray' : 'black'}>
               {#if mouseYValue === null}
-                {#if inArmagaddon(yPoint.date, key)}
+                {#if inArmagaddon(yPoint.date, key, isDesktop)}
                   Armagaddon (no data)
                 {:else}
                   no data

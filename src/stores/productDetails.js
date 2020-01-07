@@ -21,11 +21,11 @@ const productDetails = readable(undefined, async set => {
 //     return $productDetails
 // })
 
-export const showProductDetails = derived(store, $store => {
+export const showFirefoxDesktopDetails = derived(store, $store => {
   const thisCriterion = optionSet.usageCriteriaOptions.values.find(
     opt => opt.key === $store.usage
   );
-  return thisCriterion && thisCriterion.markerSet === "productDetails";
+  return thisCriterion && thisCriterion.markerSet === "firefoxDesktopVersions";
 });
 
 export const majorReleases = derived(productDetails, $pd => {

@@ -1,6 +1,7 @@
-export function inArmagaddon(dt, m) {
+export function inArmagaddon(dt, m, isDesktop = false) {
+  if (!isDesktop) return false;
   if (m === "dau") {
-    return dt >= new Date("2019-05-03") && dt <= new Date("2019-05-10");
+    return dt >= new Date("2019-05-03") && dt <= new Date("2019-05-11");
   }
   if (m === "wau") {
     return dt >= new Date("2019-05-03") && dt <= new Date("2019-05-17");

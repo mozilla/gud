@@ -28,7 +28,12 @@ function fetchMetricPoints(p, numeratorKey, denominatorKey) {
   return [p[numeratorKey], p[denominatorKey]];
 }
 
-function convertExploreData(inputs, dateKey = "date", bucketKey = "id_bucket") {
+function convertExploreData(
+  inputs,
+  isDesktop = false,
+  dateKey = "date",
+  bucketKey = "id_bucket"
+) {
   const byDate = groupBy(inputs, dateKey);
   // this metrics thing should only be the high-level metrics?
   // why not just use the metrics definition in optionSet? This should include the key
@@ -58,8 +63,7 @@ function convertExploreData(inputs, dateKey = "date", bucketKey = "id_bucket") {
         metricValue = weightedMean(metricPoints);
         CIs = sumBucketsWithCI(CIPoints, info.agg);
       }
-
-      let isNull = inArmagaddon(pt.date, m);
+      let isNull = inArmagaddon(pt.date, m, isDesktop);
       // if (CIPoints.some(d => d === null)) isNull = true;
       // if (metricPoints.some(d => d === null)) isNull = true;
 
@@ -89,10 +93,15 @@ export async function fetchExploreData(params, querystring) {
     throw new Error(message);
   } else {
     try {
+      let { usage } = params;
+      const isDesktop =
+        optionSet.usageCriteriaOptions.values.find(
+          v => v.key === usage && v.markerSet === "firefoxDesktopVersions"
+        ) !== undefined;
       payload = await response
         .json()
         .then(json => JSON.parse(json))
-        .then(convertExploreData);
+        .then(d => convertExploreData(d, isDesktop));
     } catch (err) {
       throw new Error("the data appears to be malformed :(");
     }

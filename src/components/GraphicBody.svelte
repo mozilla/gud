@@ -5,7 +5,7 @@
   import { storeToQuery, removeLocalParams } from "../stores/cache";
   import optionSet from "../stores/options.json";
   import { store, modeIsImplemented } from "../stores/store";
-  import { majorReleases, showProductDetails } from "../stores/productDetails";
+  import { majorReleases, showFirefoxDesktopDetails } from "../stores/productDetails";
 
   import AnnotationsAndRemarks from "./AnnotationsAndRemarks.svelte";
 
@@ -75,7 +75,7 @@
   $: outdata = carveData(data, $store.metric);
 
   let showProductDetailsValue;
-  showProductDetails.subscribe(v => {
+  showFirefoxDesktopDetails.subscribe(v => {
     showProductDetailsValue = v;
   });
 
@@ -110,6 +110,7 @@
               if (dataset.key.includes('retention')) return d.date >= TWO_WEEKS_AGO || d.value === null;
               return d.value === null;
               }}
+          isDesktop={showProductDetailsValue}
           markers={showProductDetailsValue ? majorReleasesValue : []}
           filterMarkerCallback={(release, graphXMin, graphXMax) => {
             const size = $store.metric === 'all' ? 'small' : 'large';
