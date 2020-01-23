@@ -116,7 +116,20 @@
               description={selector.description || selector.label}
               showDescriptionOnSelect={selector.showDescriptionOnSelect}
               selectType={selector.type || 'single'}
-              options={$store.usage && selector.key === 'metric' ? filterMetricsOnUsageCriterion(selector.values) : selector.values}
+              options={(() => {
+                if ($store.usage && selector.key === 'metric') {
+                  return filterMetricsOnUsageCriterion(selector.values);
+                } else if ($store.usage && selector.key === 'channel') {
+                  const overriddenChannels = optionSet.usageCriteriaOptions.values.find(v => v.key === $store.usage).channels;
+                  if (overriddenChannels) {
+                    return overriddenChannels;
+                  } else {
+                    return selector.values;
+                  }
+                } else {
+                  return selector.values;
+                }
+              })()}
               storeKey={selector.key}
               onSelection={option => {
                 if (selector.key === 'usage') {
