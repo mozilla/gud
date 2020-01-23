@@ -128,15 +128,27 @@
         "label": "Any Fennec Android Activity",
         "key": "Any Fennec Android Activity",
         "shortDescription": "The profile has sent a telemetry ping from Fennec Android on the day in question",
-        "disabledDimensions": ["os", "channel"],
-        "markerSet": "productDetails"
+        "disabledDimensions": ["os"],
+        "markerSet": "productDetails",
+        "channels": [
+          { "label": "Release", "key": "release" },
+          { "label": "Beta", "key": "beta" },
+          { "label": "Aurora", "key": "aurora" },
+          { "label": "Nightly", "key": "nightly" },
+          { "label": "Other", "key": "Other" }
+        ]
       },
       {
         "label": "Any Fennec iOS Activity",
         "key": "Any Fennec iOS Activity",
         "shortDescription": "The profile has sent a telemetry ping from Fennec iOS on the day in question",
-        "disabledDimensions": ["os", "channel"],
-        "markerSet": "productDetails"
+        "disabledDimensions": ["os"],
+        "markerSet": "productDetails",
+        "channels": [
+          { "label": "Release", "key": "release" },
+          { "label": "Beta", "key": "beta" },
+          { "label": "Other", "key": "Other" }
+        ]
       },
       {
         "itemType": "divider"
@@ -149,7 +161,13 @@
         "label": "Any Focus Android Activity",
         "key": "Any Focus Android Activity",
         "shortDescription": "The profile has sent a telemetry ping from Focus Android on the day in question",
-        "disabledDimensions": ["os", "channel"]
+        "disabledDimensions": ["os"],
+        "channels": [
+          { "label": "Release", "key": "release" },
+          { "label": "Beta", "key": "beta" },
+          { "label": "Nightly", "key": "nightly" },
+          { "label": "Other", "key": "Other" }
+        ]
       },
       {
         "label": "Any Focus iOS Activity",
