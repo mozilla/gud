@@ -119,42 +119,112 @@ const exploreQuery = params => {
     : "";
 
   return query(`
-WITH day_0 AS (
-SELECT
-date,
-ANY_VALUE(usage) AS usage,
-id_bucket,
-SUM(dau) AS dau,
-SUM(wau) AS wau,
-SUM(mau) AS mau,
-SUM(active_days_in_week) AS active_days_in_week,
-SAFE_DIVIDE(SUM(active_days_in_week),
-    SUM(wau)) AS intensity
-FROM
-  \`moz-fx-data-shared-prod.telemetry.smoot_usage_day_0\`
-${WHERE}
-GROUP BY
-date,
-id_bucket),
+WITH day_0_base AS (
+  SELECT
+    *
+  FROM
+    \`moz-fx-data-shared-prod.telemetry_derived.smoot_usage_desktop_compressed_v2\`
+  UNION ALL
+  SELECT
+    *
+  FROM
+    \`moz-fx-data-shared-prod.telemetry_derived.smoot_usage_nondesktop_compressed_v2\`
+  UNION ALL
+  SELECT
+    *
+  FROM
+    \`moz-fx-data-shared-prod.telemetry_derived.smoot_usage_fxa_compressed_v2\`
+),
+--
+day_0_all AS (
+  SELECT
+    submission_date AS \`date\`,
+    usage,
+    metrics.day_0.*,
+    * EXCEPT (submission_date, usage, metrics)
+  FROM
+    day_0_base
+  UNION ALL
+  SELECT
+    DATE_SUB(submission_date, INTERVAL 6 DAY) AS \`date\`,
+    usage,
+    new_profiles AS dau,
+    NULL AS wau,
+    NULL AS mau,
+    NULL AS active_days_in_week,
+    * EXCEPT (submission_date, usage, new_profiles)
+  FROM
+    \`moz-fx-data-shared-prod.telemetry_derived.smoot_usage_new_profiles_compressed_v2\`
+),
+--
+day_0 AS (
+  SELECT
+    date,
+    ANY_VALUE(usage) AS usage,
+    id_bucket,
+    SUM(dau) AS dau,
+    SUM(wau) AS wau,
+    SUM(mau) AS mau,
+    SUM(active_days_in_week) AS active_days_in_week,
+    SAFE_DIVIDE(SUM(active_days_in_week), SUM(wau)) AS intensity
+  FROM
+    day_0_all
+  ${WHERE}
+  GROUP BY
+    date,
+    id_bucket
+),
+--
+day_13_base AS (
+  SELECT
+    *
+  FROM
+    \`moz-fx-data-shared-prod.telemetry_derived.smoot_usage_desktop_compressed_v2\`
+  UNION ALL
+  SELECT
+    *
+  FROM
+    \`moz-fx-data-shared-prod.telemetry_derived.smoot_usage_nondesktop_compressed_v2\`
+  UNION ALL
+  SELECT
+    *
+  FROM
+    \`moz-fx-data-shared-prod.telemetry_derived.smoot_usage_fxa_compressed_v2\`
+),
+--
+day_13_all AS (
+  SELECT
+    DATE_SUB(submission_date, INTERVAL 13 DAY) AS \`date\`,
+    usage,
+    metrics.day_13.*,
+    * EXCEPT (submission_date, usage, metrics)
+  FROM
+    day_13_base
+),
 --
 day_13 AS (
-SELECT
-date,
-id_bucket,
-SUM(new_profiles) AS new_profiles,
-SUM(new_profile_active_in_week_1) AS new_profile_active_in_week_1,
-SUM(active_in_weeks_0_and_1) AS active_in_weeks_0_and_1,
-SUM(active_in_week_0) AS active_in_week_0,
-SAFE_DIVIDE(SUM(new_profile_active_in_week_1),
-    SUM(new_profiles)) AS retention_1_week_new_profile,
-SAFE_DIVIDE(SUM(active_in_weeks_0_and_1),
-    SUM(active_in_week_0)) AS retention_1_week_active_in_week_0
-FROM
-  \`moz-fx-data-shared-prod.telemetry.smoot_usage_day_13\`
-${WHERE}
-GROUP BY
-date,
-id_bucket),
+  SELECT
+    date,
+    id_bucket,
+    SUM(new_profiles) AS new_profiles,
+    SUM(new_profile_active_in_week_1) AS new_profile_active_in_week_1,
+    SUM(active_in_weeks_0_and_1) AS active_in_weeks_0_and_1,
+    SUM(active_in_week_0) AS active_in_week_0,
+    SAFE_DIVIDE(
+      SUM(new_profile_active_in_week_1),
+      SUM(new_profiles)
+    ) AS retention_1_week_new_profile,
+    SAFE_DIVIDE(
+      SUM(active_in_weeks_0_and_1),
+      SUM(active_in_week_0)
+    ) AS retention_1_week_active_in_week_0
+  FROM
+    day_13_all
+  ${WHERE}
+  GROUP BY
+    date,
+    id_bucket
+),
 --
 day_0_windowed AS (
 SELECT
@@ -166,25 +236,17 @@ FROM
   day_0 ),
 --
 day_0_replaced AS (
-SELECT
-  * EXCEPT (c, dau_sum_7_day, dau_sum_28_day)
-    REPLACE (
-  IF
-    (c >= 7
-      AND usage LIKE 'New %',
-      dau_sum_7_day,
-      wau) AS wau,
-  IF
-    (c >= 28
-      AND usage LIKE 'New %',
-      dau_sum_28_day,
-      mau) AS mau)
-FROM
-  day_0_windowed )
+  SELECT
+    * EXCEPT (c, dau_sum_7_day, dau_sum_28_day) REPLACE(
+      IF(c >= 7 AND usage LIKE 'New %', dau_sum_7_day, wau) AS wau,
+      IF(c >= 28 AND usage LIKE 'New %', dau_sum_28_day, mau) AS mau
+    )
+  FROM
+    day_0_windowed
+)
 --
 SELECT
-  * EXCEPT (usage)
-    REPLACE(
+  * EXCEPT (usage) REPLACE(
     -- Desktop data is missing for 2019-05-03 to 2019-05-10 due to the Armag-addon incident,
     -- so we insert nulls for any days that include this range in their windows.
     IF(usage LIKE '%Desktop%' AND date between '2019-05-03' AND '2019-05-10', NULL, dau) AS dau,
@@ -202,7 +264,8 @@ FROM
   day_0_replaced
 FULL JOIN
   day_13
-  USING(date, id_bucket)
+USING
+  (date, id_bucket)
 ORDER BY
   date
 `);
