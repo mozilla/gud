@@ -168,7 +168,7 @@
     text-align: left;
     text-transform: uppercase;
     /* padding-bottom: 5px; */
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     display: grid;
     margin-right: 0;

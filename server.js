@@ -62,10 +62,9 @@ async function query(q) {
   const [job] = await bigqueryClient.createQueryJob(options);
   console.log(`Job ${job.id} started.`);
   console.log(q);
+
   // Wait for the query to finish
   const [rows] = await job.getQueryResults();
-  //console.log('Rows:');
-  //rows.forEach(row => console.log(row));
   return rows;
 }
 
@@ -105,6 +104,9 @@ const exploreQuery = params => {
         // it must be array already?
         // requires a likeTemplate: `${paramKey} LIKE ''`
         return `REGEXP_CONTAINS(${key}, '^(${values.join("|")})')`;
+      } else if (opt.whereStyle === "boolean") {
+        const key = opt.columnName || paramKey;
+        return `${key} = ${values[0]}`;
       }
 
       if (opt.type === "single") return `${paramKey} = '${params[paramKey]}'`;
