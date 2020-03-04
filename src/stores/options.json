@@ -89,7 +89,20 @@
         "label": "Any Fenix Activity",
         "key": "Any Fenix Activity",
         "disabledDimensions": ["os", "channel", "attributed"],
-        "shortDescription": "The profile has sent a telemetry ping from Fenix on the day in question"
+        "shortDescription": "The profile has sent a baseline or metrics ping from Fenix on the day in question"
+      },
+      {
+        "label": "Any Fenix Baseline Activity",
+        "key": "Any Fenix Baseline Activity",
+        "disabledDimensions": ["os", "attributed"],
+        "shortDescription": "The profile has sent a baseline ping from Fenix on the day in question",
+        "channels": [
+          { "label": "Release (org_mozilla_firefox_beta)", "key": "release" },
+          { "label": "Beta (org_mozilla_firefox_beta)", "key": "beta" },
+          { "label": "Preview (org_mozilla_fenix)", "key": "nightly" },
+          { "label": "Fennec Nightly (org_mozilla_fennec_aurora)", "key": "aurora" },
+          { "label": "Preview Nightly (org_mozilla_fenix_nightly)", "key": "preview nightly" }
+        ]
       },
       {
         "itemType": "divider"

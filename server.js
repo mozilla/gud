@@ -135,6 +135,11 @@ WITH day_0_base AS (
   SELECT
     *
   FROM
+    \`moz-fx-data-shared-prod.analysis.klukas_smoot_usage_fenix\`
+  UNION ALL
+  SELECT
+    *
+  FROM
     \`moz-fx-data-shared-prod.telemetry_derived.smoot_usage_fxa_compressed_v2\`
 ),
 --
@@ -187,6 +192,11 @@ day_13_base AS (
     *
   FROM
     \`moz-fx-data-shared-prod.telemetry_derived.smoot_usage_nondesktop_compressed_v2\`
+  UNION ALL
+  SELECT
+    *
+  FROM
+    \`moz-fx-data-shared-prod.analysis.klukas_smoot_usage_fenix\`
   UNION ALL
   SELECT
     *
