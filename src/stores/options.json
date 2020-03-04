@@ -97,7 +97,7 @@
         "disabledDimensions": ["os", "attributed"],
         "shortDescription": "The profile has sent a baseline ping from Fenix on the day in question",
         "channels": [
-          { "label": "Release (org_mozilla_firefox_beta)", "key": "release" },
+          { "label": "Release (org_mozilla_firefox)", "key": "release" },
           { "label": "Beta (org_mozilla_firefox_beta)", "key": "beta" },
           { "label": "Preview (org_mozilla_fenix)", "key": "nightly" },
           { "label": "Fennec Nightly (org_mozilla_fennec_aurora)", "key": "aurora" },
