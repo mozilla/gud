@@ -43,8 +43,12 @@ function convertExploreData(
   const metrics = optionSet.metricOptions.values
     .filter(opt => opt.key !== undefined && opt.format !== undefined)
     .map(opt => opt.key);
+
   const output = Object.entries(byDate).map(([date, points]) => {
-    let pt = { date: new Date(date) };
+    const [y, m, d] = date.split("-");
+    const dt = new Date(Number(y), Number(m) - 1, Number(d));
+
+    let pt = { date: dt };
     metrics.forEach(m => {
       const info = getMetricInformation(m);
       let metricPoints = [];
