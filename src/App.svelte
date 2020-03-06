@@ -84,6 +84,7 @@
   $: if (visible) {
     updateQueryString(storeToQuery($store));
   }
+
 </script>
 
 <!-- PLUGINS ETC. GO RIGHT HERE -->
@@ -133,6 +134,9 @@
               storeKey={selector.key}
               onSelection={option => {
                 if (selector.key === 'usage') {
+                  if (option.disabledMetrics && option.disabledMetrics.includes($store.metric)) {
+                    store.setField('metric', 'all');
+                  }
                   if (option.disabledDimensions) {
                     store.setField('disabledDimensions', [
                       ...option.disabledDimensions
