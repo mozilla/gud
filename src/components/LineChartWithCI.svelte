@@ -323,28 +323,34 @@
         }
         //
       } else {
-        $coords.x = -150;
-        $coords.y = -150;
-        mouseXValue = undefined;
-        mouseYValue = undefined;
+        yPoint = getLatestPoint(data);
+        mouseXValue = xRollover(yPoint.date);
+        mouseYValue = yPoint.value;
+        mouseYLow = yPoint.lower;
+        mouseYHigh = yPoint.upper;
+        $coords.x = xScale(yPoint.date);
+        $coords.y = yScale(yPoint.value);
+        mouseVersionValue = undefined;
         setPoint(undefined);
       }
     });
     svg.on("mouseleave", () => {
       isDragging = false;
-      $coords.x = -150;
-      $coords.y = -150;
-      mouseXValue = undefined;
-      mouseYValue = undefined;
-      mouseYLow = undefined;
-      mouseYHigh = undefined;
+      yPoint = getLatestPoint(data);
+      mouseXValue = xRollover(yPoint.date);
+      mouseYValue = yPoint.value;
+      mouseYLow = yPoint.lower;
+      mouseYHigh = yPoint.upper;
+      $coords.x = xScale(yPoint.date);
+      $coords.y = yScale(yPoint.value);
+      mouseVersionValue = undefined;
       // clear the drag.
       isDragging = false;
       mouseDownStartValue = undefined;
       mouseDownEndValue = undefined;
       setPoint(undefined);
     });
-    yPoint = yPoint = getLatestPoint(data); //data.slice(-1)[0];
+    yPoint = getLatestPoint(data);
     mouseXValue = xRollover(yPoint.date);
     mouseYValue = yPoint.value;
     mouseYLow = yPoint.lower;
