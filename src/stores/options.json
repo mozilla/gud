@@ -321,17 +321,17 @@
       {
         "label": "English",
         "key": "en",
-        "shortDescription": "en-US, en-GB, en-CA, en-ZA"
+        "shortDescription": "all en locales"
       },
       { "label": "German", "key": "de", "shortDescription": "de" },
       {
         "label": "Spanish",
         "key": "es",
-        "shortDescription": "es-ES, es-MX, es-AR, es-CL"
+        "shortDescription": "all es locales"
       },
       { "label": "French", "key": "fr", "shortDescription": "fr" },
       { "label": "Russian", "key": "ru", "shortDescription": "ru" },
-      { "label": "Chinese", "key": "zh", "shortDescription": "zh-CN, zh-TW" },
+      { "label": "Chinese", "key": "zh", "shortDescription": "all zh locales" },
       {
         "label": "Portuguese",
         "key": "pt",
