@@ -1,7 +1,7 @@
 import optionSet from "./options.json";
 import { inArmagaddon } from "../utils/data-quality";
 import sumBucketsWithCI from "./CI";
-import { store } from "./store";
+import { toDate } from "../utils/date";
 
 const getMetricInformation = m => {
   return optionSet.metricOptions.values.find(v => v.key === m);
@@ -45,8 +45,7 @@ function convertExploreData(
     .map(opt => opt.key);
 
   const output = Object.entries(byDate).map(([date, points]) => {
-    const [y, m, d] = date.split("-");
-    const dt = new Date(Number(y), Number(m) - 1, Number(d));
+    const dt = toDate(date);
 
     let pt = { date: dt };
     metrics.forEach(m => {
