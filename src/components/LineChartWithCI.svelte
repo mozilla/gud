@@ -46,6 +46,8 @@
   export let markers = [];
   export let splitCriterion = undefined;
 
+  let coords = writable({ x: -150, y: -150 });
+
   // markers are thin, vertical lines that
   // denote special events & annotations on a graph.
   export let filterMarkerCallback = () => true;
@@ -227,18 +229,21 @@
   // note: this functionality happens to all graphs because $globalX is
   // a store shared in all component namespaces.
 
-  function updateRollover(gbx) {
-    if (gbx) {
-      yPoint = data.find(d => d.date.getTime() === gbx.getTime()); //last(data.filter(d =>  d.date <= $globalX));
-      $coords.x = xScale(yPoint.date);
-      $coords.y = yScale(yPoint.value);
-      mouseXValue = xRollover(yPoint.date);
-      mouseYValue = yPoint.value;//`  ${yPoint.value}`;
-      mouseYLow = yPoint.lower;
-      mouseYHigh = yPoint.upper;
-      mouseVersionValue = last(
+  function getLatestPoint(d) {
+    let finalData = [];
+    if (!splitCriterion) {
+      finalData = [d];
+    } else {
+      finalData = splitOn(d, splitCriterion);
+    }
+    finalData = finalData.flat();
+    return finalData.slice(-1)[0]
+  }
+
+  function getVersion(pt) {
+    let mouseVersionValue = last(
         markers.filter(release => {
-          return release.date <= yPoint.date;
+          return release.date <= pt.date;
         })
       );
       if (mouseVersionValue) {
@@ -247,19 +252,33 @@
         });
         if (mouseVersionValue.end)
           mouseVersionValue.end = mouseVersionValue.end.date;
-        mouseVersionValue.start = xScale(mouseVersionValue.date);
-        mouseVersionValue.end = mouseVersionValue.end
-          ? xScale(mouseVersionValue.end)
-          : PL.right;
+          mouseVersionValue.start = xScale(mouseVersionValue.date);
+          mouseVersionValue.end = mouseVersionValue.end
+            ? xScale(mouseVersionValue.end)
+            : PL.right;
       }
+      return mouseVersionValue;
+  }
+
+  function updateRollover(gbx) {
+    if (gbx) {
+      yPoint = data.find(d => d.date.getTime() === gbx.getTime());
+      $coords.x = xScale(yPoint.date);
+      $coords.y = yScale(yPoint.value);
+      mouseXValue = xRollover(yPoint.date);
+      mouseYValue = yPoint.value;
+      mouseYLow = yPoint.lower;
+      mouseYHigh = yPoint.upper;
+      mouseVersionValue = getVersion(yPoint);
     } else {
-      $coords.x = -150;
-      $coords.y = -150;
-      mouseXValue = undefined;
-      mouseYValue = undefined;
-      mouseYLow = undefined;
-      mouseYHigh = undefined;
-      mouseVersionValue = undefined;
+      yPoint = getLatestPoint(data);
+      mouseXValue = xRollover(yPoint.date);
+      mouseYValue = yPoint.value;
+      mouseYLow = yPoint.lower;
+      mouseYHigh = yPoint.upper;
+      $coords.x = xScale(yPoint.date);
+      $coords.y = yScale(yPoint.value);
+      mouseVersionValue  = undefined;
     }
   }
   $: updateRollover($globalX);
@@ -304,27 +323,41 @@
         }
         //
       } else {
-        $coords.x = -150;
-        $coords.y = -150;
-        mouseXValue = undefined;
-        mouseYValue = undefined;
+        yPoint = getLatestPoint(data);
+        mouseXValue = xRollover(yPoint.date);
+        mouseYValue = yPoint.value;
+        mouseYLow = yPoint.lower;
+        mouseYHigh = yPoint.upper;
+        $coords.x = xScale(yPoint.date);
+        $coords.y = yScale(yPoint.value);
+        mouseVersionValue = undefined;
         setPoint(undefined);
       }
     });
     svg.on("mouseleave", () => {
       isDragging = false;
-      $coords.x = -150;
-      $coords.y = -150;
-      mouseXValue = undefined;
-      mouseYValue = undefined;
-      mouseYLow = undefined;
-      mouseYHigh = undefined;
+      yPoint = getLatestPoint(data);
+      mouseXValue = xRollover(yPoint.date);
+      mouseYValue = yPoint.value;
+      mouseYLow = yPoint.lower;
+      mouseYHigh = yPoint.upper;
+      $coords.x = xScale(yPoint.date);
+      $coords.y = yScale(yPoint.value);
+      mouseVersionValue = undefined;
       // clear the drag.
       isDragging = false;
       mouseDownStartValue = undefined;
       mouseDownEndValue = undefined;
       setPoint(undefined);
     });
+    yPoint = getLatestPoint(data);
+    mouseXValue = xRollover(yPoint.date);
+    mouseYValue = yPoint.value;
+    mouseYLow = yPoint.lower;
+    mouseYHigh = yPoint.upper;
+    $coords.x = xScale(yPoint.date);
+    $coords.y = yScale(yPoint.value);
+    mouseVersionValue = undefined;
   });
 
   onDestroy(() => {
@@ -334,8 +367,6 @@
   afterUpdate(() => {
     if (updateTooltipPosition) updateTooltipPosition();
   });
-
-  let coords = writable({ x: -150, y: -150 });
   
   // handle scale size.
 </script>
