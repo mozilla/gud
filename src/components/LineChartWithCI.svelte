@@ -229,7 +229,7 @@
   // note: this functionality happens to all graphs because $globalX is
   // a store shared in all component namespaces.
 
-  function getLatestPoint(d) {
+  function getLatestPoint(d, xs = xScale) {
     let finalData = [];
     if (!splitCriterion) {
       finalData = [d];
@@ -237,7 +237,15 @@
       finalData = splitOn(d, splitCriterion);
     }
     finalData = finalData.flat();
-    return finalData.slice(-1)[0]
+    let latest = finalData.slice(-1)[0];
+
+    if (latest.date > xs.domain()[1]) {
+      latest = finalData.filter(di => di.date >= xs.domain()[1])[0];
+    } else if (latest.date < xs.domain()[0]) {
+      latest = finalData.filter(di => di.date <= xs.domain()[1])[0];
+    }
+
+    return latest;
   }
 
   function getVersion(pt) {
