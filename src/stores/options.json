@@ -38,7 +38,7 @@
       {
         "label": "Any Firefox Activity",
         "key": "Any Firefox Desktop Activity",
-        "shortDescription": "The profile has sent a telemetry ping from Firefox Desktop on the day in question",
+        "shortDescription": "The profile has sent a telemetry 'main' ping from Firefox Desktop on the day in question",
         "markerSet": "firefoxDesktopVersions"
       },
       {
@@ -76,7 +76,7 @@
         "label": "Any Mobile Activity",
         "key": "Any Firefox Non-desktop Activity",
         "disabledDimensions": ["os", "attributed"],
-        "shortDescription": "The profile has sent a telemetry ping from any of apps considered for the 2019 Mobile Reach KPI (Fenix, Fennec Android, Fennec iOS, Firefox Lite, FirefoxConnect, Focus Android, and Focus iOS) on the day in question."
+        "shortDescription": "The profile has sent a telemetry ping from any of apps considered for the 2019 Mobile Reach KPI (Fenix, Fennec Android, Fennec iOS, Firefox Lite (excluding CN), FirefoxConnect, Focus Android, Focus iOS, and Lockwise) on the day in question."
       },
       {
         "itemType": "divider"
@@ -89,7 +89,7 @@
         "label": "Any Fenix Activity",
         "key": "Any Fenix Activity",
         "disabledDimensions": ["os", "channel", "attributed"],
-        "shortDescription": "The profile has sent a telemetry ping from Fenix on the day in question"
+        "shortDescription": "The profile has sent a Glean 'baseline' or 'metrics' ping from Fenix on the day in question"
       },
       {
         "itemType": "divider"
@@ -101,7 +101,7 @@
       {
         "label": "Any Firefox Account Activity",
         "key": "Any Firefox Account Activity",
-        "shortDescription": "The profile has sent a telemetry ping from Firefox Account on the day in question",
+        "shortDescription": "The profile has interacted with a Firefox Account server on the day in question",
         "disabledDimensions": ["os", "channel", "attributed"]
       },
       {
@@ -114,7 +114,7 @@
       {
         "label": "Any Lockwise Android Activity",
         "key": "Any Lockwise Android Activity",
-        "shortDescription": "The profile has sent a telemetry ping from Lockwise Android on the day in question",
+        "shortDescription": "The profile has sent a telemetry 'core' ping from Lockwise Android on the day in question",
         "disabledDimensions": ["os", "channel", "attributed"]
       },
       {
@@ -127,7 +127,7 @@
       {
         "label": "Any Fennec Android Activity",
         "key": "Any Fennec Android Activity",
-        "shortDescription": "The profile has sent a telemetry ping from Fennec Android on the day in question",
+        "shortDescription": "The profile has sent a telemetry 'core' ping from Fennec Android on the day in question",
         "disabledDimensions": ["os", "attributed"],
         "markerSet": "productDetails",
         "channels": [
@@ -141,7 +141,7 @@
       {
         "label": "Any Fennec iOS Activity",
         "key": "Any Fennec iOS Activity",
-        "shortDescription": "The profile has sent a telemetry ping from Fennec iOS on the day in question",
+        "shortDescription": "The profile has sent a telemetry 'core' ping from Fennec iOS on the day in question",
         "disabledDimensions": ["os", "attributed"],
         "markerSet": "productDetails",
         "channels": [
@@ -160,7 +160,7 @@
       {
         "label": "Any Focus Android Activity",
         "key": "Any Focus Android Activity",
-        "shortDescription": "The profile has sent a telemetry ping from Focus Android on the day in question",
+        "shortDescription": "The profile has sent a telemetry 'core' ping from Focus Android on the day in question",
         "disabledDimensions": ["os", "attributed"],
         "channels": [
           { "label": "Release", "key": "release" },
@@ -172,7 +172,7 @@
       {
         "label": "Any Focus iOS Activity",
         "key": "Any Focus iOS Activity",
-        "shortDescription": "The profile has sent a telemetry ping from Focus iOS on the day in question",
+        "shortDescription": "The profile has sent a telemetry 'core' ping from Focus iOS on the day in question",
         "disabledDimensions": ["os", "channel", "attributed"]
       },
       {
@@ -181,19 +181,19 @@
       {
         "label": "Any Firefox Lite Activity",
         "key": "Any Firefox Lite Activity",
-        "shortDescription": "The profile has sent a telemetry ping from Firefox Lite on the day in question",
+        "shortDescription": "The profile has sent a telemetry 'core' ping from Firefox Lite on the day in question",
         "disabledDimensions": ["os", "channel", "attributed"]
       },
       {
         "label": "Any Firefox for FireTV Activity",
         "key": "Any FirefoxForFireTV Activity",
-        "shortDescription": "The profile has sent a telemetry ping from Firefox for FireTV on the day in question",
+        "shortDescription": "The profile has sent a telemetry 'core' ping from Firefox for FireTV on the day in question",
         "disabledDimensions": ["os", "channel"]
       },
       {
         "label": "Any FirefoxConnect Activity",
         "key": "Any FirefoxConnect Activity",
-        "shortDescription": "The profile has sent a telemetry ping from FirefoxConnect on the day in question",
+        "shortDescription": "The profile has sent a telemetry 'core' ping from FirefoxConnect on the day in question",
         "disabledDimensions": ["os", "channel", "attributed"]
       }
     ]
