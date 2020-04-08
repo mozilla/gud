@@ -1,21 +1,40 @@
 :root {
-    --ux-gray-100: var(--cool-gray-100);
-    --ux-gray-150: var(--cool-gray-150);
-    --ux-gray-200: var(--cool-gray-200);
-    --ux-gray-250: var(--cool-gray-250);
-    --ux-gray-300: var(--cool-gray-300);
-    --ux-gray-350: var(--cool-gray-350);
-    --ux-gray-400: var(--cool-gray-400);
-    --ux-gray-450: var(--cool-gray-450);
-    --ux-gray-500: var(--cool-gray-500);
-    --ux-gray-550: var(--cool-gray-550);
-    --ux-gray-600: var(--cool-gray-600);
-    --ux-gray-650: var(--cool-gray-650);
-    --ux-gray-700: var(--cool-gray-700);
-    --ux-gray-750: var(--cool-gray-750);
-    --ux-gray-800: var(--cool-gray-800);
-    --ux-gray-850: var(--cool-gray-850);
-    --ux-gray-900: var(--cool-gray-900);
+
+    --neutral-gray-100: hsl(0, 0%, 95%);
+    --neutral-gray-100: hsl(0, 0%, 90%);
+    --neutral-gray-200: hsl(0, 0%, 85%);
+    --neutral-gray-250: hsl(0, 0%, 80%);
+    --neutral-gray-300: hsl(0, 0%, 75%);
+    --neutral-gray-350: hsl(0, 0%, 59%);
+    --neutral-gray-400: hsl(0, 0%, 52%);
+    --neutral-gray-450: hsl(0, 0%, 48%);
+    --neutral-gray-500: hsl(0, 0%, 43%);
+    --neutral-gray-550: hsl(0, 0%, 39%);
+    --neutral-gray-600: hsl(0, 0%, 35%);
+    --neutral-gray-650: hsl(0, 0%, 31%);
+    --neutral-gray-700: hsl(0, 0%, 27%);
+    --neutral-gray-770: hsl(0, 0%, 21%);
+    --neutral-gray-800: hsl(0, 0%, 15%);
+    --neutral-gray-800: hsl(0, 0%, 12%);
+    --neutral-gray-900: hsl(0, 0%, 10%);
+
+    --ux-gray-100: var(--neutral-gray-100);
+    --ux-gray-150: var(--neutral-gray-150);
+    --ux-gray-200: var(--neutral-gray-200);
+    --ux-gray-250: var(--neutral-gray-250);
+    --ux-gray-300: var(--neutral-gray-300);
+    --ux-gray-350: var(--neutral-gray-350);
+    --ux-gray-400: var(--neutral-gray-400);
+    --ux-gray-450: var(--neutral-gray-450);
+    --ux-gray-500: var(--neutral-gray-500);
+    --ux-gray-550: var(--neutral-gray-550);
+    --ux-gray-600: var(--neutral-gray-600);
+    --ux-gray-650: var(--neutral-gray-650);
+    --ux-gray-700: var(--neutral-gray-700);
+    --ux-gray-750: var(--neutral-gray-750);
+    --ux-gray-800: var(--neutral-gray-800);
+    --ux-gray-850: var(--neutral-gray-850);
+    --ux-gray-900: var(--neutral-gray-900);
 }
 
 body {

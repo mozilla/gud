@@ -14,7 +14,7 @@ h1 {
   justify-content: start;
   font-size: 36px;
   font-weight: bold;
-  color: var(--ux-gray-800);
+  color: var(--ux-gray-700);
   margin:0;
   padding: var(--space-2x);
   align-items: center;
