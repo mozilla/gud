@@ -1,10 +1,11 @@
+/* eslint-disable */
 import { readable, derived } from "svelte/store";
 
 import optionSet from "./options.json";
 import { store } from "./store";
 
-const productDetails = readable(undefined, async set => {
-  //if (!hasLoaded) {
+const productDetails = readable(undefined, async (set) => {
+  // if (!hasLoaded) {
   const request = await fetch(
     "https://product-details.mozilla.org/1.0/all.json"
   );
@@ -21,14 +22,14 @@ const productDetails = readable(undefined, async set => {
 //     return $productDetails
 // })
 
-export const showFirefoxDesktopDetails = derived(store, $store => {
+export const showFirefoxDesktopDetails = derived(store, ($store) => {
   const thisCriterion = optionSet.usageCriteriaOptions.values.find(
-    opt => opt.key === $store.usage
+    (opt) => opt.key === $store.usage
   );
   return thisCriterion && thisCriterion.markerSet === "firefoxDesktopVersions";
 });
 
-export const majorReleases = derived(productDetails, $pd => {
+export const majorReleases = derived(productDetails, ($pd) => {
   // get $usage for optionSet.
   if ($pd === undefined) return undefined;
   return Object.entries($pd)
@@ -43,13 +44,14 @@ export const majorReleases = derived(productDetails, $pd => {
     .map(([_, info]) => {
       info.str = info.date;
       info.date = new Date(info.date);
+      // eslint-disable-next-line radix
       let version = parseInt(info.version);
-      if (version >= 4) version = ~~version;
+      if (version >= 4) version = Math.floor(version);
       version = `${version}`;
       info.label = version;
       return info;
     })
-    .filter(info => {
+    .filter((info) => {
       return info.str > "2016-06-01";
     });
 });

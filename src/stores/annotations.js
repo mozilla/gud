@@ -14,13 +14,14 @@ export function deactivateAnnotationModal() {
 }
 
 export function addAnnotation(annotation) {
+  // eslint-disable-next-line no-param-reassign
   annotation.id = ID;
   ID += 1;
-  annotations.update(anns => [...anns, annotation]);
+  annotations.update((anns) => [...anns, annotation]);
 }
 
 export function removeAnnotation(annotationID) {
-  annotations.update(anns => anns.filter(ann => ann.id !== annotationID));
+  annotations.update((anns) => anns.filter((ann) => ann.id !== annotationID));
 }
 
 export default annotations;

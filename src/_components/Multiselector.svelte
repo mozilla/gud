@@ -3,24 +3,24 @@
 </script>
 
 <script>
-  import { onMount } from "svelte";
-  import { writable } from "svelte/store";
-  import { fade, fly, slide } from "svelte/transition";
-  import { flip } from "svelte/animate";
+  import { onMount } from 'svelte';
+  import { writable } from 'svelte/store';
+  import { fade, fly, slide } from 'svelte/transition';
+  import { flip } from 'svelte/animate';
 
-  import Popper from "popper.js";
+  import Popper from 'popper.js';
 
-  import { store } from "../stores/store";
-  import SelectedCheckbox from "./SelectedCheckbox.svelte";
-  import BlankCheckbox from "./BlankCheckbox.svelte";
-  import Tooltip from "./Tooltip.svelte";
+  import { store } from '../stores/store';
+  import SelectedCheckbox from './SelectedCheckbox.svelte';
+  import BlankCheckbox from './BlankCheckbox.svelte';
+  import Tooltip from './Tooltip.svelte';
 
   export let title;
   export let description = title;
   export let showDescriptionOnSelect = false;
   export let options;
   export let storeKey;
-  export let selectType = "single";
+  export let selectType = 'single';
   export let onSelection;
   export let enabled;
 
@@ -45,17 +45,17 @@
     visible = true;
     const container = document.body;
     menuPopup = new Popper(parentRef, menuRef, {
-      placement: "right-start",
+      placement: 'right-start',
       modifiers: {
         offset: {
           enabled: true,
-          offset: "0,10px"
+          offset: '0,10px',
         },
         preventOverflow: {
           boundariesElement: container,
-          padding: 36
-        }
-      }
+          padding: 36,
+        },
+      },
     });
     updatePopup();
   });
@@ -63,8 +63,8 @@
   // set singleOptionLabel
   let singleOptionLabel = options[0].label;
   let singleOptionDescription = options[0].shortDescription;
-  $: if (selectType === "single") {
-    const opt = options.find(opt => opt.key === $store[storeKey]);
+  $: if (selectType === 'single') {
+    const opt = options.find((opt) => opt.key === $store[storeKey]);
     singleOptionLabel = opt.label;
     if (showDescriptionOnSelect) singleOptionDescription = opt.shortDescription;
   }
@@ -77,22 +77,22 @@
   function removeSelection(key) {
     store.setField(
       storeKey,
-      $store[storeKey].filter(k => k !== key)
+      $store[storeKey].filter((k) => k !== key),
     );
   }
 
   async function handleSelection(key) {
-    const thisOption = options.find(k => k.key === key);
+    const thisOption = options.find((k) => k.key === key);
     if (onSelection) {
       await onSelection(thisOption);
     }
-    if (selectType === "multi") {
+    if (selectType === 'multi') {
       if (!$store[storeKey].includes(key)) {
         store.setField(storeKey, [...$store[storeKey], key]);
       } else {
         store.setField(
           storeKey,
-          $store[storeKey].filter(k => k !== key)
+          $store[storeKey].filter((k) => k !== key),
         );
       }
     } else {
@@ -103,11 +103,11 @@
   }
 
   function clearAllSelections() {
-    store.setField(storeKey, selectType === "multi" ? [] : options[0].key);
+    store.setField(storeKey, selectType === 'multi' ? [] : options[0].key);
   }
 
   function handleKeydown(event) {
-    if (isActive && event.key === "Escape") {
+    if (isActive && event.key === 'Escape') {
       isActive = false;
     }
   }
@@ -115,16 +115,16 @@
   function addAllSelections() {
     store.setField(
       storeKey,
-      options.map(opt => opt.key)
+      options.map((opt) => opt.key),
     );
   }
 
   function hideOnClickOutside(element) {
-    const outsideClickListener = event => {
+    const outsideClickListener = (event) => {
       if (
-        !element.contains(event.target) &&
-        !parentRef.contains(event.target) &&
-        isActive
+        !element.contains(event.target)
+      && !parentRef.contains(event.target)
+      && isActive
       ) {
         // or use: event.target.closest(selector) === null
         toggleActive();
@@ -133,10 +133,10 @@
     };
 
     const removeClickListener = () => {
-      document.removeEventListener("click", outsideClickListener);
+      document.removeEventListener('click', outsideClickListener);
     };
 
-    document.addEventListener("click", outsideClickListener);
+    document.addEventListener('click', outsideClickListener);
   }
 </script>
 
@@ -422,7 +422,7 @@
           <span class="remove-item" on:click={() => removeSelection(key)}>
             ╳
           </span>
-          {options.find(opt => opt.key === key).label}
+          {options.find((opt) => opt.key === key).label}
         </li>
       {/each}
     </ul>

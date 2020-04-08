@@ -13,8 +13,8 @@ h1 {
   grid-auto-flow: column;
   justify-content: start;
   font-size: 36px;
-  font-weight: 900;
-  color: var(--digital-blue-900);
+  font-weight: bold;
+  color: var(--ux-gray-800);
   margin:0;
   padding: var(--space-2x);
   align-items: center;

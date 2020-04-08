@@ -170,24 +170,6 @@ main {
 	padding-bottom: var(--pad);
 }
 
-h1 {
-	/* grid-row: header; */
-	grid-column: header-title;
-	margin:0;
-	/* padding-left: var(--pad);
-	padding-right: var(--pad);
-	padding-bottom: var(--pad); */
-	display: flex;
-	align-items: center;
-	height: var(--title-height);
-}
-
-h1 span {
-	padding-left: 5px;
-	color: gray;
-	font-weight: 300;
-}
-
 .ff-logo {
 	height: calc(var(--title-height) - var(--pad) - var(--pad));
 	padding-right: calc(var(--pad) / 2);

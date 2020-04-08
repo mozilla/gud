@@ -10,6 +10,8 @@
   import Sidebar from '../components/layout/Sidebar.svelte';
   import Content from '../components/layout/Content.svelte';
 
+  import ExploreBody from './explore/ExploreBody.svelte';
+
   // components
   // import NavMenu from "./components/NavMenu.svelte";
   // import ControlModes from "./components/ControlModes.svelte";
@@ -94,10 +96,9 @@
 
 <Layout>
   <Sidebar>
-    ok!
   </Sidebar>
   <Content>
-    Anything?
+    <ExploreBody />
   </Content>
 </Layout>
 
