@@ -1,10 +1,11 @@
+/* eslint-disable camelcase */
 /* NOTE – these functions were migrated over from BQ.
  */
 function erfinv(x) {
-  var z;
-  var a = 0.147;
-  var the_sign_of_x;
-  if (0 == x) {
+  let z;
+  const a = 0.147;
+  let the_sign_of_x;
+  if (x === 0) {
     the_sign_of_x = 0;
   } else if (x > 0) {
     the_sign_of_x = 1;
@@ -12,15 +13,15 @@ function erfinv(x) {
     the_sign_of_x = -1;
   }
 
-  if (0 != x) {
-    var ln_1minus_x_sqrd = Math.log(1 - x * x);
-    var ln_1minusxx_by_a = ln_1minus_x_sqrd / a;
-    var ln_1minusxx_by_2 = ln_1minus_x_sqrd / 2;
-    var ln_etc_by2_plus2 = ln_1minusxx_by_2 + 2 / (Math.PI * a);
-    var first_sqrt = Math.sqrt(
+  if (x !== 0) {
+    const ln_1minus_x_sqrd = Math.log(1 - x * x);
+    const ln_1minusxx_by_a = ln_1minus_x_sqrd / a;
+    const ln_1minusxx_by_2 = ln_1minus_x_sqrd / 2;
+    const ln_etc_by2_plus2 = ln_1minusxx_by_2 + 2 / (Math.PI * a);
+    const first_sqrt = Math.sqrt(
       ln_etc_by2_plus2 * ln_etc_by2_plus2 - ln_1minusxx_by_a
     );
-    var second_sqrt = Math.sqrt(first_sqrt - ln_etc_by2_plus2);
+    const second_sqrt = Math.sqrt(first_sqrt - ln_etc_by2_plus2);
     z = second_sqrt * the_sign_of_x;
   } else {
     // x is zero
@@ -31,8 +32,8 @@ function erfinv(x) {
 
 function jackknife_resamples(arr) {
   const output = [];
-  for (var i = 0; i < arr.length; i++) {
-    var x = arr.slice();
+  for (let i = 0; i < arr.length; i += 1) {
+    const x = arr.slice();
     x.splice(i, 1);
     output.push(x);
   }
@@ -40,7 +41,7 @@ function jackknife_resamples(arr) {
 }
 
 function array_sum(arr) {
-  return arr.reduce(function(acc, x) {
+  return arr.reduce((acc, x) => {
     return acc + x;
   }, 0);
 }
@@ -50,32 +51,33 @@ function array_avg(arr) {
 }
 
 function sumBucketsWithCI(counts_per_bucket, agg = "sum") {
-  //counts_per_bucket = counts_per_bucket.map(x => parseInt(x));
-  var n = counts_per_bucket.length;
-  var total = array_sum(counts_per_bucket);
-  var mean = total / n;
-  var resamples = jackknife_resamples(counts_per_bucket);
-  var jk_means = resamples.map(x => array_avg(x));
-  var mean_errs = jk_means.map(x => Math.pow(x - mean, 2));
-  var bucket_std_err = Math.sqrt((n - 1) * array_avg(mean_errs));
-  var std_err = (agg === "sum" ? n : 1) * bucket_std_err;
+  // counts_per_bucket = counts_per_bucket.map(x => parseInt(x));
+  const n = counts_per_bucket.length;
+  const total = array_sum(counts_per_bucket);
+  const mean = total / n;
+  const resamples = jackknife_resamples(counts_per_bucket);
+  const jk_means = resamples.map((x) => array_avg(x));
+  // eslint-disable-next-line no-restricted-properties
+  const mean_errs = jk_means.map((x) => Math.pow(x - mean, 2));
+  const bucket_std_err = Math.sqrt((n - 1) * array_avg(mean_errs));
+  const std_err = (agg === "sum" ? n : 1) * bucket_std_err;
   // var z_score = Math.sqrt(2.0) * erfinv(0.90);
-  var z_score = Math.sqrt(2.0) * erfinv(0.95);
+  const z_score = Math.sqrt(2.0) * erfinv(0.95);
   // shouldn't these be mean?
   let value;
   if (agg === "sum") value = total;
   else if (agg === "mean") value = mean;
-  var high = z_score * std_err;
-  var low = z_score * std_err;
+  const high = z_score * std_err;
+  const low = z_score * std_err;
   return {
     value,
     sum: total,
-    low: low,
-    high: high,
+    low,
+    high,
     margin: z_score * std_err,
     pm: high - total,
     nbuckets: n,
-    mean
+    mean,
   };
 }
 

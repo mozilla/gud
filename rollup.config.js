@@ -1,8 +1,9 @@
 import svelte from "rollup-plugin-svelte";
 import resolve from "rollup-plugin-node-resolve";
-import commonjs from "rollup-plugin-commonjs";
+import commonjs from "@rollup/plugin-commonjs";
 import livereload from "rollup-plugin-livereload";
 import json from "rollup-plugin-json";
+import postcss from "rollup-plugin-postcss";
 import { terser } from "rollup-plugin-terser";
 import { eslint } from "rollup-plugin-eslint";
 
@@ -17,6 +18,7 @@ export default {
     file: "public/bundle.js"
   },
   plugins: [
+    postcss(),
     json(),
     eslint({
       include: "**/*.js",

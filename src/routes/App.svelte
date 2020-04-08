@@ -1,55 +1,56 @@
 <script>
+  import '@graph-paper/core/style.css';
   import { onMount } from "svelte";
   import { fly, fade } from "svelte/transition";
   import { flip } from "svelte/animate";
 
-  // 3rd parties
-
   import { csvFormat } from "d3-dsv";
 
+  import Layout from '../components/layout/Layout.svelte';
+  import Sidebar from '../components/layout/Sidebar.svelte';
+  import Body from '../components/layout/Body.svelte';
+
   // components
-  import NavMenu from "./components/NavMenu.svelte";
-  import ControlModes from "./components/ControlModes.svelte";
-  import GraphicBody from "./components/GraphicBody.svelte";
-  import Multiselector from "./components/Multiselector.svelte";
+  // import NavMenu from "./components/NavMenu.svelte";
+  // import ControlModes from "./components/ControlModes.svelte";
+  // import GraphicBody from "./components/GraphicBody.svelte";
+  // import Multiselector from "./components/Multiselector.svelte";
   // import RadioGroup from './components/RadioGroup.svelte';
-  import DatePicker from "./components/DatePicker.svelte";
-  import ErrorMessage from "./components/ErrorMessage.svelte";
-  import NoData from "./components/NoData.svelte";
+  // import DatePicker from "./components/DatePicker.svelte";
+  // import ErrorMessage from "./components/ErrorMessage.svelte";
+  // import NoData from "./components/NoData.svelte";
   // import AnnotationModal from './components/AnnotationModal.svelte';
 
-  import FulfillmentButton from "./components/FulfillmentButton.svelte";
-  import GoToDocsButton from "./components/GoToDocsButton.svelte";
-  import ArrowForward from "./components/icons/ArrowForward.svelte";
+  // import FulfillmentButton from "./components/FulfillmentButton.svelte";
+  // import GoToDocsButton from "./components/GoToDocsButton.svelte";
+  // import ArrowForward from "./components/icons/ArrowForward.svelte";
   // experiments
   // import MouseMove from './Components/MouseMove.svelte';
   // import AdjustableDate from './components/AdjustableDate.svelte';
 
-  import optionSet from "./stores/options.json";
-  import { createRequestCache, storeToQuery } from "./stores/cache";
-  import { store, settingChanged, modeIsImplemented } from "./stores/store";
+  // import optionSet from "./stores/options.json";
+  import { createRequestCache, storeToQuery } from "../stores/cache";
+  import { store, settingChanged, modeIsImplemented } from "../stores/store";
 
-  // annotations
-  import { annotationModalIsActive } from "./stores/annotations";
+  // // annotations
+  // import { annotationModalIsActive } from "./stores/annotations";
 
-  function filterMetricsOnUsageCriterion(values) {
-    const disabledMetrics = optionSet.usageCriteriaOptions.values.find(
-      v => v.key === $store.usage
-    ).disabledMetrics;
-    if (disabledMetrics !== undefined) {
-      return values.filter(v => !disabledMetrics.includes(v.key));
-    }
-    return values;
-  }
+  // function filterMetricsOnUsageCriterion(values) {
+  //   const disabledMetrics = optionSet.usageCriteriaOptions.values.find(
+  //     v => v.key === $store.usage
+  //   ).disabledMetrics;
+  //   if (disabledMetrics !== undefined) {
+  //     return values.filter(v => !disabledMetrics.includes(v.key));
+  //   }
+  //   return values;
+  // }
 
-  export let name;
+  // export let name;
 
-  const menuOptions = Object.values(optionSet).filter(v => v.inMenu);
-  const cache = createRequestCache();
+  // const menuOptions = Object.values(optionSet).filter(v => v.inMenu);
+  // const cache = createRequestCache();
   let visible = false;
 
-  // FIXME: this and all the buttons around exporting should be
-  // in some other file!!!
   function downloadString(text, fileType = "text", fileName) {
     const blob = new Blob([text], { type: fileType });
     const a = document.createElement("a");
@@ -87,11 +88,16 @@
 
 </script>
 
+<Layout>
+  <Sidebar />
+  <Body />
+</Layout>
+
 <!-- PLUGINS ETC. GO RIGHT HERE -->
 <!-- <AnnotationModal active={$annotationModalIsActive} /> -->
 
 <!-- MAIN BODY -->
-<main>
+<!-- <main>
   <div class="controls">
     <section class="control-modes">
       <ControlModes />
@@ -191,7 +197,6 @@
           <GoToDocsButton />
         </div>
       </div>
-      <!-- content -->
       {#await $cache}
         <div in:fly={{ y: 30, duration: 200 }} class="loading-data">
           <div class="loading-message">Loading data ...</div>
@@ -210,7 +215,6 @@
       {:catch error}
         <ErrorMessage {error} />
       {/await}
-      <!-- foot -->
       <footer class="body-foot">
         <h3>Inquiries</h3>
         <ul>
@@ -230,4 +234,4 @@
       </footer>
     </div>
   {/if}
-</main>
+</main> -->
