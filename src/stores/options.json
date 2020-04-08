@@ -93,10 +93,44 @@
         "label": "Fenix"
       },
       {
+        "label": "Any Fenix or Firefox Preview Activity",
+        "key": "Any Preview+Fenix Activity",
+        "disabledDimensions": ["os", "attributed"],
+        "shortDescription": "The profile has sent a Glean 'baseline' ping from Fenix or Firefox Preview on the day in question",
+        "channels": [
+          { "label": "Release", "key": "release",
+            "shortDescription": "org-mozilla-firefox" },
+          { "label": "Beta", "key": "beta",
+            "shortDescription": "org-mozilla-firefox-beta and org-mozilla-fenix" },
+          { "label": "Nightly", "key": "nightly",
+            "shortDescription": "org-mozilla-fennec-aurora and org-mozilla-fenix-nightly" }
+        ]
+      },
+      {
         "label": "Any Fenix Activity",
         "key": "Any Fenix Activity",
-        "disabledDimensions": ["os", "channel", "attributed"],
-        "shortDescription": "The profile has sent a Glean 'baseline' or 'metrics' ping from Fenix on the day in question"
+        "disabledDimensions": ["os", "attributed"],
+        "shortDescription": "The profile has sent a Glean 'baseline' ping from Fenix on the day in question; excludes Firefox Preview",
+        "channels": [
+          { "label": "Release", "key": "release",
+            "shortDescription": "org-mozilla-firefox" },
+          { "label": "Beta", "key": "beta",
+            "shortDescription": "org-mozilla-firefox-beta" },
+          { "label": "Nightly", "key": "nightly",
+            "shortDescription": "org-mozilla-fennec-aurora" }
+        ]
+      },
+      {
+        "label": "Any Firefox Preview Activity",
+        "key": "Any Firefox Preview Activity",
+        "disabledDimensions": ["os", "attributed"],
+        "shortDescription": "The profile has sent a Glean 'baseline' ping from Firefox Preview on the day in question",
+        "channels": [
+          { "label": "Beta", "key": "beta",
+            "shortDescription": "org-mozilla-fenix" },
+          { "label": "Nightly", "key": "nightly",
+            "shortDescription": "org-mozilla-fenix-nightly" }
+        ]
       },
       {
         "itemType": "divider"
