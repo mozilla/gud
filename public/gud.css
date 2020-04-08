@@ -1,0 +1,18 @@
+:root {
+
+}
+
+body {
+    background-color: white;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: max-content max-content;
+}
+
+.sidebar {
+    width: var(--space-48x);
+    height: 100vh;
+    background-color: rgb(243,238,238);
+}

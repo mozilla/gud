@@ -1,12 +1,36 @@
+<script>
+import { fade } from 'svelte/transition';
+import GUDLogo from '../GUDLogo.svelte';
+import isMounted from '../../utils/mounted';
+
+const mounted = isMounted();
+
+</script>
 
 <style>
-.sidebar {
-  width: var(--space-72x);
-  height: 100vh;
-  background-color: blue;
+h1 {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: start;
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--digital-blue-900);
+  margin:0;
+  padding: var(--space-2x);
+  align-items: center;
+  grid-column-gap: var(--space-2x);
+  line-height:.79;
 }
 </style>
 
 <div class="sidebar">
 
+  <h1><GUDLogo size={64} />
+    {#if $mounted}
+    <span in:fade={{ duration: 1000 }}>
+      Growth & Usage
+    </span>
+    {/if}
+  </h1>
+  <slot></slot>
 </div>

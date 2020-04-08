@@ -1,14 +1,14 @@
 <script>
   import '@graph-paper/core/style.css';
-  import { onMount } from "svelte";
-  import { fly, fade } from "svelte/transition";
-  import { flip } from "svelte/animate";
+  import { onMount } from 'svelte';
+  import { fly, fade } from 'svelte/transition';
+  import { flip } from 'svelte/animate';
 
-  import { csvFormat } from "d3-dsv";
+  import { csvFormat } from 'd3-dsv';
 
   import Layout from '../components/layout/Layout.svelte';
   import Sidebar from '../components/layout/Sidebar.svelte';
-  import Body from '../components/layout/Body.svelte';
+  import Content from '../components/layout/Content.svelte';
 
   // components
   // import NavMenu from "./components/NavMenu.svelte";
@@ -29,8 +29,8 @@
   // import AdjustableDate from './components/AdjustableDate.svelte';
 
   // import optionSet from "./stores/options.json";
-  import { createRequestCache, storeToQuery } from "../stores/cache";
-  import { store, settingChanged, modeIsImplemented } from "../stores/store";
+  import { createRequestCache, storeToQuery } from '../stores/cache';
+  import { store, settingChanged, modeIsImplemented } from '../stores/store';
 
   // // annotations
   // import { annotationModalIsActive } from "./stores/annotations";
@@ -51,17 +51,17 @@
   // const cache = createRequestCache();
   let visible = false;
 
-  function downloadString(text, fileType = "text", fileName) {
+  function downloadString(text, fileType = 'text', fileName) {
     const blob = new Blob([text], { type: fileType });
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.download = fileName;
     a.href = URL.createObjectURL(blob);
-    a.dataset.downloadurl = [fileType, a.download, a.href].join(":");
-    a.style.display = "none";
+    a.dataset.downloadurl = [fileType, a.download, a.href].join(':');
+    a.style.display = 'none';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    setTimeout(function() {
+    setTimeout(() => {
       URL.revokeObjectURL(a.href);
     }, 1500);
   }
@@ -71,14 +71,18 @@
   });
 
   function updateQueryString(value) {
+    // eslint-disable-next-line no-restricted-globals
     if (history.pushState) {
+      // FIXME: fix this string concatentation eventually.
+      /* eslint-disable */
       const newurl =
         window.location.protocol +
         "//" +
         window.location.host +
         window.location.pathname +
         `?${value}`;
-      window.history.pushState({ path: newurl }, "", newurl);
+      /* eslint-enable */
+      window.history.pushState({ path: newurl }, '', newurl);
     }
   }
 
@@ -89,8 +93,12 @@
 </script>
 
 <Layout>
-  <Sidebar />
-  <Body />
+  <Sidebar>
+    ok!
+  </Sidebar>
+  <Content>
+    Anything?
+  </Content>
 </Layout>
 
 <!-- PLUGINS ETC. GO RIGHT HERE -->

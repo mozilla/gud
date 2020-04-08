@@ -10,7 +10,8 @@ html, body {
 	--pad: 20px;
 	--subsection-margin: 30px;
 	--left-pane: 350px;
-	--title-height: 85px;
+	/* --title-height: 85px; */
+	--title-height: var(--space-10x);
 	--footer-height: 40px;
 	--control-foot-height: var(--footer-height);
 	--top-height: calc(var(--title-height) + var(--pad) + var(--pad));
@@ -89,14 +90,16 @@ main {
 }
 
 .controls {
-	grid-column: controls;
+	/* grid-column: controls; */
 	display: grid;
 	grid-template-rows: 
 		[control-mode] var(--title-height) 
 		[control-reset] var(--title-height)
 		[control-selectors] auto 
 		[control-foot] var(--control-foot-height);
-	background: rgb(243, 243, 243) none repeat scroll 0% 0%;
+	/* background: rgb(243, 243, 243) none repeat scroll 0% 0%; */
+	width: var(--space-48x);
+	background: rgb(243, 243, 0) none repeat scroll 0% 0%;
 }
 
 .mode-container {
