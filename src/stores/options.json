@@ -159,16 +159,6 @@
         "disabledDimensions": ["os", "channel", "attributed"]
       },
       {
-        "label": "Any Lockwise Baseline Activity",
-        "key": "Any Lockwise Baseline Activity",
-        "shortDescription": "The profile has sent a Glean 'baseline' ping from Lockwise on the day in question",
-        "disabledDimensions": ["channel", "attributed"],
-        "platforms": [
-          { "label": "Android", "key": "Android" },
-          { "label": "iOS", "key": "iOS" }
-        ]
-      },
-      {
         "itemType": "divider"
       },
       {
