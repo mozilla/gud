@@ -229,12 +229,24 @@
         "label": "Any Firefox for FireTV Activity",
         "key": "Any FirefoxForFireTV Activity",
         "shortDescription": "The profile has sent a telemetry 'core' ping from Firefox for FireTV on the day in question",
-        "disabledDimensions": ["os", "channel"]
+        "disabledDimensions": ["os", "channel", "attributed"]
       },
       {
         "label": "Any FirefoxConnect Activity",
         "key": "Any FirefoxConnect Activity",
         "shortDescription": "The profile has sent a telemetry 'core' ping from FirefoxConnect on the day in question",
+        "disabledDimensions": ["os", "channel", "attributed"]
+      },
+      {
+        "label": "Any Reference Browser Activity",
+        "key": "Any Reference Browser Baseline Activity",
+        "shortDescription": "The profile has sent a Glean 'baseline' ping from Reference Browser on the day in question",
+        "disabledDimensions": ["os", "channel", "attributed"]
+      },
+      {
+        "label": "Any VR Browser Activity",
+        "key": "Any VR Browser Baseline Activity",
+        "shortDescription": "The profile has sent a Glean 'baseline' ping from Firefox Reality (VR Browser) on the day in question",
         "disabledDimensions": ["os", "channel", "attributed"]
       }
     ]
