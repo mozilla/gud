@@ -35,6 +35,24 @@
     --ux-gray-800: var(--neutral-gray-800);
     --ux-gray-850: var(--neutral-gray-850);
     --ux-gray-900: var(--neutral-gray-900);
+
+    --sidebar-width: var(--space-40x);
+    --body-header-height: var(--space-8x);
+    --body-header-pad: var(--space-2x);
+
+    	/* graph settings */
+	--small-graph-width: 350px;
+	--large-graph-width: 900px;
+
+	--moderate-transition: 200ms;
+
+	--secondary-color: #0097B2;
+	--faint-text: lightgray;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    margin:0;
+    padding:0;
 }
 
 body {
@@ -47,7 +65,117 @@ body {
 }
 
 .sidebar {
-    width: var(--space-40x);
+    width: var(--sidebar-width);
     height: 100vh;
     background-color: rgb(243,238,238);
+}
+
+.body-container {
+    outline: 1px solid black;
+    width: calc(100vw - var(--sidebar-width));
+}
+
+.body-header {
+    height: var(--body-header-height);
+    padding: var(--body-header-pad);
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+}
+
+.body-header h2 {
+    font-weight:normal;
+    font-size: var(--text-08);
+}
+
+.body-controls {
+    outline: 1px solid black;
+    height: var(--space-12x);
+}
+
+/* DataGraphic */
+
+svg text {
+    -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+svg text::selection {
+    background: none;
+}
+
+@keyframes rotate-loader {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes dash-loader {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dashoffset: -125px;
+  }
+}
+
+/* Graphic Body */
+
+.graphic-body {
+	max-width: 1100px;
+	padding: var(--pad);
+}
+
+.graphic-body-header {
+	font-style: italic;
+	font-weight:normal;
+	color: #555;
+	margin:0;
+	padding:0;
+	padding-left:50px;
+	padding-bottom:25px;
+}
+
+
+.all-graphics {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-row-gap: var(--subsection-margin);
+}
+
+.one-graphic {
+    display: block;
+}
+
+
+
+/* media queries */
+
+@media (max-width: 1450px) {
+	:root {
+		--graph-width: 300px;
+	}
+}
+
+@media (max-width: 1301px) {
+	:root {
+		--left-pane: 250px;
+	}
+
+	.date-picker-controls {
+		display: block;
+	}
+
+	.all-graphics {
+		grid-template-columns: max-content max-content;
+		grid-template-rows: 1fr;
+		justify-content: center;	
+	}
 }

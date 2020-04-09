@@ -1,7 +1,7 @@
 <script>
 import { fade } from 'svelte/transition';
 import GUDLogo from '../GUDLogo.svelte';
-import isMounted from '../../utils/mounted';
+import isMounted from '../../utils/is-mounted';
 
 const mounted = isMounted();
 
@@ -20,6 +20,7 @@ h1 {
   align-items: center;
   grid-column-gap: var(--space-2x);
   line-height:.79;
+  height: var(--space-8x);
 }
 </style>
 

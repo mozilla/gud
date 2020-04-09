@@ -9,7 +9,7 @@ onMount(() => {
   mounted = true;
 });
 
-const DIST = 25;
+const DIST = 5;
 </script>
 
 <style>
