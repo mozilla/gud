@@ -143,6 +143,7 @@
 <style>
   .selector {
     margin-bottom: var(--pad);
+    --multiselector-list-item-pad: var(--space-2x);
   }
 
   .disabled {
@@ -160,10 +161,10 @@
     /* border-bottom: 1px solid tomato; */
     background-color: var(--multiselector-bg);
     border: 1px solid var(--multiselector-border-color);
-    padding: calc(var(--multiselector-list-item-pad) / 2);
-    padding-left: var(--multiselector-horiz-pad);
-    padding-right: var(--multiselector-horiz-pad);
-    border-radius: calc(var(--multiselector-list-item-pad) / 4);
+    padding: var(--space-1h);
+    padding-left: var(--space-base);
+    padding-right: var(--space-base);
+    border-radius: var(--space-1q);
     color: var(--multiselector-button-text-color);
     text-align: left;
     text-transform: uppercase;
@@ -290,19 +291,21 @@
   .dropdown-status {
     text-align: center;
     font-size: 14px;
-    opacity: 0.75;
   }
 
   .dropdown-content {
-    font-size: 14px;
+    font-size: var(--text-03);
+    display: grid;
+    grid-auto-flow: row;
+    grid-row-gap: var(--space-1h);
   }
 
   .clear-all {
     border-bottom: 1px solid gainsboro;
     min-height: 0px;
-    font-size: 10px;
+    font-size: var(--text-015);
     font-weight: bold;
-    color: darkgray;
+    color: var(--ux-gray-400);
     text-transform: uppercase;
   }
 
@@ -349,8 +352,8 @@
   }
 
   .dropdown-item-description {
-    font-size: 13px;
-    opacity: 0.6;
+    font-size: var(--text-02);
+    color: var(--ux-gray-500);
   }
 
   .divider {
@@ -363,7 +366,7 @@
     text-transform: uppercase;
     font-size: 12px;
     font-weight: 900;
-    color: darkgray;
+    color: var(--ux-gray-500);
     padding-top: calc(var(--multiselector-list-item-pad) / 2);
     padding-bottom: calc(var(--multiselector-list-item-pad) / 2);
     padding-left: calc(

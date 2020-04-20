@@ -47,7 +47,24 @@
 	--moderate-transition: 200ms;
 
 	--secondary-color: #0097B2;
-	--faint-text: lightgray;
+  --faint-text: lightgray;
+  
+
+  	/* shared style elements */
+	--ui-pad: calc(var(--pad) / 2);
+	--ui-radius: 5px;
+	--default-button-text-color: white;
+	--default-button-bg-color: rgb(90, 90, 170);
+
+  /* multiselector	 */
+	--multiselector-horiz-pad: 8px;
+	--multiselector-list-item-pad: calc(var(--pad) / 2);
+    --multiselector-list-item-size: 25px;
+	--multiselector-border-color: transparent;
+	--multiselector-bg: var(--default-button-bg-color);
+	/* --multiselector-bg: #00b3f4; */
+    --multiselector-button-text-color: white;
+	--multiselector-selected-bg: tomato;
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -59,9 +76,14 @@ body {
     background-color: white;
 }
 
-.layout {
-    display: grid;
-    grid-template-columns: max-content max-content;
+.vertical-orientation {
+  display: grid;
+  grid-template-rows: 
+    var(--body-header-height)
+    var(--space-8x)
+    auto
+    var(--space-8x);
+  align-items: start;
 }
 
 .sidebar {
@@ -71,7 +93,6 @@ body {
 }
 
 .body-container {
-    outline: 1px solid black;
     width: calc(100vw - var(--sidebar-width));
 }
 
@@ -89,7 +110,6 @@ body {
 }
 
 .body-controls {
-    outline: 1px solid black;
     height: var(--space-12x);
 }
 
@@ -152,6 +172,39 @@ svg text::selection {
 
 .one-graphic {
     display: block;
+}
+
+
+.app-button {
+  padding: var(--space-2x);
+  font-size: var(--text-015);
+}
+
+.app-button button {
+	background: none;
+	padding: calc(var(--space-2x) / 3);
+	/* background-color: var(--secondary-color); */
+	/* color: white; */
+	border: none;
+	color: var(--secondary-color);
+	border: 1px solid var(--secondary-color);
+	/* border-top:    1px solid var(--secondary-color); */
+	border-radius: 3px;
+	cursor: pointer;
+	transition: var(--moderate-transition);
+	text-transform: uppercase;
+	opacity: .6;
+}
+
+.app-button button span {
+	padding-left: calc(var(--space-2x) / 3);
+	font-weight:900;
+}
+
+.app-button button:hover {
+	background-color: rgb(240,240,240);
+	opacity: 1;
+	box-shadow: 2px 2px 0px rgba(0,0,0,.2);
 }
 
 

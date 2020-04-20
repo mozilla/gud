@@ -11,6 +11,7 @@
   import Content from '../components/layout/Content.svelte';
 
   import ExploreBody from './explore/ExploreBody.svelte';
+  import ExploreSidebar from './explore/ExploreSidebar.svelte';
 
   // components
   // import NavMenu from "./components/NavMenu.svelte";
@@ -96,6 +97,7 @@
 
 <Layout>
   <Sidebar>
+    <ExploreSidebar />
   </Sidebar>
   <Content>
     <ExploreBody />
