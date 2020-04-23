@@ -20,11 +20,16 @@ const menuOptions = Object.values(optionSet).filter((v) => v.inMenu);
 
 <style>
 .control-selectors {
-  padding: var(--space-2x);
+  padding-left: var(--space-2x);
+  padding-right: var(--space-2x);
+  display: grid;
+  grid-auto-flow: row;
+  grid-row-gap: var(--space-3x);
+  justify-items: end;
 }
 </style>
 
-<div class='body-header'>
+<div>
   {#if $settingChanged && $modeIsImplemented}
   <section class="app-button" transition:fly={{ x: -30, duration: 300 }}>
     <button

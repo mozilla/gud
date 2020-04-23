@@ -16,11 +16,12 @@ const cache = createRequestCache();
 .loading-data {
   position: grid;
   justify-items:stretch;
-  outline: 1px solid black;
   grid-auto-flow: row;
   align-content: center;
 	text-align:center;
   font-weight: bold;
+  width: 900px;
+  height: 400px;
 	/* background-color: #eee; */
 	border-radius: 5px;
 	position: absolute;
@@ -48,7 +49,7 @@ const cache = createRequestCache();
 }
 </style>
 
-<div class=body-container>
+<div class="body-container vertical-orientation">
 
 <Header />
 <Controls />

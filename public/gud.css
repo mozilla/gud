@@ -76,15 +76,18 @@ body {
     background-color: white;
 }
 
-.vertical-orientation {
+/* grid auto flow centered */
+
+.gafc {
   display: grid;
-  grid-template-rows: 
-    var(--body-header-height)
-    var(--space-8x)
-    auto
-    var(--space-8x);
-  align-items: start;
+  grid-auto-flow: column;
+  align-items: center;
+  justify-content: start;
 }
+
+.col-gap-1x { grid-column-gap: var(--space-base); }
+.col-gap-2x { grid-column-gap: var(--space-2x); }
+
 
 .sidebar {
     width: var(--sidebar-width);
@@ -94,14 +97,17 @@ body {
 
 .body-container {
     width: calc(100vw - var(--sidebar-width));
+    min-height: 100vh;
 }
 
 .body-header {
-    height: var(--body-header-height);
     padding: var(--body-header-pad);
+    padding-left: var(--space-6x);
+    padding-right: var(--space-6x);
     display: grid;
-    grid-auto-flow: column;
+    grid-auto-flow: row;
     align-items: center;
+    grid-row: 1 / 3;
 }
 
 .body-header h2 {
@@ -110,7 +116,9 @@ body {
 }
 
 .body-controls {
-    height: var(--space-12x);
+    min-height: var(--space-8x);
+    padding-left: var(--space-6x);
+    padding-right: var(--space-6x);
 }
 
 /* DataGraphic */

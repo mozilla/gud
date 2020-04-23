@@ -9,9 +9,16 @@ const mounted = isMounted();
 
 <style>
 
-/* div * {
-  outline: 1px solid black;
-} */
+.vertical-orientation {
+  display: grid;
+  grid-template-rows:
+    var(--body-header-height)
+    var(--space-8x)
+    auto
+    max-content;
+  align-items: start;
+}
+
 h1 {
   display: grid;
   grid-auto-flow: column;
@@ -26,6 +33,27 @@ h1 {
   line-height:.79;
   /* height: var(--space-8x); */
 }
+
+.sidebar__footer {
+  /* align-self: stretch; */
+  width: 100%;
+  background-color: var(--ux-gray-200);
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  grid-column-gap: var(--space-base);
+}
+
+.sidebar__footer__button {
+  font-size: var(--text-015);
+  background-color: hsl(32, 30%, 30%);
+  color: hsla(32, 20%, 95%, 1);
+  padding: var(--space-1h);
+  padding-left: var(--space-base);
+  padding-right: var(--space-base);
+  /* border-radius: var(--space-base); */
+}
+
 </style>
 
 <div class="sidebar vertical-orientation">
@@ -41,5 +69,9 @@ h1 {
   <div></div>
   <div>
     <slot></slot>
+  </div>
+  <div class=sidebar__footer>
+    <button class=sidebar__footer__button>Feedback</button>
+    <button class=sidebar__footer__button>Documentation</button>
   </div>
 </div>

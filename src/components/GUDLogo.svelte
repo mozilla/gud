@@ -57,7 +57,7 @@ svg {
                     <path in:fly={{ duration: 1000, x: DIST, y: 0 }}  d="M498.831,416L554.256,384L554.256,320L498.831,352L498.831,416Z" style="fill:url(#leftSide);"/>
                 </g>
                 <g transform="matrix(-0.5,0.866025,0.866025,0.5,443.405,-320)">
-                    <path in:fly={{ duration: 1000, x: -DIST, y: -DIST }}  d="M498.831,416L554.256,384L554.256,320L498.831,352L498.831,416Z" style="fill:url(#topSide);"/>
+                    <path in:fly={{ duration: 1000, x: -DIST, y: 0 }}  d="M498.831,416L554.256,384L554.256,320L498.831,352L498.831,416Z" style="fill:url(#topSide);"/>
                 </g>
             </g>
             <g in:fade={{ duration: 600, delay: 700 }}>

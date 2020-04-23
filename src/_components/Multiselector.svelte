@@ -172,8 +172,6 @@
     font-size: 12px;
     cursor: pointer;
     display: grid;
-    margin-right: 0;
-    margin-left: auto;
     grid-template-columns: [title] max-content [carat] max-content;
     grid-column-gap: 5px;
     transition: background-color 200ms, box-shadow 200ms;
@@ -221,7 +219,7 @@
     transition: 100ms;
     /* max-height: 95vh;
     overflow: auto; */
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
   }
 
   div {
@@ -241,7 +239,7 @@
   ul.menu-content {
     transition: 100ms;
     margin: 0;
-    border: 1px solid lightgray;
+    /* border: 1px solid lightgray; */
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     padding: 0;
@@ -322,7 +320,8 @@
     padding: 0;
     margin: 0;
     /* margin-left: calc(16px + var(--pad) / 2); */
-    margin-top: var(--multiselector-list-item-pad);
+    /* margin-top: var(--multiselector-list-item-pad); */
+    /* padding-bottom: var(--space-2x); */
     flex-wrap: wrap;
     font-size: 14px;
     font-weight: bold;
@@ -432,9 +431,6 @@
   {:else}
     <div class="selected-items">
       {singleOptionLabel}
-      {#if showDescriptionOnSelect && singleOptionDescription && singleOptionLabel !== 'All'}
-        <div class="single-option-description">{singleOptionDescription}</div>
-      {/if}
     </div>
   {/if}
 
