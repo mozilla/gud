@@ -1,8 +1,11 @@
 <script>
 import { createEventDispatcher } from 'svelte';
+import { fly } from 'svelte/transition';
 import { timeFormat, timeParse } from 'd3-time-format';
 import { timeDay } from 'd3-time';
 import { Button } from '@graph-paper/button';
+import { ArrowheadDown as CaretDown } from '@graph-paper/icons';
+import { FloatingMenu } from '@graph-paper/menu';
 import Calendar from '../Calendar.svelte';
 
 const dispatch = createEventDispatcher();
@@ -67,6 +70,8 @@ function withKey(keybinding, callback) {
 $: startIsValid = validateDate(formattedStartDate);
 $: endIsValid = validateDate(formattedEndDate);
 
+let parent;
+
 </script>
 
 <style>
@@ -74,8 +79,9 @@ $: endIsValid = validateDate(formattedEndDate);
 .date-picker {
   width: var(--space-40x);
   border: 1px solid var(--ux-gray-300);
-  box-shadow: 0px 4px 6px rgba(0,0,0,.1);
   border-radius: var(--space-base);
+  background-color: white;
+  z-index: 45;
 }
 
 .date-picker__optionset {
@@ -158,14 +164,17 @@ width: 102px;
 
 <svelte:window on:keydown={withKey('Escape', () => { if (active) active = false; })} />
 
-<Button compact level="medium" on:click={setActive}>
-  <div class='gafc col-gap-1x'>
-    <Calendar size={12} /> {formatLabel(toDate(startDate))} - {formatLabel(toDate(endDate))}
-  </div>
-</Button>
+<div bind:this={parent}>
+  <Button compact level="medium" on:click={setActive}>
+    <div class='gafc col-gap-1x'>
+      <Calendar size={12} /> {formatLabel(toDate(startDate))} - {formatLabel(toDate(endDate))} <CaretDown size={14} />
+    </div>
+  </Button>
+</div>
 
 {#if active}
-  <div class="date-picker">
+<FloatingMenu offset={16} parent={parent}>
+  <div class="date-picker" transition:fly={{ duration: 200, y: -5 }}>
     <div class="date-picker__optionset">
       <div class="date-picker__option" class:date-picker__option--active={whichOption === 'BETWEEN'} on:click={changeOption('BETWEEN')}>Between</div>
       <div class="date-picker__reset">
@@ -204,4 +213,5 @@ width: 102px;
       <Button compact level="high" on:click={applyDates}>Apply</Button>
     </div>
   </div>
+</FloatingMenu>
 {/if}

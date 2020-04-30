@@ -1,7 +1,7 @@
 <script>
 import { fly } from 'svelte/transition';
 import Multiselector from '../../_components/Multiselector.svelte';
-
+import DimensionSelector from '../../components/controls/DimensionSelector.svelte';
 import { store, settingChanged, modeIsImplemented } from '../../stores/store';
 import optionSet from '../../stores/options.json';
 
@@ -43,7 +43,19 @@ const menuOptions = Object.values(optionSet).filter((v) => v.inMenu);
 {/if}
 </div>
 
-{#if $store.mode === 'explore'}
+<div>
+  <DimensionSelector>
+    Product / Usage
+  </DimensionSelector>
+  <DimensionSelector options={optionSet.channelOptions.values}>
+    Channel
+  </DimensionSelector>
+  <DimensionSelector>
+    OS
+  </DimensionSelector>
+</div>
+
+<!-- {#if $store.mode === 'explore'}
 <section class="control-selectors">
   {#each menuOptions as selector, i (selector.key)}
     {#if selector.type !== 'date'}
@@ -89,4 +101,4 @@ const menuOptions = Object.values(optionSet).filter((v) => v.inMenu);
     {/if}
   {/each}
 </section>
-{/if}
+{/if} -->
