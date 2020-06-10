@@ -282,8 +282,8 @@
     "whereStyle": "boolean",
     "inMenu": true,
     "values": [
-      { "label": "Attributed Installs", "key": "TRUE" },
-      { "label": "Unattributed Installs", "key": "FALSE" }
+      { "label": "Attributed", "key": "TRUE" },
+      { "label": "Unattributed", "key": "FALSE" }
     ]
   },
   "metricOptions": {
