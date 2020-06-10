@@ -98,12 +98,21 @@
         "disabledDimensions": ["os", "attributed"],
         "shortDescription": "The profile has sent a Glean 'baseline' ping from Fenix or Firefox Preview on the day in question",
         "channels": [
-          { "label": "Release", "key": "release",
-            "shortDescription": "org.mozilla.firefox" },
-          { "label": "Beta", "key": "beta",
-            "shortDescription": "org.mozilla.firefox_beta and org.mozilla.fenix" },
-          { "label": "Nightly", "key": "nightly",
-            "shortDescription": "org.mozilla.fennec_aurora and org.mozilla.fenix.nightly" }
+          {
+            "label": "Release",
+            "key": "release",
+            "shortDescription": "org.mozilla.firefox"
+          },
+          {
+            "label": "Beta",
+            "key": "beta",
+            "shortDescription": "org.mozilla.firefox_beta and org.mozilla.fenix"
+          },
+          {
+            "label": "Nightly",
+            "key": "nightly",
+            "shortDescription": "org.mozilla.fennec_aurora and org.mozilla.fenix.nightly"
+          }
         ]
       },
       {
@@ -112,12 +121,21 @@
         "disabledDimensions": ["os", "attributed"],
         "shortDescription": "The profile has sent a Glean 'baseline' ping from Fenix on the day in question; excludes Firefox Preview",
         "channels": [
-          { "label": "Release", "key": "release",
-            "shortDescription": "org.mozilla.firefox" },
-          { "label": "Beta", "key": "beta",
-            "shortDescription": "org.mozilla.firefox_beta" },
-          { "label": "Nightly", "key": "nightly",
-            "shortDescription": "org.mozilla.fennec_aurora" }
+          {
+            "label": "Release",
+            "key": "release",
+            "shortDescription": "org.mozilla.firefox"
+          },
+          {
+            "label": "Beta",
+            "key": "beta",
+            "shortDescription": "org.mozilla.firefox_beta"
+          },
+          {
+            "label": "Nightly",
+            "key": "nightly",
+            "shortDescription": "org.mozilla.fennec_aurora"
+          }
         ]
       },
       {
@@ -126,10 +144,16 @@
         "disabledDimensions": ["os", "attributed"],
         "shortDescription": "The profile has sent a Glean 'baseline' ping from Firefox Preview on the day in question",
         "channels": [
-          { "label": "Beta", "key": "beta",
-            "shortDescription": "org.mozilla.fenix" },
-          { "label": "Nightly", "key": "nightly",
-            "shortDescription": "org.mozilla.fenix.nightly" }
+          {
+            "label": "Beta",
+            "key": "beta",
+            "shortDescription": "org.mozilla.fenix"
+          },
+          {
+            "label": "Nightly",
+            "key": "nightly",
+            "shortDescription": "org.mozilla.fenix.nightly"
+          }
         ]
       },
       {
@@ -258,8 +282,8 @@
     "whereStyle": "boolean",
     "inMenu": true,
     "values": [
-      { "label": "Light Funnel", "key": "TRUE"},
-      { "label": "Dark Funnel", "key": "FALSE"}
+      { "label": "Attributed", "key": "TRUE" },
+      { "label": "Unattributed", "key": "FALSE" }
     ]
   },
   "metricOptions": {
