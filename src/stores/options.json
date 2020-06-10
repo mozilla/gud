@@ -283,7 +283,7 @@
     "inMenu": true,
     "values": [
       { "label": "Attributed Installs", "key": "TRUE" },
-      { "label": "Non-Attributed Installs", "key": "FALSE" }
+      { "label": "Unattributed Installs", "key": "FALSE" }
     ]
   },
   "metricOptions": {
