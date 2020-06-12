@@ -119,6 +119,7 @@ const exploreQuery = params => {
         WHEREClauses.length > 1 ? WHEREClauses.join(" AND\n") : WHEREClauses
       }`
     : "";
+  const GROUPING_DIMENSION = "";
 
   return query(`
 WITH day_0_base AS (
@@ -164,6 +165,7 @@ day_0 AS (
     date,
     ANY_VALUE(usage) AS usage,
     id_bucket,
+    ${GROUPING_DIMENSION}
     SUM(dau) AS dau,
     SUM(wau) AS wau,
     SUM(mau) AS mau,
@@ -175,6 +177,7 @@ day_0 AS (
   GROUP BY
     date,
     id_bucket
+    ${GROUPING_DIMENSION}
 ),
 --
 day_13_base AS (
@@ -208,6 +211,7 @@ day_13 AS (
   SELECT
     date,
     id_bucket,
+    ${GROUPING_DIMENSION}
     SUM(new_profiles) AS new_profiles,
     SUM(new_profile_active_in_week_1) AS new_profile_active_in_week_1,
     SUM(active_in_weeks_0_and_1) AS active_in_weeks_0_and_1,
@@ -226,14 +230,15 @@ day_13 AS (
   GROUP BY
     date,
     id_bucket
+    ${GROUPING_DIMENSION}
 ),
 --
 day_0_windowed AS (
 SELECT
   *,
-  COUNT(*) OVER (PARTITION BY id_bucket ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS c,
-  SUM(dau) OVER (PARTITION BY id_bucket ORDER BY date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS dau_sum_7_day,
-  SUM(dau) OVER (PARTITION BY id_bucket ORDER BY date ROWS BETWEEN 27 PRECEDING AND CURRENT ROW) AS dau_sum_28_day
+  COUNT(*) OVER (PARTITION BY id_bucket ${GROUPING_DIMENSION} ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS c,
+  SUM(dau) OVER (PARTITION BY id_bucket ${GROUPING_DIMENSION} ORDER BY date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS dau_sum_7_day,
+  SUM(dau) OVER (PARTITION BY id_bucket ${GROUPING_DIMENSION} ORDER BY date ROWS BETWEEN 27 PRECEDING AND CURRENT ROW) AS dau_sum_28_day
 FROM
   day_0 ),
 --
@@ -267,7 +272,7 @@ FROM
 FULL JOIN
   day_13
 USING
-  (date, id_bucket)
+  (date, id_bucket ${GROUPING_DIMENSION})
 ORDER BY
   date
 `);
