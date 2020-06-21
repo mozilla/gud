@@ -1,134 +1,315 @@
 <script>
-  import { onMount } from "svelte";
-  import { timeFormat } from "d3-time-format";
+  import { createEventDispatcher, tick } from "svelte";
+  import { fly } from "svelte/transition";
+  import { timeFormat, timeParse } from "d3-time-format";
+  import { timeDay } from "d3-time";
+  // import { FloatingMenu } from "../../../../menu";
+  import { placeElement } from "@graph-paper/core/utils/float-placement";
 
-  import optionSet from "../stores/options.json";
-  import { majorReleases } from "../stores/productDetails";
-  import { store } from "../stores/store";
+  import { Button } from "@graph-paper/button";
+  import { CaretDown, Calendar } from "@graph-paper/icons";
 
-  const timeFormatter = timeFormat("%Y-%m-%d");
+  const dispatch = createEventDispatcher();
 
-  const dayBefore = d => {
-    const di = new Date(d);
-    return timeFormatter(di);
-  };
+  export let active = false;
 
-  const dayAfter = d => {
-    const di = new Date(d);
-    di.setDate(di.getDate() + 2);
-    return timeFormatter(di);
-  };
+  let whichOption = "BETWEEN";
 
-  $: startMin = $store.minStartDate;
-  $: startMax = dayBefore($store.endDate);
-  $: endMin = dayAfter($store.startDate);
-  const endMax = $store.maxEndDate;
+  function setActive() {
+    active = !active;
+  }
 
-  $: currentStart = $store.startDate;
-  $: currentEnd = $store.endDate;
+  function changeOption(which) {
+    return () => {
+      whichOption = which;
+    };
+  }
+
+  const FORMAT = "%Y-%m-%d";
+  const LABEL_FORMAT = "%b %d, %Y";
+  const formatLabel = timeFormat(LABEL_FORMAT);
+
+  function toDate(str) {
+    const fmt = timeParse(FORMAT);
+    return fmt(str);
+  }
+
+  function fromDate(dt) {
+    const fmt = timeFormat(FORMAT);
+    return fmt(dt);
+  }
+
+  function validateDate(str) {
+    if (!str) return false;
+    let [y, m, d] = str.split("-");
+    d = +d;
+    m = +m;
+    y = +y;
+    const dt = new Date(y, m - 1, d);
+    return Boolean(+dt) && dt.getDate() === d && y > 2010;
+  }
+
+  let lastValue = 90;
+
+  export let startDate;
+  export let endDate;
+
+  let formattedStartDate = fromDate(startDate);
+  let formattedEndDate = fromDate(endDate);
+  let boundStart = formattedStartDate;
+  let boundEnd = formattedEndDate;
+  // // $: if (fromDate(endDate) !== formattedEndDate)
+  //   formattedEndDate = fromDate(endDate);
+
+  async function applyDates() {
+    if (boundStart !== formattedStartDate) formattedStartDate = boundStart;
+    if (boundEnd !== formattedEndDate) formattedEndDate = boundEnd;
+    if (startIsValid && endIsValid) {
+      dispatch("applyDates", {
+        start: toDate(formattedStartDate),
+        end: toDate(formattedEndDate),
+      });
+    }
+
+    // await tick();
+    // formattedStartDate = fromDate(startDate);
+  }
+
+  async function resetDates() {
+    dispatch("resetDates");
+    await tick();
+    boundStart = fromDate(startDate);
+    boundEnd = fromDate(endDate);
+  }
+
+  function withKey(keybinding, callback) {
+    return (evt) => {
+      if (evt.key === keybinding) callback();
+    };
+  }
+
+  $: startIsValid = validateDate(boundStart);
+  $: endIsValid = validateDate(boundEnd);
+
+  let parent;
+  let element;
+  let leftPlacement = 0;
+  let topPlacement = 0;
+  export let location = "bottom";
+  export let alignment = "left";
+  let scrollY;
+
+  $: if (active && element && parent) {
+    [leftPlacement, topPlacement] = placeElement({
+      location,
+      alignment,
+      elementPosition: element.getBoundingClientRect(),
+      parentPosition: parent.getBoundingClientRect(),
+      distance: 20,
+      y: scrollY,
+    });
+  }
 </script>
 
 <style>
-  :root {
-    --selector-metadata-font-size: 15px;
-  }
-
   .date-picker {
-    margin-top: var(--footer-height);
-    text-align: right;
+    --header-bg: var(--cool-gray-150);
+    width: var(--space-40x);
+    border-radius: var(--space-base);
+    background-color: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
+      0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07),
+      0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
+    /* z-index: 45; */
   }
 
-  .date-picker-controls {
+  .date-picker:before {
+    --wedge: var(--space-2x);
+    content: "";
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    transform: translateX(var(--wedge)) translateY(calc(var(--wedge) * -1));
+    border-left: var(--wedge) solid transparent;
+    border-right: var(--wedge) solid transparent;
+    border-bottom: var(--wedge) solid var(--header-bg);
+  }
+
+  .date-picker__optionset {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: var(--pad);
-    justify-content: end;
+    grid-auto-flow: column;
+    grid-column-gap: var(--space-base);
+    background-color: var(--header-bg);
+    padding-top: var(--space-base);
+    padding-left: var(--space-2x);
+    padding-right: var(--space-2x);
+    border-top-right-radius: var(--space-base);
+    border-top-left-radius: var(--space-base);
   }
 
-  h2 {
-    font-size: 20px;
-    font-weight: normal;
-  }
-
-  input {
-    background-color: transparent;
-    border: none;
-    border-bottom: 1px solid tomato;
-    padding: 0;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    color: var(--dp-default-color);
-    font-family: var(--default-font-family);
-    font-size: var(--default-font-size);
-    transition: border-bottom 100ms;
+  .date-picker__option {
+    justify-self: start;
+    padding: var(--space-base);
+    padding-left: var(--space-2x);
+    padding-right: var(--space-2x);
+    font-size: var(--text-02);
+    text-align: center;
+    color: var(--cool-gray-550);
     cursor: pointer;
-    width: 100%;
   }
 
-  input:hover {
-    border-bottom: 1px solid black;
+  .date-picker__option--active {
+    background-color: white;
+    color: var(--digital-blue-500);
   }
 
-  input:focus {
-    color: var(--dp-active-color);
+  .date-picker--last {
+    padding: var(--space-base);
   }
 
-  .date-picker-input-label {
-    font-size: 12px;
-    text-align: left;
-    color: tomato;
+  .date-picker--between {
+    padding: var(--space-base);
+    padding-left: var(--space-2x);
+    padding-right: var(--space-2x);
   }
 
-  @media (max-width: 1301px) {
-    .date-picker-controls {
-      display: block;
-      padding-bottom: var(--pad);
-    }
+  .date-picker__input {
+    display: inline;
+    font-size: var(--text-02);
+    border-radius: var(--space-1h);
+    border-width: 2px;
+    transition: 120ms border, 200ms box-shadow;
+  }
+
+  .date-picker__input:focus {
+    border: 2px solid var(--digital-blue-300);
+    box-shadow: 4px 4px 0px var(--digital-blue-100);
+  }
+
+  .date-picker__input--last {
+    width: 72px;
+  }
+
+  .date-picker__input--between {
+    width: 102px;
+  }
+
+  .date-picker__apply {
+    padding: var(--space-base);
+    padding-left: var(--space-2x);
+    padding-right: var(--space-2x);
+    padding-bottom: var(--space-2x);
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: end;
+    grid-column-gap: var(--space-base);
+  }
+
+  .date-picker__input--invalid,
+  .date-picker__input--invalid:focus {
+    border: 2px solid var(--pantone-red-300);
+  }
+
+  .date-picker__input--invalid:focus {
+    box-shadow: 2px 2px 0px var(--pantone-red-500);
+  }
+
+  .date-picker__reset {
+    justify-self: end;
+  }
+
+  .date-picker__range {
+    padding-left: var(--space-2x);
+    padding-right: var(--space-2x);
+    color: var(--ux-gray-500);
+    font-size: var(--text-02);
+  }
+
+  /* FIXME: we are duplicating */
+  .gafc {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    grid-column-gap: var(--space-1x);
   }
 </style>
 
-<div class="date-picker">
+<svelte:window
+  bind:scrollY
+  on:keydown={withKey('Escape', () => {
+    if (active) active = false;
+  })} />
 
-  <h2>Time Period</h2>
-
-  <div class="date-picker-controls">
-    <div>
-      <div class="date-picker-input-label">Start</div>
-      <input
-        type="date"
-        id="startDate"
-        name="range-start"
-        bind:value={currentStart}
-        min={startMin}
-        max={startMax}
-        on:change={evt => {
-          let date = evt.target.value;
-          if (date === '' || date < startMin) {
-            date = startMin;
-          } else if (date > startMax) {
-            date = startMax;
-          }
-          store.setField('startDate', date);
-        }} />
+<div bind:this={parent}>
+  <Button compact level="medium" on:click={setActive}>
+    <div class="gafc col-gap-1x">
+      <Calendar size={12} />
+      {formatLabel(startDate)} - {formatLabel(endDate)}
+      <CaretDown size={14} />
     </div>
-    <div>
-      <div class="date-picker-input-label">End</div>
-      <input
-        type="date"
-        id="endDate"
-        name="range-end"
-        bind:value={currentEnd}
-        min={endMin}
-        max={endMax}
-        on:change={evt => {
-          let date = evt.target.value;
-          if (date === '' || date > endMax) {
-            date = endMax;
-          } else if (date < endMin) {
-            date = endMin;
-          }
-          store.setField('endDate', date);
-        }} />
+  </Button>
+</div>
+
+{#if active}
+  <!-- <FloatingMenu offset={16} {parent}> -->
+  <div
+    bind:this={element}
+    class="date-picker"
+    transition:fly={{ duration: 65, y: -5 }}
+    style=" position: absolute; left: {leftPlacement}px; top: {topPlacement}px;">
+    <div class="date-picker__optionset">
+      <div
+        class="date-picker__option"
+        class:date-picker__option--active={whichOption === 'BETWEEN'}
+        on:click={changeOption('BETWEEN')}>
+        Between
+      </div>
+      <div class="date-picker__reset">
+        <Button level="low" compact on:click={resetDates}>Reset</Button>
+      </div>
+    </div>
+    {#if whichOption === 'LAST'}
+      <div class="date-picker--last">
+        <div>
+          last
+          <input
+            type="number"
+            class="date-picker__input date-picker__input--last"
+            bind:value={lastValue} />
+          days
+        </div>
+      </div>
+    {/if}
+    {#if whichOption === 'BETWEEN'}
+      <div class="date-picker--between">
+        <input
+          class="date-picker__input date-picker__input--between"
+          class:date-picker__input--invalid={!startIsValid}
+          bind:value={boundStart} />
+        to
+        <input
+          class="date-picker__input date-picker__input--between"
+          class:date-picker__input--invalid={!endIsValid}
+          bind:value={boundEnd} />
+      </div>
+      <div class="date-picker__range">
+        {#if startIsValid && endIsValid}
+          {timeDay.count(toDate(boundStart), toDate(boundEnd))} days
+        {:else}Invalid dates.{/if}
+      </div>
+    {/if}
+    <div class="date-picker__apply">
+      <Button
+        compact
+        level="low"
+        on:click={() => {
+          active = false;
+        }}>
+        Cancel
+      </Button>
+      <Button compact level="high" on:click={applyDates}>Apply</Button>
     </div>
   </div>
-</div>
+  <!-- </FloatingMenu> -->
+{/if}
