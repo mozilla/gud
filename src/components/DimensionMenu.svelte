@@ -127,21 +127,26 @@
       <Divider />
     {/if}
     {#each options as option}
-      <ListItem on:click={toggleListItem(option.key, multi)}>
-        <span slot="primary">{option.label}</span>
-        <span slot="secondary">
-          {#if option.description}{option.description}{/if}
-        </span>
-        <span
-          slot="right"
-          style="color: {selections.includes(option.key) ? 'blue' : 'var(--cool-gray-400)'}">
-          {#if selections.includes(option.key)}
-            <Checkbox size="1em" />
-          {:else}
-            <CheckboxBlank size="1em" />
-          {/if}
-        </span>
-      </ListItem>
+      <!-- {console.log(option)} -->
+      {#if option.itemType === 'divider'}
+        <Divider />
+      {:else}
+        <ListItem on:click={toggleListItem(option.key, multi)}>
+          <span slot="primary">{option.label}</span>
+          <span slot="secondary">
+            {#if option.description}{option.description}{/if}
+          </span>
+          <span
+            slot="right"
+            style="color: {selections.includes(option.key) ? 'blue' : 'var(--cool-gray-400)'}">
+            {#if selections.includes(option.key)}
+              <Checkbox size="1em" />
+            {:else}
+              <CheckboxBlank size="1em" />
+            {/if}
+          </span>
+        </ListItem>
+    {/if}
     {/each}
   </List>
 </FloatingChild>

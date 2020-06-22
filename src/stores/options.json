@@ -1,29 +1,5 @@
 {
-  "startOptions": {
-    "label": "Start",
-    "type": "date",
-    "key": "startDate",
-    "onlyLocal": true,
-    "inMenu": true
-  },
-  "endOptions": {
-    "label": "End",
-    "type": "date",
-    "key": "endDate",
-    "onlyLocal": true,
-    "inMenu": true
-  },
-  "modeOptions": {
-    "label": "Mode",
-    "key": "mode",
-    "type": "single",
-    "inMenu": false,
-    "values": [
-      { "label": "Explore", "key": "explore" },
-      { "label": "Table", "key": "table" }
-    ]
-  },
-  "usageCriteriaOptions": {
+  "usage": {
     "label": "Product / Usage Criteria",
     "description": "any product, feature, or population subset for which we wish to calculate growth metrics",
     "key": "usage",
@@ -286,7 +262,7 @@
       { "label": "Unattributed", "key": "FALSE" }
     ]
   },
-  "metricOptions": {
+  "metric": {
     "label": "Metric",
     "type": "single",
     "key": "metric",
@@ -374,7 +350,7 @@
       }
     ]
   },
-  "platformOptions": {
+  "platform": {
     "label": "OS",
     "key": "os",
     "description": "available operating systems",
@@ -386,7 +362,7 @@
       { "label": "Linux", "key": "Linux" }
     ]
   },
-  "languageOptions": {
+  "language": {
     "label": "Language",
     "key": "language",
     "description": "available languages",
@@ -419,7 +395,7 @@
       { "label": "Italian", "key": "it", "shortDescription": "it" }
     ]
   },
-  "countryOptions": {
+  "country": {
     "label": "Country",
     "key": "country",
     "type": "multi",
@@ -441,7 +417,7 @@
       { "label": "Kenya", "key": "KE" }
     ]
   },
-  "channelOptions": {
+  "channel": {
     "label": "Channel",
     "key": "channel",
     "type": "multi",

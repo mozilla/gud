@@ -5,6 +5,7 @@
   import { Box } from "@graph-paper/box";
   import { Chip, ChipSet } from "@graph-paper/chip";
   import DimensionMenu from "./DimensionMenu.svelte";
+  import CONFIG from '../stores/options.json';
 
   let filters = [
     {
@@ -31,8 +32,9 @@
     },
   ];
 
-  let selections = filters.reduce((acc, v) => {
-    acc[v.key] = [v.options[0].key];
+  let selections = Object.values(CONFIG).reduce((acc, v) => {
+    console.log(v)
+    acc[v.key] = [v.values[0].key];
     return acc;
   }, {});
 
@@ -77,28 +79,28 @@
     <Box pad={2}>
       <h2>Filters</h2>
       <Stack>
-        {#each filters as filter}
+        {#each Object.values(CONFIG) as dimension, i (dimension.key)}
           <Stack space={0}>
             <DimensionMenu
-              on:selection={handleDimensionSelection(filter.key)}
-              selections={selections[filter.key]}
-              multi={!!filter.multi}
-              options={filter.options}>
-              {filter.title}
+              on:selection={handleDimensionSelection(dimension.key)}
+              selections={selections[dimension.key]}
+              multi={dimension.type === 'multi'}
+              options={dimension.values}>
+              {dimension.label}
             </DimensionMenu>
-            {#if selections[filter.key].length && filter.multi}
+            {#if selections[dimension.key].length && dimension.type === 'multi'}
               <div transition:slide>
                 <ChipSet>
-                  {#each selections[filter.key] as value, i (value)}
+                  {#each selections[dimension.key] as value, i (value)}
                     <Chip
                       cancelable
-                      on:cancel={removeSelection(filter.key, value)}>
+                      on:cancel={removeSelection(dimension.key, value)}>
                       {value}
                     </Chip>
                   {/each}
                 </ChipSet>
               </div>
-            {:else if !filter.multi}{selections[filter.key]}{/if}
+            {:else if !(dimension.type === 'multi')}{selections[dimension.key]}{/if}
           </Stack>
         {/each}
       </Stack>
