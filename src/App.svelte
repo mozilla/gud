@@ -1,11 +1,10 @@
 <script>
   import Sidebar from "./components/Sidebar.svelte";
   import Explore from "./components/Explore.svelte";
-  import LoadingSpinner from './components/LoadingSpinner.svelte'
+  import LoadingSpinner from './components/LoadingSpinner.svelte';
+  import ErrorMessage from './components/ErrorMessage.svelte';
   import { createRequestCache } from './stores/cache';
   import { store } from './stores/store';
-
-  $: console.log($store);
 
   const cache = createRequestCache();
 
@@ -15,7 +14,6 @@
   div {
     display: grid;
     grid-template-columns: var(--space-32x) auto;
-    /* FIXME: remove need for this workaround from story */
     min-width: calc(100vw - var(--space-4x)) !important;
   }
 </style>
@@ -26,5 +24,7 @@
     <LoadingSpinner />
   {:then value}
     <Explore data={value} />
+  {:catch err}
+    <ErrorMessage message={err.message} />
   {/await}
 </div>

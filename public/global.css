@@ -1,8 +1,20 @@
 nav {
-  background-color: var(--cool-gray-subtle);
+  /* background-color: var(--cool-gray-subtle); */
   max-height: 100vh;
   min-height: 100vh;
   position: sticky;
   top: 0;
   left: 0;
+}
+
+.transition-message {
+  height: max-content;
+  overflow: hidden;
+  display: grid;
+  grid-auto-flow: row;
+  justify-items: center;
+  justify-content: center;
+  padding-top: var(--space-32x);
+  align-items: center;
+  align-content: start;
 }
