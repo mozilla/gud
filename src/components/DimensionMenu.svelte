@@ -88,6 +88,7 @@
     align-items: center;
     align-content: stretch;
     width: 100%;
+    text-align: left;
   }
 </style>
 

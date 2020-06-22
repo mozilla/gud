@@ -41,14 +41,14 @@ function getDefaultState(
         if (basedOnQueryParams && params.get(field)) {
           value = params.get(field);
         } else {
-          value = values.find(l => !l.itemType).key;
+          value = values.find((l) => !l.itemType).key;
         }
         acc[field] = value;
       }
 
       // If the default usage criteria has disabled dimensions, record them
       if (field === "usage") {
-        const selected = values.find(v => v.key === value);
+        const selected = values.find((v) => v.key === value);
         if (selected.disabledDimensions) {
           acc.disabledDimensions = [...selected.disabledDimensions];
         } else {
@@ -60,7 +60,7 @@ function getDefaultState(
     },
     {}
   );
-
+  state.mode = "explore";
   state.maxEndDate = maxEndDate;
 
   return state;
@@ -72,14 +72,14 @@ export const store = {
   subscribe: internalStore.subscribe,
   setField(field, value) {
     internalStore.update(
-      produce(draftState => {
+      produce((draftState) => {
         draftState[field] = value;
       })
     );
   },
   setDateRange(startDate, endDate) {
     internalStore.update(
-      produce(draftState => {
+      produce((draftState) => {
         draftState.startDate = startDate;
         draftState.endDate = endDate;
       })
@@ -87,30 +87,30 @@ export const store = {
   },
   resetQuery() {
     internalStore.set(getDefaultState());
-  }
+  },
 };
 
-export const settingChanged = derived(store, $store => {
-  return Object.keys($store).some(field => {
-    const option = Object.values(options).find(o => o.key === field);
+export const settingChanged = derived(store, ($store) => {
+  return Object.keys($store).some((field) => {
+    const option = Object.values(options).find((o) => o.key === field);
     if (!option) return false;
 
     if (option.type === "multi") {
       return $store[field].length !== 0;
-    } else if (field === "startDate") {
+    }
+    if (field === "startDate") {
       if (!$store.minStartDate) {
         return false;
-      } else {
-        return $store.startDate !== $store.minStartDate;
       }
-    } else if (field === "endDate") {
-      return $store.endDate !== $store.maxEndDate;
-    } else {
-      return $store[field] !== option.values.filter(v => !v.itemType)[0].key;
+      return $store.startDate !== $store.minStartDate;
     }
+    if (field === "endDate") {
+      return $store.endDate !== $store.maxEndDate;
+    }
+    return $store[field] !== option.values.filter((v) => !v.itemType)[0].key;
   });
 });
 
-export const modeIsImplemented = derived(store, $store => {
+export const modeIsImplemented = derived(store, ($store) => {
   return $store.mode === "explore";
 });

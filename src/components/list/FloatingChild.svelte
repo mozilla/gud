@@ -20,7 +20,7 @@
       alignment,
       elementPosition: element.getBoundingClientRect(),
       parentPosition: parent.getBoundingClientRect(),
-      distance: 20,
+      distance: 10,
       y: scrollY,
     });
   }
@@ -35,7 +35,7 @@
       0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07),
       0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
     border-radius: var(--space-2x);
-    transition: opacity 75ms, transform 75ms;
+    transition: opacity 40ms;
     opacity: 1;
     z-index: 1;
     transform: none;
@@ -43,8 +43,8 @@
 
   .hidden {
     opacity: 0;
-    z-index: -1;
-    transform: translateX(-5px);
+    z-index: -5;
+    transform: translateX(-10000px);
   }
 </style>
 

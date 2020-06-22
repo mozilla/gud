@@ -1,6 +1,13 @@
 <script>
   import Sidebar from "./components/Sidebar.svelte";
   import Explore from "./components/Explore.svelte";
+  import { createRequestCache } from './stores/cache';
+  import { store } from './stores/store';
+
+  $: console.log($store);
+
+  const cache = createRequestCache();
+
 </script>
 
 <style>
@@ -14,5 +21,9 @@
 
 <div>
   <Sidebar />
-  <Explore />
+  {#await $cache}
+    huh?
+  {:then value}
+    <Explore data={value} />
+  {/await}
 </div>

@@ -1,4 +1,22 @@
 {
+  "mode": {
+    "notInMenu": true,
+    "key": "mode",
+    "values": [
+      { "key": "explore", "label": "Explore" },
+      { "key": "compare", "label": "Compare" }
+    ]
+  },
+  "startDate": {
+    "key": "startDate",
+    "notInMenu": true,
+    "values": []
+  },
+  "endDate": {
+    "key": "endDate",
+    "notInMenu": true,
+    "values": []
+  },
   "usage": {
     "label": "Product / Usage Criteria",
     "description": "any product, feature, or population subset for which we wish to calculate growth metrics",
@@ -12,7 +30,7 @@
         "label": "Firefox (Desktop)"
       },
       {
-        "label": "Any Firefox Activity",
+        "label": "Any Firefox Desktop Activity",
         "key": "Any Firefox Desktop Activity",
         "shortDescription": "The profile has sent a telemetry 'main' ping from Firefox Desktop on the day in question",
         "markerSet": "firefoxDesktopVersions"

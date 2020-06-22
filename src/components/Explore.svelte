@@ -2,12 +2,11 @@
   import { format } from "d3-format";
   import { timeFormat } from "d3-time-format";
 
-  // eslint-disable-next-line import/no-extraneous-dependencies
   import { fly } from "svelte/transition";
-  // eslint-disable-next-line import/no-extraneous-dependencies
   import { writable } from "svelte/store";
 
   import { Box } from "@graph-paper/box";
+  import { store } from '../stores/store'
   import MetricChart from "./MetricChart.svelte";
 
   import {
@@ -28,97 +27,41 @@
   import Key from "./Key.svelte";
   import Shortcuts from "./Shortcuts.svelte";
 
-  const store = writable({
+  const graphSize = writable({
     graphSize: "small", // medium, large.
   });
 
+export let data;
+
+
   function changeSize(size) {
     return () => {
-      store.update((state) => {
+      graphSize.update((state) => {
         const newState = { ...state };
         newState.graphSize = size;
         return newState;
       });
     };
   }
-
+  console.log(data);
   let dtfmt = timeFormat("%b %d, %Y");
 
-  let dates = (n = 365 * 2) => {
-    let dt = new Date("2017-01-01");
-    return Array.from({ length: n })
-      .fill(null)
-      .map(() => {
-        let dt2 = new Date(dt);
-        dt.setDate(dt.getDate() + 1);
-        return dt2;
-      });
-  };
-
-  let M = Math.random() * 10;
-  let dau = 1000000 * M;
-  let wau = dau * 3;
-  let mau = dau * 5.5;
-  let usage = 2.5;
-  let r01 = 0.8;
-  let r02 = 0.7;
-
-  const metricData = dates().map((date, i) => {
-    const dow = i % 7;
-    const weekend = dow > 4;
-    dau += (Math.random() - 0.45) * 100000 * M;
-    wau += (Math.random() - 0.45) * 50000 * M;
-    mau += (Math.random() - 0.45) * 50000 * M;
-    r01 += (Math.random() - 0.5) * (0.01 * (dow === 6 || dow === 7 ? 0.1 : 1));
-    r02 += (Math.random() - 0.5) * (0.01 * (dow === 6 || dow === 7 ? 0.1 : 1));
-    const r = Math.random();
-    if (r < 0.005) {
-      r01 += (Math.random() - 0.6) * 0.1;
-    }
-    usage +=
-      (Math.random() - 0.5) * (0.01 * (dow === 6 || dow === 7 ? 0.1 : 1));
-
-    return {
-      date,
-      dts: dtfmt(date),
-      dau: dau * (weekend ? 0.5 : 1),
-      dauLow: dau * (weekend ? 0.4 : 1) * 0.9 * (1 - Math.random() / 8),
-      dauHigh: dau * (weekend ? 0.7 : 1) * 1.1,
-      wau: i > 100 && i < 160 ? undefined : wau,
-      wauLow: i > 100 && i < 160 ? undefined : wau * 0.95,
-      wauHigh: i > 100 && i < 160 ? undefined : wau * 1.05,
-      mau,
-      mauLow: mau * 0.9,
-      mauHigh: mau * 1.1,
-      usage,
-      usageLow: usage * 0.8 + Math.random() / 5,
-      usageHigh: usage * 1.2 + Math.random() / 5,
-      retention01: r01,
-      retention02: r02,
-      retention01Low: r01 * 0.95,
-      retention01High: r01 * 1.05,
-      retention02Low: r02 * 0.95,
-      retention02High: r02 * 1.05,
-    };
-  });
-
-  const generateDomain = () => [
-    new Date(Math.min(...metricData.map((d) => d.date))),
-    new Date(Math.max(...metricData.map((d) => d.date))),
+  const generateDomain = (d) => [
+    new Date(Math.min(...d.map((di) => di.date))),
+    new Date(Math.max(...d.map((di) => di.date))),
   ];
 
-  // let xDomain = tweened(generateDomain(), { duration: 200, easing });
-  let xDomain = generateDomain();
+  let xDomain = generateDomain(data);
 
   let auMax =
     Math.max(
-      ...metricData.map((d) => d.dauHigh),
-      ...metricData.map((d) => d.wauHigh || 0),
-      ...metricData.map((d) => d.mauHigh)
+      ...data.map((d) => d.dau_high),
+      ...data.map((d) => d.wau_high || 0),
+      ...data.map((d) => d.mau_high)
     ) * 1.1;
 
   const resetDomain = () => {
-    xDomain = generateDomain();
+    xDomain = generateDomain(data);
   };
 
   let withCommas = format(",");
@@ -162,16 +105,16 @@
       hoverFormat: count,
     },
     {
-      name: "Usage",
-      key: "usage",
+      name: "Intensity",
+      key: "intensity",
       type: "rate",
       yMax: 7,
-      axisFormat: format(",d"),
+      axisFormat: format(".1f"),
       hoverFormat: format(".2f"),
     },
     {
       name: "Retention ",
-      key: "retention01",
+      key: "retention_1_week_active_in_week_0",
       type: "percentage",
       yMax: 1,
       axisFormat: format(".0%"),
@@ -179,7 +122,7 @@
     },
     {
       name: "Retention (1 wk. new)",
-      key: "retention02",
+      key: "retention_1_week_new_profile",
       type: "percentage",
       yMax: 1,
       axisFormat: format(".0%"),
@@ -214,13 +157,13 @@
 
   let width = 375;
   let height = 250;
-  $: if ($store.graphSize === "small") {
+  $: if ($graphSize.graphSize === "small") {
     width = 375;
     height = 250;
-  } else if ($store.graphSize === "medium") {
+  } else if ($graphSize.graphSize === "medium") {
     width = 550;
     height = 325;
-  } else if ($store.graphSize === "large") {
+  } else if ($graphSize.graphSize === "large") {
     width = 1200;
     height = 400;
   }
@@ -283,7 +226,7 @@
 
 <main>
   <Box padding={2}>
-    <h1>Metrics Dashboard</h1>
+    <h1>{$store.usage}</h1>
 
     <div class="main-controls">
       <div class="gafc">
@@ -342,15 +285,14 @@
       </div>
     </div>
 
-    <div class="multiples multiples--{$store.graphSize}">
+    <div class="multiples multiples--{$graphSize.graphSize}">
       {#each graphs as { name, type, key, yMax, axisFormat, hoverFormat }, i (name)}
         <div>
           <MetricChart
-            size={$store.size}
             {width}
             {height}
             {name}
-            data={metricData}
+            data={data}
             y={key}
             {xDomain}
             yMin={commonScales ? 0 : undefined}

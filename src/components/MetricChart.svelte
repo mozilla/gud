@@ -130,7 +130,7 @@
   {height}
   top={32}
   bottom={24}
-  left={36}
+  left={40}
   right={24}
   {xDomain}
   xDomainTween={{ duration: 150, easing }}
