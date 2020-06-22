@@ -1,6 +1,7 @@
 <script>
   import Sidebar from "./components/Sidebar.svelte";
   import Explore from "./components/Explore.svelte";
+  import LoadingSpinner from './components/LoadingSpinner.svelte'
   import { createRequestCache } from './stores/cache';
   import { store } from './stores/store';
 
@@ -22,7 +23,7 @@
 <div>
   <Sidebar />
   {#await $cache}
-    huh?
+    <LoadingSpinner />
   {:then value}
     <Explore data={value} />
   {/await}
