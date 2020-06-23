@@ -16,6 +16,10 @@
     dispatch('cancel');
   }
 
+  function listenForEscape(event) {
+    if (event.key === 'Escape') onCancel();
+  }
+
 </script>
 
 <style>
@@ -93,6 +97,8 @@
     background-color: var(--digital-blue-100);
   }
 </style>
+
+<svelte:window on:keydown={listenForEscape} />
 
 {#if isMounted}
   <Portal>
