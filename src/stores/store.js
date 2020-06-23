@@ -85,6 +85,14 @@ export const store = {
       })
     );
   },
+  resetDateRange() {
+    internalStore.update(
+      produce((draftState) => {
+        draftState.startDate = draftState.minStartDate;
+        draftState.endDate = draftState.maxEndDate;
+      })
+    );
+  },
   resetQuery() {
     internalStore.set(getDefaultState());
   },

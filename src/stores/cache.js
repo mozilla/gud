@@ -30,20 +30,23 @@ function toQueryStringParts(key, val) {
   return `${opt.key}=${encodeURIComponent(val)}`;
 }
 
-export const storeToQuery = ($store) => {
+function filterUnusedState(localState = true) {
+  return ([key]) => {
+    return ![
+      "activeUsersYMax",
+      "minStartDate",
+      "maxEndDate",
+      "disabledDimensions",
+      !localState ? "startDate" : "",
+      !localState ? "endDate" : "",
+    ].includes(key);
+  };
+}
+
+export const storeToQuery = ($store, localState = true) => {
   return Object.entries($store)
-    .filter(
-      ([key]) =>
-        ![
-          "activeUsersYMax",
-          "minStartDate",
-          "maxEndDate",
-          "disabledDimensions",
-        ].includes(key)
-    )
-    .map(([key, val]) => {
-      return toQueryStringParts(key, val);
-    })
+    .filter(filterUnusedState(localState))
+    .map(([key, val]) => toQueryStringParts(key, val))
     .join("&");
 };
 
@@ -75,17 +78,28 @@ function setRanges(data, options = { setMinStartDate: false }) {
   return data;
 }
 
+export const datesAreDefault = derived(store, ($store) => {
+  return (
+    $store.startDate === $store.minStartDate &&
+    $store.endDate === $store.maxEndDate
+  );
+});
+
 export function createRequestCache() {
   const cacheObj = {};
   let lastMetric;
-
-  return derived(store, ($store) => {
+  let lastServerQuery;
+  return derived(store, ($store, set) => {
     const queryParams = removeLocalParams($store);
     const q = storeToQuery(queryParams);
+
+    const serverQuery = storeToQuery(queryParams, false);
+    if (serverQuery === lastServerQuery) return;
+
     const newMetric = queryParams.usage;
     const metricChanged = lastMetric && lastMetric !== newMetric;
     const setMinStartDate = !$store.startDate || metricChanged;
-    if ($store.mode !== "explore") return undefined;
+    if ($store.mode !== "explore") return;
     if (!(q in cacheObj)) {
       cacheObj[q] = fetchExploreData(queryParams, q);
     }
@@ -93,6 +107,7 @@ export function createRequestCache() {
       setRanges(data, { setMinStartDate })
     );
     lastMetric = newMetric;
-    return promise;
+    lastServerQuery = serverQuery;
+    set(promise);
   });
 }

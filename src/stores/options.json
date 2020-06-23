@@ -10,12 +10,14 @@
   "startDate": {
     "key": "startDate",
     "notInMenu": true,
-    "values": []
+    "values": [],
+    "onlyLocal": true
   },
   "endDate": {
     "key": "endDate",
     "notInMenu": true,
-    "values": []
+    "values": [],
+    "onlyLocal": true
   },
   "usage": {
     "label": "Product / Usage Criteria",

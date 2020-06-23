@@ -1,13 +1,14 @@
 <script>
   import { format } from "d3-format";
-  import { timeFormat } from "d3-time-format";
+  import { timeFormat, timeParse } from "d3-time-format";
 
   import { fly } from "svelte/transition";
   import { writable } from "svelte/store";
 
   import { Box } from "@graph-paper/box";
   import CONFIG from '../stores/options.json';
-  import { store } from '../stores/store'
+  import { store } from '../stores/store';
+  import { datesAreDefault } from '../stores/cache';
   import MetricChart from "./MetricChart.svelte";
 
   import {
@@ -45,13 +46,16 @@
   }
 
   let dtfmt = timeFormat("%b %d, %Y");
+  let dateStringFormat = timeFormat('%Y-%m-%d');
+  let parseDateString = timeParse('%Y-%m-%d');
 
   const generateDomain = (d) => [
     new Date(Math.min(...d.map((di) => di.date))),
     new Date(Math.max(...d.map((di) => di.date))),
   ];
 
-  let xDomain = generateDomain(data);
+  //let xDomain = generateDomain(data);
+  $: xDomain = [parseDateString($store.startDate), parseDateString($store.endDate)];
 
   let auMax =
     Math.max(
@@ -61,7 +65,7 @@
     ) * 1.1;
 
   const resetDomain = () => {
-    xDomain = generateDomain(data);
+    store.resetDateRange();
   };
 
   let withCommas = format(",");
@@ -147,7 +151,7 @@
   const endMouseEvent = () => {
     startValue = new Date(Math.min(mouseDownValue.x, mouseMoveValue.x));
     endValue = new Date(Math.max(mouseDownValue.x, mouseMoveValue.x));
-    xDomain = [startValue, endValue];
+    store.setDateRange(dateStringFormat(startValue), dateStringFormat(endValue));
     isScrubbing = true;
     resetMouseClicks();
   };
@@ -259,7 +263,7 @@
           }}
           on:resetDates={resetDomain} />
 
-        {#if isScrubbing}
+        {#if !$datesAreDefault}
           <div in:fly={{ duration: 400, y: -10 }}>
             <Button
               level="medium"
