@@ -98,7 +98,11 @@
                     {/each}
                   </ChipSet>
                 </div>
-              {:else if !(dimension.type === 'multi')}{selections[dimension.key]}{/if}
+              {:else if !(dimension.type === 'multi')}
+                <div style='text-align: left; padding-right: var(--space-2x); padding-left: var(--space-4x); font-size: var(--text-02);'>
+                  {selections[dimension.key]}
+                </div>
+              {/if}
             </Stack>
             {/if}
           {/each}

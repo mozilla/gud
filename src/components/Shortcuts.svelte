@@ -31,7 +31,7 @@
     left: calc(50% - var(--width) / 2);
     top: 25%;
     bottom: 25%;
-    border: 4px solid var(--digital-blue-600);
+    border: 4px solid var(--digital-blue-500);
     border-radius: var(--space-1h);
     min-height: 400px;
     padding: var(--space-4x);
@@ -47,6 +47,7 @@
     display: grid;
     grid-template-columns: max-content max-content;
     grid-column-gap: var(--space-2x);
+    grid-row-gap: var(--space-2x);
     font-size: var(--text-015);
     padding: 0px;
     margin: 0px;
@@ -55,9 +56,8 @@
   h4 {
     padding: 0px;
     margin: 0px;
-    padding-bottom: var(--space-base);
-    color: var(--cool-gray-650);
-    font-weight: normal;
+    color: var(--digital-blue-700);
+    font-size: var(--text-05);
     text-transform: uppercase;
   }
 
@@ -72,14 +72,17 @@
     grid-column-gap: var(--space-1h);
   }
 
-  .close-button {
+  header {
+    padding-bottom: var(--space-2x);
     display: grid;
     width: 100%;
-    justify-content: end;
+    grid-auto-flow: column;
+    justify-content: space-between;
+    align-items: center;
   }
 
   button {
-    background: transparent;
+    background-color: var(--digital-blue-100);
     padding: 0px;
     margin: 0px;
     border: none;
@@ -88,13 +91,15 @@
     justify-items: center;
     border-radius: 50%;
     padding: var(--space-1x);
-    transition: background-color 100ms;
+    transition: background-color 100ms, transform 500ms;
     color: var(--digital-blue-700);
+    cursor: pointer;
 
   }
 
   button:hover {
-    background-color: var(--digital-blue-100);
+    background-color: var(--digital-blue-150);
+    transform: rotate(360deg);
   }
 </style>
 
@@ -103,12 +108,12 @@
 {#if isMounted}
   <Portal>
     <div class=container transition:fly={{duration: 125, y:5}}>
-      <div class=close-button>
+      <header>
+        <h4>Shortcuts</h4>
         <button on:click={onCancel}>
           <Close />
         </button>
-      </div>
-      <h4>Shortcuts</h4>
+      </header>
       <dl>
         <dt>click + drag + release</dt>
         <dd>
