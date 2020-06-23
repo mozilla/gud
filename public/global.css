@@ -3,7 +3,6 @@
 }
 
 nav {
-  background-color: var(--cool-gray-subtle);
   max-height: 100vh;
   min-height: 100vh;
   position: sticky;
@@ -11,9 +10,17 @@ nav {
   left: 0;
   display: grid;
   grid-template-rows: max-content max-content auto;
-
+  padding-left: var(--space-1h);
+  padding-right: var(--space-1h);
   align-content: stretch;
   align-items: start;
+  /* border-right: 1px solid var(--cool-gray-200); */
+  box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.05);
+}
+
+nav .gp-button {
+  font-weight: normal;
+  transition: background-color 200ms, color 200ms;
 }
 
 nav > div:last-child {

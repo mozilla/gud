@@ -42,7 +42,7 @@
   let mounted = false;
   onMount(() => { mounted = true });
 
-  let showShortcuts = true;
+  let showShortcuts = false;
 
 </script>
 
@@ -50,14 +50,14 @@
   h1 {
     padding: 0px;
     margin: 0px;
-    font-weight: 900;
     color: var(--cool-gray-700);
     display: grid;
     grid-auto-flow: column;
-    grid-column-gap: var(--space-2x);
+    grid-column-gap: var(--space-1x);
     justify-content: start;
     align-items: center;
-    font-size: var(--text-07);
+    font-size: var(--text-06);
+    line-height: 1;
   }
 
   h2 {
@@ -69,12 +69,12 @@
 
 <nav>
     <Box padding={2}>
-      <h1><GUDLogo size={40} /> GUD</h1>
+      <h1><GUDLogo size={32} /> Growth & Usage</h1>
     </Box>
     {#if mounted}
     <Box pad={2}>
       <div in:fly={{duration: 500, x: -10}}>
-        <h2>Filters</h2>
+        <!-- <h2>Filters</h2> -->
         <Stack>
           {#each Object.values(CONFIG) as dimension, i (dimension.key)}
             {#if !dimension.notInMenu}
@@ -83,6 +83,7 @@
                 on:selection={handleDimensionSelection(dimension.key)}
                 selections={selections[dimension.key]}
                 multi={dimension.type === 'multi'}
+                menuWidth={dimension.key === 'usage' ? 72 : 32}
                 options={dimension.values}>
                 {dimension.label}
               </DimensionMenu>

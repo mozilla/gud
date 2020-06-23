@@ -3,8 +3,8 @@ import { readable, derived } from "svelte/store";
 import optionSet from "./options.json";
 import { store } from "./store";
 
-const productDetails = readable(undefined, async set => {
-  //if (!hasLoaded) {
+const productDetails = readable(undefined, async (set) => {
+  // if (!hasLoaded) {
   const request = await fetch(
     "https://product-details.mozilla.org/1.0/all.json"
   );
@@ -21,14 +21,14 @@ const productDetails = readable(undefined, async set => {
 //     return $productDetails
 // })
 
-export const showFirefoxDesktopDetails = derived(store, $store => {
+export const showFirefoxDesktopDetails = derived(store, ($store) => {
   const thisCriterion = optionSet.usageCriteriaOptions.values.find(
-    opt => opt.key === $store.usage
+    (opt) => opt.key === $store.usage
   );
   return thisCriterion && thisCriterion.markerSet === "firefoxDesktopVersions";
 });
 
-export const majorReleases = derived(productDetails, $pd => {
+export const majorReleases = derived(productDetails, ($pd) => {
   // get $usage for optionSet.
   if ($pd === undefined) return undefined;
   return Object.entries($pd)
@@ -49,7 +49,7 @@ export const majorReleases = derived(productDetails, $pd => {
       info.label = version;
       return info;
     })
-    .filter(info => {
+    .filter((info) => {
       return info.str > "2016-06-01";
     });
 });

@@ -2,7 +2,8 @@
   import { getContext } from "svelte";
 
   let borderRadius = getContext("gp:list:border-radius");
-  $: style = `${borderRadius ? `--border-radius: ${borderRadius}` : ""}`;
+  $: style = `${borderRadius ? `--border-radius: ${borderRadius};` : ""}`;
+  $: console.log(style)
 </script>
 
 <style>
@@ -12,7 +13,7 @@
     margin: 0px;
     background-color: white;
     list-style-type: none;
-    min-width: var(--space-32x);
+    min-width: var(--spac-32x);
     border-radius: var(--border-radius);
   }
 </style>

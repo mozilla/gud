@@ -27,18 +27,21 @@
 
   <g slot="annotation" let:xScale let:yScale let:left let:right>
     <line
+      shape-rendering=crispEdges
       x1={right + 10}
       x2={right + 10}
       y1={yScale(legendData[legendData.length - 1].yMin)}
       y2={yScale(legendData[legendData.length - 1].yMax)}
       stroke="var(--cool-gray-500)" />
     <line
+      shape-rendering=crispEdges
       x1={right + 10}
       x2={right + 5}
       y1={yScale(legendData[legendData.length - 1].yMin)}
       y2={yScale(legendData[legendData.length - 1].yMin)}
       stroke="var(--cool-gray-500)" />
     <line
+      shape-rendering=crispEdges
       x1={right + 10}
       x2={right + 5}
       y1={yScale(legendData[legendData.length - 1].yMax)}

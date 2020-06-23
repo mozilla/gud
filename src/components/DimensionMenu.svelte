@@ -14,12 +14,14 @@
   import List from "./list/List.svelte";
   import ListItem from "./list/ListItem.svelte";
   import Divider from "./list/Divider.svelte";
+  import ListHeader from './list/ListHeader.svelte';
 
 
   const dispatch = createEventDispatcher();
 
   export let toggled = false;
   export let multi = true;
+  export let menuWidth = 32;
   export let options;
 
   let container;
@@ -107,12 +109,11 @@
   </Button>
 </div>
 
-<FloatingChild active={toggled} bind:element parent={container}>
+<FloatingChild width={menuWidth} active={toggled} bind:element parent={container}>
   <List>
     {#if multi}
       <ListItem on:click={clearSelection}>
         <span slot="secondary">
-
           {#if selections.length}
             clear {selections.length} selection{selections.length === 1 ? '' : 's'}
           {:else}showing all{/if}
@@ -128,14 +129,15 @@
       <Divider />
     {/if}
     {#each options as option}
-      <!-- {console.log(option)} -->
       {#if option.itemType === 'divider'}
         <Divider />
+      {:else if option.itemType === 'section'}
+        <ListHeader>{option.label}</ListHeader>
       {:else}
         <ListItem on:click={toggleListItem(option.key, multi)}>
           <span slot="primary">{option.label}</span>
           <span slot="secondary">
-            {#if option.description}{option.description}{/if}
+            {#if option.shortDescription}{option.shortDescription}{/if}
           </span>
           <span
             slot="right"

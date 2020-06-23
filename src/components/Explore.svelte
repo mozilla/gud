@@ -200,14 +200,16 @@
 
   main {
     min-width: 1200px;
+    padding-left: var(--space-6x);
   }
 
   .multiples {
     display: grid;
     grid-column-gap: var(--space-4x);
     grid-row-gap: var(--space-8x);
-    justify-content: center;
+    justify-content: start;
     justify-items: start;
+
   }
 
   .multiples--small {
@@ -227,7 +229,7 @@
     padding-right: var(--space-2x);
     display: grid;
     grid-auto-flow: column;
-    justify-content: stretch;
+    justify-content: start;
     justify-items: start;
     align-items: center;
     margin-bottom: var(--space-4x);
@@ -239,11 +241,11 @@
 </style>
 
 <main>
-  <Box padding={2}>
     <header>
       <h1>{$store.usage}</h1>
       <div>{description}</div>
     </header>
+
 
     <div class="main-controls">
       <div class="gafc">
@@ -271,8 +273,9 @@
             </Button>
           </div>
         {/if}
-      </div>
-      <div class="gafc" style="justify-self: end">
+      <!-- </div>
+
+      <div class="gafc"> -->
         <Button
           compact
           level="medium"
@@ -333,5 +336,4 @@
       align-items: start; justify-content: space-between; ">
       <Key />
     </div>
-  </Box>
 </main>

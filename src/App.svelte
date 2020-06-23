@@ -13,7 +13,7 @@
 <style>
   div {
     display: grid;
-    grid-template-columns: var(--space-32x) auto;
+    grid-template-columns: var(--space-40x) auto;
     min-width: calc(100vw - var(--space-4x)) !important;
   }
 </style>

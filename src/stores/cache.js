@@ -81,7 +81,6 @@ export function createRequestCache() {
 
   return derived(store, ($store) => {
     const queryParams = removeLocalParams($store);
-    console.log(queryParams);
     const q = storeToQuery(queryParams);
     const newMetric = queryParams.usage;
     const metricChanged = lastMetric && lastMetric !== newMetric;
@@ -90,9 +89,9 @@ export function createRequestCache() {
     if (!(q in cacheObj)) {
       cacheObj[q] = fetchExploreData(queryParams, q);
     }
-    const promise = cacheObj[q]
-      .then((data) => setRanges(data, { setMinStartDate }))
-      .catch(console.log);
+    const promise = cacheObj[q].then((data) =>
+      setRanges(data, { setMinStartDate })
+    );
     lastMetric = newMetric;
     return promise;
   });

@@ -1,6 +1,6 @@
 <script>
   import { onMount, createEventDispatcher } from 'svelte';
-  import { fly } from 'svelte/transition';
+  import { fly, scale } from 'svelte/transition';
   import { Portal } from "@graph-paper/portal"
   import { Calendar, Close } from "@graph-paper/icons";
 
@@ -31,10 +31,8 @@
     left: calc(50% - var(--width) / 2);
     top: 25%;
     bottom: 25%;
-    border: 4px solid var(--digital-blue-500);
     border-radius: var(--space-1h);
     min-height: 400px;
-    padding: var(--space-4x);
     box-shadow:
             0 2px 1px rgba(0,0,0,0.09),
             0 4px 2px rgba(0,0,0,0.09),
@@ -46,9 +44,17 @@
   dl {
     display: grid;
     grid-template-columns: max-content max-content;
-    grid-column-gap: var(--space-2x);
+    align-items: baseline;
+    grid-column-gap: var(--space-4x);
     grid-row-gap: var(--space-2x);
     font-size: var(--text-015);
+    padding: 0px;
+    margin: 0px;
+    padding: var(--space-4x);
+    padding-top: var(--space-2x);
+  }
+
+  dd {
     padding: 0px;
     margin: 0px;
   }
@@ -56,7 +62,6 @@
   h4 {
     padding: 0px;
     margin: 0px;
-    color: var(--digital-blue-700);
     font-size: var(--text-05);
     text-transform: uppercase;
   }
@@ -73,16 +78,19 @@
   }
 
   header {
-    padding-bottom: var(--space-2x);
+    padding: var(--space-2x);
     display: grid;
-    width: 100%;
     grid-auto-flow: column;
     justify-content: space-between;
     align-items: center;
+    background: linear-gradient(to left, var(--digital-blue-700), var(--digital-blue-800) 36%, var(--digital-blue-900));
+    color: var(--digital-blue-100);
+    border-top-left-radius: var(--space-1h);
+    border-top-right-radius: var(--space-1h);
   }
 
   button {
-    background-color: var(--digital-blue-100);
+    background-color: var(--digital-blue-200);
     padding: 0px;
     margin: 0px;
     border: none;
@@ -98,7 +106,7 @@
   }
 
   button:hover {
-    background-color: var(--digital-blue-150);
+    background-color: var(--digital-blue-250);
     transform: rotate(360deg);
   }
 </style>
@@ -111,7 +119,7 @@
       <header>
         <h4>Shortcuts</h4>
         <button on:click={onCancel}>
-          <Close />
+          <Close size={16} />
         </button>
       </header>
       <dl>
