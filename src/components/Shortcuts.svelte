@@ -1,14 +1,45 @@
 <script>
-  import { Calendar } from "@graph-paper/icons";
+  import { onMount, createEventDispatcher } from 'svelte';
+  import { fly } from 'svelte/transition';
+  import { Portal } from "@graph-paper/portal"
+  import { Calendar, Close } from "@graph-paper/icons";
+
+  const dispatch = createEventDispatcher();
+
+  let isMounted = false;
+
+  onMount(() => {
+    isMounted = true;
+  });
+
+  function onCancel() {
+    dispatch('cancel');
+  }
+
 </script>
 
 <style>
-  div {
-    padding-top: var(--space-4x);
-    padding-left: var(--space-3x);
+  .container {
+    --width: 600px;
+    position: absolute;
+    width: var(--width);
+    background-color: white;
+    left: calc(50% - var(--width) / 2);
+    top: 25%;
+    bottom: 25%;
+    border: 4px solid var(--digital-blue-600);
+    border-radius: var(--space-1h);
+    min-height: 400px;
+    padding: var(--space-4x);
+    box-shadow:
+            0 2px 1px rgba(0,0,0,0.09),
+            0 4px 2px rgba(0,0,0,0.09),
+            0 8px 4px rgba(0,0,0,0.09),
+            0 16px 8px rgba(0,0,0,0.09),
+            0 32px 16px rgba(0,0,0,0.09);
   }
 
-  .shortcuts {
+  dl {
     display: grid;
     grid-template-columns: max-content max-content;
     grid-column-gap: var(--space-2x);
@@ -36,22 +67,55 @@
     align-items: center;
     grid-column-gap: var(--space-1h);
   }
+
+  .close-button {
+    display: grid;
+    width: 100%;
+    justify-content: end;
+  }
+
+  button {
+    background: transparent;
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    border-radius: 50%;
+    padding: var(--space-1x);
+    transition: background-color 100ms;
+    color: var(--digital-blue-700);
+
+  }
+
+  button:hover {
+    background-color: var(--digital-blue-100);
+  }
 </style>
 
-<div>
-  <h4>Shortcuts</h4>
-  <dl class="shortcuts">
-    <dt>click + drag + release</dt>
-    <dd>
-      set a new
-      <span>
-        date range
-        <Calendar size="1em" />
-      </span>
-      for all graphs
-    </dd>
-
-    <dt>shift + drag</dt>
-    <dd>compare whichever point was highlighted on shift to a hover point</dd>
-  </dl>
-</div>
+{#if isMounted}
+  <Portal>
+    <div class=container transition:fly={{duration: 125, y:5}}>
+      <div class=close-button>
+        <button on:click={onCancel}>
+          <Close />
+        </button>
+      </div>
+      <h4>Shortcuts</h4>
+      <dl>
+        <dt>click + drag + release</dt>
+        <dd>
+          set a new
+          <span>
+            date range
+            <Calendar size="1em" />
+          </span>
+          for all graphs
+        </dd>
+        <dt>shift + drag</dt>
+        <dd>compare whichever point was highlighted on shift to a hover point</dd>
+      </dl>
+    </div>
+  </Portal>
+{/if}

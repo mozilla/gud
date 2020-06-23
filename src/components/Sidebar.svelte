@@ -5,6 +5,13 @@
   import { Stack } from "@graph-paper/stack";
   import { Box } from "@graph-paper/box";
   import { Chip, ChipSet } from "@graph-paper/chip";
+  import { Documentation } from "@graph-paper/icons";
+
+  import Shortcuts from './Shortcuts.svelte';
+
+  import Slack from './Slack.svelte';
+  import Keyboard from './Keyboard.svelte';
+  import GithubLogo from './GithubLogo.svelte';
   import DimensionMenu from "./DimensionMenu.svelte";
   import GUDLogo from './GUDLogo.svelte';
   import CONFIG from '../stores/options.json';
@@ -34,6 +41,9 @@
 
   let mounted = false;
   onMount(() => { mounted = true });
+
+  let showShortcuts = true;
+
 </script>
 
 <style>
@@ -58,7 +68,6 @@
 </style>
 
 <nav>
-  <div>
     <Box padding={2}>
       <h1><GUDLogo size={40} /> GUD</h1>
     </Box>
@@ -98,21 +107,36 @@
     </Box>
 
     {/if}
-    <!-- footer -->
-    <!-- {#if site.feedback}
-      <Box padding={3}>
-        <div
-          style="padding-top: var(--space-4x); font-size: var(--text-02); color:
-          var(--cool-gray-7500);">
-          <div
-            style="font-size: var(--text-015); text-transform: uppercase;color:
-            var(--cool-gray-550); font-weight: bold;">
-            feedback
-          </div>
-          {site.feedback}
-        </div>
+    <div class="bottom-element">
+      <Box>
+        <Stack>
+            <Button compact level=low href="https://docs.telemetry.mozilla.org/tools/gud.html">
+              <div class=gafc>
+                <Documentation color=var(--icon-color) size={14} /> Documentation
+              </div>
+            </Button>
+            <Button toggled={showShortcuts} compact level=low on:click={() => { showShortcuts = !showShortcuts; }}>
+              <div class=gafc>
+                <Keyboard color=var(--icon-color) size={14} />
+                Shortcuts
+              </div>
+            </Button>
+            <Button compact level=low href="https://mozilla.slack.com/archives/CKMUVLPSL">
+              <div class=gafc>
+                <Slack color=var(--icon-color) size={14} /> Feedback
+              </div>
+            </Button>
+            <Button compact level=low href="https://github.com/mozilla/gud/issues/new/choose">
+              <div class=gafc>
+                <GithubLogo color=var(--icon-color) size={14} />
+                File an Issue
+              </div>
+            </Button>
+        </Stack>
       </Box>
-    {/if} -->
-
-  </div>
+    </div>
 </nav>
+
+{#if showShortcuts}
+  <Shortcuts on:cancel={() => { showShortcuts = false; }} />
+{/if}

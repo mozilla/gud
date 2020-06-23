@@ -1,10 +1,40 @@
+:root {
+  --gafc-space: var(--space-1x);
+}
+
 nav {
-  /* background-color: var(--cool-gray-subtle); */
+  background-color: var(--cool-gray-subtle);
   max-height: 100vh;
   min-height: 100vh;
   position: sticky;
   top: 0;
   left: 0;
+  display: grid;
+  grid-template-rows: max-content max-content auto;
+
+  align-content: stretch;
+  align-items: start;
+}
+
+nav > div:last-child {
+  align-self: end;
+  padding-bottom: var(--space-2x);
+  --icon-color: var(--digital-blue-250);
+}
+
+nav > div:last-child .gp-button svg {
+  transition: fill 200ms;
+}
+
+nav > div:last-child .gp-button:hover {
+  --icon-color: var(--digital-blue-800);
+}
+
+.gafc {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  grid-column-gap: var(--gafc-space);
 }
 
 .transition-message {

@@ -6,6 +6,7 @@
   import { writable } from "svelte/store";
 
   import { Box } from "@graph-paper/box";
+  import CONFIG from '../stores/options.json';
   import { store } from '../stores/store'
   import MetricChart from "./MetricChart.svelte";
 
@@ -31,8 +32,7 @@
     graphSize: "small", // medium, large.
   });
 
-export let data;
-
+  export let data;
 
   function changeSize(size) {
     return () => {
@@ -43,7 +43,7 @@ export let data;
       });
     };
   }
-  console.log(data);
+
   let dtfmt = timeFormat("%b %d, %Y");
 
   const generateDomain = (d) => [
@@ -157,6 +157,7 @@ export let data;
 
   let width = 375;
   let height = 250;
+
   $: if ($graphSize.graphSize === "small") {
     width = 375;
     height = 250;
@@ -167,14 +168,27 @@ export let data;
     width = 1200;
     height = 400;
   }
+
+  $: description = CONFIG.usage.values.find(v=> v.key === $store.usage).shortDescription;
+
 </script>
 
 <style>
+
+  header {
+    padding-left: var(--space-2x);
+    color: var(--cool-gray-700);
+    padding-bottom: var(--space-6x);
+  }
+
   h1 {
     margin: 0px;
     padding: 0px;
-    padding-left: var(--space-2x);
-    padding-bottom: var(--space-2x);
+  }
+
+  header div {
+    font-size: var(--text-03);
+    max-width: calc(var(--space-1x) * 120);
   }
 
   .gafc {
@@ -226,7 +240,10 @@ export let data;
 
 <main>
   <Box padding={2}>
-    <h1>{$store.usage}</h1>
+    <header>
+      <h1>{$store.usage}</h1>
+      <div>{description}</div>
+    </header>
 
     <div class="main-controls">
       <div class="gafc">
@@ -314,7 +331,6 @@ export let data;
       in:fly={{ duration: 500, delay: 1000, y: -10 }}
       style=" width: 970px; display: grid; grid-template-columns: auto auto;
       align-items: start; justify-content: space-between; ">
-      <Shortcuts />
       <Key />
     </div>
   </Box>
