@@ -10,3 +10,11 @@ header {
 footer {
   display: none;
 }
+
+.deepLink {
+  display: none;
+}
+
+.deepLink:hover {
+  display: block;
+}
