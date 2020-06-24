@@ -222,7 +222,7 @@
           <a
             class="bt bt-text bt-text-with-icon"
             target="_blank"
-            href="https://docs.google.com/document/d/1sIHCCaJhtfxj-dnbInfuIjlMRhCFbEhFiBESaezIRwM/edit?usp=sharing">
+            href="https://mozilla.github.io/gud">
             Documentation
             <ArrowForward />
           </a>
