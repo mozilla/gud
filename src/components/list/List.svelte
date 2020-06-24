@@ -3,7 +3,6 @@
 
   let borderRadius = getContext("gp:list:border-radius");
   $: style = `${borderRadius ? `--border-radius: ${borderRadius};` : ""}`;
-  $: console.log(style)
 </script>
 
 <style>

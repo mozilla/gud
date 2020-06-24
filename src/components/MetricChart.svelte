@@ -11,6 +11,7 @@
   // import VerticalErrorBar from "../../../VerticalErrorBar.svelte";
   import LeftAxis from "@graph-paper/guides/LeftAxis.svelte";
   import BottomAxis from "@graph-paper/guides/BottomAxis.svelte";
+  import TimeAxis from './TimeAxis.svelte';
   import { window1D } from "@graph-paper/core/utils/window-functions";
 
   // import Window1D from "../Window1D.svelte";
@@ -129,7 +130,7 @@
   {width}
   {height}
   top={32}
-  bottom={24}
+  bottom={32}
   left={40}
   right={24}
   {xDomain}
@@ -173,7 +174,8 @@
         opacity=".3" />
     {/if}
     <LeftAxis tickColor="var(--cool-gray-150)" tickFormatter={axisFormat} />
-    <BottomAxis lineStyle="long" tickColor="var(--cool-gray-150)" />
+    <TimeAxis />
+    <!-- <BottomAxis lineStyle="long" tickColor="var(--cool-gray-150)" /> -->
   </g>
   <g slot="body-background" let:xScale let:yScale let:top let:bottom>
     {#if mouseDownValue.x && mouseMoveValue.x}
