@@ -10,8 +10,8 @@ const maxEndDate = timeFormatter(new Date());
 function getDefaultState(
   { basedOnQueryParams } = { basedOnQueryParams: false }
 ) {
-  const params = new URLSearchParams(window.location.search);
-
+  const search = `${window.location.hash.split("?")[1]}`;
+  const params = new URLSearchParams(search);
   const state = Object.values(options).reduce(
     (acc, { key: field, type, values }) => {
       let value;

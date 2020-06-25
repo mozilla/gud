@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte'
   import page from 'page';
   import Sidebar from "./components/Sidebar.svelte";
   import routes from './routes/routes';
@@ -7,34 +8,46 @@
 
   function updateQueryString(query) {
     if (window.history.replaceState) {
-      const newURL = `${window.location.origin}${window.location.pathname}?${query}`;
+      let hash = window.location.hash.split('?')[0];
+      if (hash.length === 0 || hash === '#!/') {
+        hash = '';
+      }
+      const newURL = `${window.location.origin}${window.location.pathname}${hash}?${query}`
       window.history.replaceState(null, null, newURL);
     }
   }
 
-
-
   let mounted = false;
   onMount(() => { mounted = true });
 
-  $: if (mounted) {
-    updateQueryString(storeToQuery($store));
-  }
-
+  let currentView;
   let bodyComponent;
   let sidebarComponent;
 
   function useComponent(thisView = undefined) {
-    return ({params}) => {
-      const currentView = params.view;
-      let view = thisView || currentView;
-      bodyComponent = routes[view].body;
-      sidebarComponent = routes[view].sidebar;
+    return (ctx, next) => {
+      const params = ctx.params;
+      const urlView = params.view;
+      currentView = thisView || urlView;
+      store.setField('mode', currentView);
+      bodyComponent = routes[currentView].body;
+      sidebarComponent = routes[currentView].sidebar;
+      next('wonderful');
     }
   }
-  page('/', useComponent('explore'));
-  page('/:view', useComponent());
+
+  function updateAfterMoving(ctx, next) {
+    ctx.path += '?' + storeToQuery($store);
+    ctx.save();
+  }
+
+  page('/', useComponent('explore'), updateAfterMoving);
+  page('/:view', useComponent(), updateAfterMoving);
   page({ hashbang: true });
+
+  $: if (mounted) {
+    updateQueryString(storeToQuery($store));
+  }
 
 </script>
 
