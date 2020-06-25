@@ -24,7 +24,7 @@
     "description": "any product, feature, or population subset for which we wish to calculate growth metrics",
     "key": "usage",
     "type": "single",
-    "inMenu": false,
+    "inMenu": true,
     "showDescriptionOnSelect": true,
     "values": [
       {
