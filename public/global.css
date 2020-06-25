@@ -10,8 +10,8 @@ nav {
   left: 0;
   display: grid;
   grid-template-rows: max-content max-content auto;
-  padding-left: var(--space-1h);
-  padding-right: var(--space-1h);
+  /* padding-left: var(--space-1h);
+  padding-right: var(--space-1h); */
   align-content: stretch;
   align-items: start;
   background-color: white;

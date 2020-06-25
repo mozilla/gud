@@ -28,8 +28,7 @@
   export let yMax;
   export let mouseDownValue = {};
   export let mouseMoveValue = {};
-
-  export let xMouse = {};
+  export let hoverCaveat = () => undefined;
 
   export let axisFormat = (v) => v;
   export let hoverFormat = (v) => v;
@@ -75,17 +74,28 @@
     return (end - start) / start;
   }
 
-  $: if (mousePosition.x) xMouse = mousePosition;
+  function latestValidPoint(d, ya) {
+    let di;
+    for (let i = d.length-1; i > 0; i -= 1) {
+      di = d[i];
+      const dt = di.date;
+      if (di[y] !== undefined) break
+    }
+    return di || d[d.length-1]
+  }
 
-  $: output =
-    xMouse.x && xScale && xMouse.body
-      ? get(data, xMouse.x, "date", xScale.domain())
-      : data[data.length - 1];
+  // update the xMouse shared value.
+
+  $: output = (xScale) ? get(data, mousePosition.x || latestValidPoint(data, y).date, "date", xScale.domain()) : data[data.length -1];
 
   $: if (isComparing) {
     compareEnd = output;
   } else {
     compareStart = output;
+  }
+
+  function mouseleave(event) {
+    resetMouseClicks(event);
   }
 </script>
 
@@ -134,7 +144,7 @@
   left={40}
   right={24}
   {xDomain}
-  xDomainTween={{ duration: 150, easing }}
+  xDomainTween={{ duration: 250, easing }}
   yDomainTween={{ duration: 200, easing }}
   yDomain={[yMin, yMax]}
   xType="time"
@@ -153,7 +163,7 @@
     }
   }}
   on:mouseup={endMouseEvent}
-  on:mouseleave={resetMouseClicks}>
+  on:mouseleave={mouseleave}>
   <g slot="body-background">
     <Band
       {data}
@@ -187,19 +197,21 @@
         height={bottom - top}
         fill="var(--pantone-red-100)" />
       <line
+        shape-rendering=crispEdges
         x1={xScale(mouseDownValue.x)}
         x2={xScale(mouseDownValue.x)}
         y1={top}
         y2={bottom}
         stroke="var(--pantone-red-200)"
-        stroke-width="2" />
+        stroke-width="1" />
       <line
+        shape-rendering=crispEdges
         x1={xScale(mouseMoveValue.x)}
         x2={xScale(mouseMoveValue.x)}
         y1={top}
         y2={bottom}
         stroke="var(--pantone-red-200)"
-        stroke-width="2" />
+        stroke-width="1" />
       <text
         transition:fade={{ duration: 75 }}
         x={Math.min(xScale(mouseDownValue.x), xScale(mouseMoveValue.x)) + 5}

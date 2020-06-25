@@ -28,12 +28,15 @@ function fetchMetricPoints(p, numeratorKey, denominatorKey) {
   return [p[numeratorKey], p[denominatorKey]];
 }
 
-function convertExploreData(
-  inputs,
-  isDesktop = false,
-  dateKey = "date",
-  bucketKey = "id_bucket"
-) {
+function isValidRetentionDate(dt, key, latest) {
+  const isRetention =
+    key === "retention_1_week_active_in_week_0" ||
+    key === "retention_1_week_new_profile";
+  if (!isRetention) return true;
+  return dt <= latest;
+}
+
+function convertExploreData(inputs, isDesktop = false, dateKey = "date") {
   const byDate = groupBy(inputs, dateKey);
   // this metrics thing should only be the high-level metrics?
   // why not just use the metrics definition in optionSet? This should include the key
@@ -44,7 +47,11 @@ function convertExploreData(
     .filter((opt) => opt.key !== undefined && opt.format !== undefined)
     .map((opt) => opt.key);
 
-  const output = Object.entries(byDate).map(([date, points]) => {
+  const keys = Object.keys(byDate);
+  keys.sort();
+  const latestDate = toDate(keys[keys.length - 1]);
+  latestDate.setDate(latestDate.getDate() - 13);
+  const output = Object.entries(byDate).map(([date, points], i) => {
     const dt = toDate(date);
 
     const pt = { date: dt };
@@ -66,13 +73,20 @@ function convertExploreData(
         metricValue = weightedMean(metricPoints);
         CIs = sumBucketsWithCI(CIPoints, info.agg);
       }
-      const isNull = inArmagaddon(pt.date, m, isDesktop);
-      // if (CIPoints.some(d => d === null)) isNull = true;
-      // if (metricPoints.some(d => d === null)) isNull = true;
+      const invalidRetention = !isValidRetentionDate(pt.date, m, latestDate);
+      const armagaddon = inArmagaddon(pt.date, m, isDesktop);
+      // check for retention
 
-      pt[m] = !isNull ? metricValue : null;
-      pt[`${m}_low`] = !isNull ? metricValue - CIs.margin : null;
-      pt[`${m}_high`] = !isNull ? metricValue + CIs.margin : null;
+      // if date in last 7 days ...
+      // console.log(dt);
+      pt[m] = !(armagaddon || invalidRetention) ? metricValue : undefined;
+      pt[`${m}_low`] = !(armagaddon || invalidRetention)
+        ? metricValue - CIs.margin
+        : undefined;
+      pt[`${m}_high`] = !(armagaddon || invalidRetention)
+        ? metricValue + CIs.margin
+        : undefined;
+
       if (Number.isNaN(pt[m])) pt[m] = 0;
       if (Number.isNaN(pt[`${m}_low`])) pt[`${m}_low`] = 0;
       if (Number.isNaN(pt[`${m}_high`])) pt[`${m}_high`] = 0;

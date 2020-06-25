@@ -60,9 +60,9 @@
 
   let auMax =
     Math.max(
-      ...data.map((d) => d.dau_high),
+      ...data.map((d) => d.dau_high || 0),
       ...data.map((d) => d.wau_high || 0),
-      ...data.map((d) => d.mau_high)
+      ...data.map((d) => d.mau_high || 0)
     ) * 1.1;
 
   const resetDomain = () => {
@@ -140,8 +140,6 @@
   let mouseMoveValue = {};
   let startValue;
   let endValue;
-
-  let xMouse;
 
   const resetMouseClicks = () => {
     mouseDownValue = {};
@@ -349,7 +347,7 @@
             {hoverFormat}
             {endMouseEvent}
             {resetMouseClicks}
-            bind:xMouse
+            bind:mousePosition
             bind:mouseDownValue
             bind:mouseMoveValue
             bind:isComparing />
