@@ -16,7 +16,6 @@
   import Divider from "./list/Divider.svelte";
   import ListHeader from './list/ListHeader.svelte';
 
-
   const dispatch = createEventDispatcher();
 
   export let variant = 'regular';

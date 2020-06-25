@@ -25,7 +25,7 @@ export function inArmagaddon(dt, m, isDesktop = false) {
 
 export function dataQualityReason(dt, m, isDesktop = false) {
   if (!isDesktop) return undefined;
-  const armagaddon = inArmagaddon(dt, m);
-  if (armagaddon) return "no data (Armagaddon)";
+  const armagaddon = inArmagaddon(dt, m, isDesktop);
+  if (armagaddon) return "Armagaddon";
   return undefined;
 }

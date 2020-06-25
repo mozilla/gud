@@ -28,7 +28,7 @@
   export let yMax;
   export let mouseDownValue = {};
   export let mouseMoveValue = {};
-  export let hoverCaveat = () => undefined;
+  export let caveat = () => undefined;
 
   export let axisFormat = (v) => v;
   export let hoverFormat = (v) => v;
@@ -97,6 +97,9 @@
   function mouseleave(event) {
     resetMouseClicks(event);
   }
+
+  $: caveatReason = caveat(output);
+
 </script>
 
 <style>
@@ -127,13 +130,23 @@
   .comparison__text {
     font-size: 12px;
   }
+
+  .caveat {
+    font-size:.8em;
+  }
 </style>
 
 <svelte:window on:keydown={keyDown} on:keyup={keyUp} />
 
 <header>
   <h2>{name}</h2>
-  <div>{hoverFormat(output[y])}</div>
+  <div class:caveat={!!caveatReason}>
+    {#if caveatReason}
+      no data
+    {:else if output[y]}
+      {hoverFormat(output[y])}
+    {/if}
+    </div>
 </header>
 
 <DataGraphic
@@ -246,8 +259,7 @@
       <!-- isComparing bg -->
 
       <g transform="translate({xScale(output.date)} 0)">
-        <!-- <VerticalErrorBar minY={output[`${y}Low`]} maxY={output[`${y}High`]} /> -->
-        {#if !isComparing}
+        {#if !isComparing && !caveatReason && output[y] !== undefined}
           <circle cy={yScale(output[y])} r="3" fill="var(--digital-blue-500)" />
         {/if}
         {#if isComparing}
@@ -285,6 +297,9 @@
       <text use:outline x={left} y={12} font-size={12}>
         {dtfmt(output.date)}
       </text>
+    {/if}
+    {#if caveatReason}
+      <text x={right} y={12} text-anchor=end font-size={12}>{caveatReason}</text>
     {/if}
     {#if isComparing}
       <line

@@ -5,7 +5,7 @@
   import { Stack } from "@graph-paper/stack";
   import { Box } from "@graph-paper/box";
   import { Chip, ChipSet } from "@graph-paper/chip";
-  import { Documentation } from "@graph-paper/icons";
+  import { Documentation, Explore, Calendar } from "@graph-paper/icons";
 
   import Shortcuts from './Shortcuts.svelte';
 
@@ -18,7 +18,7 @@
   import { store } from '../stores/store';
 
   let selections = Object.values(CONFIG).reduce((acc, v) => {
-    if (v.notInMenu) return acc;
+    if (!v.inMenu) return acc;
     if (v.type === 'multi') acc[v.key] = [];
     else acc[v.key] = [v.values[0].key];
     return acc;
@@ -82,13 +82,38 @@
     <Box padding={2}>
       <h1><GUDLogo size={32} /> Growth & Usage</h1>
     </Box>
+    <Box>
+      <Stack>
+        <Button level=low>
+        <div class=gafc>
+          <Explore size=1em /> Explore
+        </div>
+        </Button>
+        <Button level=low>
+          <div class=gafc>
+            <Calendar size=1em />
+            2020
+          </div>
+        </Button>
+      </Stack>
+    </Box>
     {#if mounted}
     <Box padding={0}>
       <div in:fly={{duration: 500, x: -10}}>
-        <!-- <h2>Filters</h2> -->
         <Stack space={0}>
+          <!-- <DimensionMenu
+                on:selection={handleDimensionSelection(CONFIG.usage.key)}
+                selections={selections[CONFIG.usage.key]}
+                multi={false}
+                menuWidth={setMenuWidth(CONFIG.usage.key)}
+                variant={setButtonVariant(CONFIG.usage.key)}
+                options={CONFIG.usage.values}>
+                {CONFIG.usage.label}
+                <span slot=option>{$store[CONFIG.usage.key]}</span>
+          </DimensionMenu> -->
+
           {#each Object.values(CONFIG) as dimension, i (dimension.key)}
-            {#if !dimension.notInMenu}
+            {#if dimension.inMenu}
             <Stack space={0}>
               <DimensionMenu
                 on:selection={handleDimensionSelection(dimension.key)}
@@ -98,7 +123,6 @@
                 variant={setButtonVariant(dimension.key)}
                 options={dimension.values}>
                 {dimension.label}
-                <span slot=option>{$store[dimension.key]}</span>
               </DimensionMenu>
               {#if selections[dimension.key].length && dimension.type === 'multi'}
                 <div transition:slide style='padding-left: var(--space-2x); padding-right: var(--space-2x); padding-top: var(--space-1x);'>
@@ -112,10 +136,6 @@
                     {/each}
                   </ChipSet>
                 </div>
-              <!-- {:else if !(dimension.type === 'multi')}
-                <div style='text-align: left; padding-right: var(--space-2x); padding-left: var(--space-4x); font-size: var(--text-02);'>
-                  {selections[dimension.key]}
-                </div> -->
               {/if}
               <hr style="width:100%; border: none; border-bottom: 1px solid var(--cool-gray-150); padding:0px; margin:0px;" />
             </Stack>

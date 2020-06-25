@@ -10,6 +10,7 @@
   import { store } from '../stores/store';
   import { datesAreDefault } from '../stores/cache';
   import MetricChart from "./MetricChart.svelte";
+  import {dataQualityReason} from '../utils/data-quality';
 
   import {
     Close,
@@ -222,7 +223,7 @@
   .multiples {
     display: grid;
     grid-column-gap: var(--space-4x);
-    grid-row-gap: var(--space-8x);
+    grid-row-gap: var(--space-6x);
     justify-content: start;
     justify-items: start;
 
@@ -343,6 +344,7 @@
             {xDomain}
             yMin={commonScales ? 0 : undefined}
             yMax={commonScales ? yMax : undefined}
+            caveat={(datapoint) => dataQualityReason(datapoint.date, key, true)}
             {axisFormat}
             {hoverFormat}
             {endMouseEvent}

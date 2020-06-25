@@ -1,6 +1,6 @@
 {
   "mode": {
-    "notInMenu": true,
+    "inMenu": false,
     "key": "mode",
     "values": [
       { "key": "explore", "label": "Explore" },
@@ -9,13 +9,13 @@
   },
   "startDate": {
     "key": "startDate",
-    "notInMenu": true,
+    "inMenu": false,
     "values": [],
     "onlyLocal": true
   },
   "endDate": {
     "key": "endDate",
-    "notInMenu": true,
+    "inMenu": false,
     "values": [],
     "onlyLocal": true
   },
@@ -24,7 +24,7 @@
     "description": "any product, feature, or population subset for which we wish to calculate growth metrics",
     "key": "usage",
     "type": "single",
-    "inMenu": true,
+    "inMenu": false,
     "showDescriptionOnSelect": true,
     "values": [
       {

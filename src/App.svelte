@@ -33,7 +33,7 @@
 <style>
   div {
     display: grid;
-    grid-template-columns: var(--space-40x) auto;
+    grid-template-columns: calc(var(--space-1x) * 36) auto;
     min-width: calc(100vw - var(--space-4x)) !important;
   }
 </style>
