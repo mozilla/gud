@@ -11,6 +11,7 @@
   import { datesAreDefault } from '../stores/cache';
   import MetricChart from "./MetricChart.svelte";
   import {dataQualityReason} from '../utils/data-quality';
+  import smooth from '../utils/smoothing';
 
   import {
     Close,
@@ -87,7 +88,7 @@
 
   const graphs = [
     {
-      name: "DAU",
+      name: "Daily Active Users",
       key: "dau",
       type: "count",
       yMax: auMax,
@@ -95,7 +96,7 @@
       hoverFormat: count,
     },
     {
-      name: "WAU",
+      name: "Weekly Active Users",
       key: "wau",
       type: "count",
       yMax: auMax,
@@ -103,7 +104,7 @@
       hoverFormat: count,
     },
     {
-      name: "MAU",
+      name: "Monthly Active Users",
       key: "mau",
       type: "count",
       yMax: auMax,
@@ -111,7 +112,7 @@
       hoverFormat: count,
     },
     {
-      name: "Intensity",
+      name: "Avg. Days / Week",
       key: "intensity",
       type: "rate",
       yMax: 7,
@@ -119,16 +120,16 @@
       hoverFormat: format(".2f"),
     },
     {
-      name: "Retention ",
-      key: "retention_1_week_active_in_week_0",
+      name: "1-Wk. Retention (new clients)",
+      key: "retention_1_week_new_profile",
       type: "percentage",
       yMax: 1,
       axisFormat: format(".0%"),
       hoverFormat: format(".2%"),
     },
     {
-      name: "Retention (1 wk. new)",
-      key: "retention_1_week_new_profile",
+      name: "1-Wk. Retention ",
+      key: "retention_1_week_active_in_week_0",
       type: "percentage",
       yMax: 1,
       axisFormat: format(".0%"),
@@ -156,7 +157,11 @@
     resetMouseClicks();
   };
 
+
+  //$: transform = makeTransformation(isSmoothed)
+
   let isComparing = false;
+  let smoothed = false;
   let commonScales = true;
 
   let width = 375;
@@ -318,6 +323,21 @@
             {/if}
           </div>
         </Button>
+        <Button
+          compact
+          level="medium"
+          on:click={() => {
+            smoothed = !smoothed;
+          }}>
+          <div class="gafc" style="grid-column-gap: var(--space-base);">
+            7-day smoothing
+            {#if smoothed}
+              <Checkbox size="1em" />
+            {:else}
+              <CheckboxBlank size="1em" />
+            {/if}
+          </div>
+        </Button>
         <ButtonGroup level="medium" compact>
           <Button on:click={changeSize('small')}>
             <ThreeByThree size={16} />
@@ -339,7 +359,8 @@
             {width}
             {height}
             {name}
-            data={data}
+            {data}
+            transform={smoothed ? smooth : undefined}
             y={key}
             {xDomain}
             yMin={commonScales ? 0 : undefined}

@@ -72,9 +72,11 @@
   }
 
   h2 {
-    font-size: var(--text-03);
+    font-size: var(--text-02);
     font-weight: normal;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
+    padding-left: var(--space-2x);
+    padding-right: var(--space-2x);
   }
 </style>
 
@@ -111,7 +113,7 @@
                 {CONFIG.usage.label}
                 <span slot=option>{$store[CONFIG.usage.key]}</span>
           </DimensionMenu> -->
-
+          <h2>Aggregation Filters</h2>
           {#each Object.values(CONFIG) as dimension, i (dimension.key)}
             {#if dimension.inMenu}
             <Stack space={0}>
@@ -149,7 +151,7 @@
     <div class="bottom-element">
       <Box>
         <Stack>
-            <Button compact level=low href="https://docs.telemetry.mozilla.org/tools/gud.html">
+            <Button compact level=low href="https://mozilla.github.io/gud/">
               <div class=gafc>
                 <Documentation color=var(--icon-color) size={14} /> Documentation
               </div>

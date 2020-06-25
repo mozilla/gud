@@ -1,6 +1,6 @@
 <script>
   // eslint-disable-next-line import/no-extraneous-dependencies
-  import { fade } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
   import { timeFormat } from "d3-time-format";
   import { format } from "d3-format";
   import { cubicOut as easing } from "svelte/easing";
@@ -29,6 +29,7 @@
   export let mouseDownValue = {};
   export let mouseMoveValue = {};
   export let caveat = () => undefined;
+  export let transform = undefined;
 
   export let axisFormat = (v) => v;
   export let hoverFormat = (v) => v;
@@ -84,18 +85,17 @@
     return di || d[d.length-1]
   }
 
+  function mouseleave(event) {
+    resetMouseClicks(event);
+  }
   // update the xMouse shared value.
-
-  $: output = (xScale) ? get(data, mousePosition.x || latestValidPoint(data, y).date, "date", xScale.domain()) : data[data.length -1];
+  $: transformedData = transform ? transform(data, y) : data;
+  $: output = (xScale && transformedData) ? get(transformedData, mousePosition.x || latestValidPoint(transformedData, y).date, "date", xScale.domain()) : transformedData[transformedData.length -1];
 
   $: if (isComparing) {
     compareEnd = output;
   } else {
     compareStart = output;
-  }
-
-  function mouseleave(event) {
-    resetMouseClicks(event);
   }
 
   $: caveatReason = caveat(output);
@@ -133,6 +133,7 @@
 
   .caveat {
     font-size:.8em;
+    color: var(--cool-gray-500);
   }
 </style>
 
@@ -179,7 +180,7 @@
   on:mouseleave={mouseleave}>
   <g slot="body-background">
     <Band
-      {data}
+      data={transformedData}
       x="date"
       yMin={`${y}Low`}
       yMax={`${y}High`}
@@ -239,7 +240,7 @@
   </g>
   <g slot="body">
 
-    <Line {data} x="date" {y} />
+    <Line data={transformedData} x="date" {y} />
 
   </g>
 
@@ -299,7 +300,7 @@
       </text>
     {/if}
     {#if caveatReason}
-      <text x={right} y={12} text-anchor=end font-size={12}>{caveatReason}</text>
+      <text in:fade={{duration:200}} x={right} y={12} text-anchor=end font-size={12} fill=var(--cool-gray-500)>{caveatReason}</text>
     {/if}
     {#if isComparing}
       <line
