@@ -17,6 +17,7 @@
     Tile,
     Checkbox,
     CheckboxBlank,
+    Explore
   } from "@graph-paper/icons";
 
   import ThreeByThree from './ThreeByThree.svelte'
@@ -178,21 +179,39 @@
 </script>
 
 <style>
+  main {
+    min-width: 1200px;
+    padding-left: var(--space-6x);
+    padding-right: var(--space-6x);
+  }
 
   header {
+    padding-top: var(--space-2x);
     padding-left: var(--space-2x);
     color: var(--cool-gray-700);
     padding-bottom: var(--space-6x);
+    display: grid;
+    grid-template-columns: auto max-content;
+    grid-template-rows: auto auto;
+    grid-template-areas: 'title nav'
+                         'description nav'
   }
 
   h1 {
     margin: 0px;
     padding: 0px;
+    font-size: var(--text-06);
+    grid-area: title;
   }
 
-  header div {
+  header .description {
     font-size: var(--text-03);
     max-width: calc(var(--space-1x) * 120);
+    grid-area: description;
+  }
+
+  header .nav {
+    grid-area: nav;
   }
 
   .gafc {
@@ -200,11 +219,6 @@
     grid-auto-flow: column;
     align-items: center;
     grid-column-gap: var(--space-2x);
-  }
-
-  main {
-    min-width: 1200px;
-    padding-left: var(--space-6x);
   }
 
   .multiples {
@@ -246,8 +260,18 @@
 
 <main>
     <header>
-      <h1>{$store.usage}</h1>
-      <div>{description}</div>
+      <h1>
+        <!-- <span style='color: var(--cool-gray-400); position: relative; z-index: 1; display: inline-block; transform: translateX(-20px) translateY(1px);'> -->
+        <span style='color: var(--cool-gray-400);'>
+          <Explore size={16} />
+        </span>
+       <span style='color: var(--cool-gray-400); font-weight: normal;'>
+        explore /
+      </span> {$store.usage}</h1>
+      <div class=description>{description}</div>
+      <div class=nav>
+        <Button level=medium>Export ...</Button>
+      </div>
     </header>
 
 
@@ -333,11 +357,5 @@
       {/each}
     </div>
 
-    <div
-      class="bottom"
-      in:fly={{ duration: 500, delay: 1000, y: -10 }}
-      style=" width: 970px; display: grid; grid-template-columns: auto auto;
-      align-items: start; justify-content: space-between; ">
       <Key />
-    </div>
 </main>

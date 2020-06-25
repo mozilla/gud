@@ -40,21 +40,36 @@
   $: weeks = timeWeek.range(...$scale.domain(), 2);
   $: days = timeDay.range(...$scale.domain());
 
+  let p;
   $: if (r >= 365 * 1.5) {
     resolution = "years";
+    p = years;
   } else if (r <= 365 * 1.5 && r >= 365) {
     resolution = "shortYear";
+    p = quarters;
   } else if (r <= 365 && r >= 365 / 4) {
     resolution = "months";
+    p = months;
   } else if (r <= 365 / 4 && r > 18) {
     resolution = "weeks";
+    p = weeks;
   } else if (r <= 18) {
     resolution = "days";
+    p = days;
   }
 
 </script>
 
 <AxisContainer side="bottom">
+  <g slot='ticks' let:closestMargin let:farthestMargin>
+    {#each p as pi, i}
+                <AxisTick
+      placement={pi}
+      color="var(--cool-gray-150)"
+      tickDirection={-1}
+      length={closestMargin - farthestMargin} />
+    {/each}
+  </g>
   <g slot='labels'>
     {#if resolution === 'days'}
     {#each days as period, i}

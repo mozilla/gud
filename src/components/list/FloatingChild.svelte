@@ -58,9 +58,9 @@
   class:hidden={!active}
   style="
     position: absolute; left: {leftPlacement}px; top: {topPlacement}px;
-    max-height: calc(100vh - {y}px - var(--space-16x));
+    max-height: calc(100vh - {y}px - var(--space-8x));
     overflow-y: auto;
-    --width: var(--space-{width}x);
+    --width: calc(var(--space-1x) * {width});
   ">
   <slot />
 </div>

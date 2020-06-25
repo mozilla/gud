@@ -95,7 +95,7 @@
     grid-template-columns: auto auto;
     margin: 0;
     padding: 0;
-    padding-left: 36px;
+    padding-left: 40px;
     padding-right: 24px;
     color: var(--cool-gray-750);
   }

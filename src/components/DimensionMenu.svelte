@@ -19,6 +19,7 @@
 
   const dispatch = createEventDispatcher();
 
+  export let variant = 'regular';
   export let toggled = false;
   export let multi = true;
   export let menuWidth = 32;
@@ -81,6 +82,8 @@
   .dimension-button {
     width: 100%;
     display: grid;
+    padding: 0px;
+margin:0px;
   }
 
   .dimension-button__content {
@@ -92,12 +95,64 @@
     width: 100%;
     text-align: left;
   }
+
+  .dimension-button--big {
+    padding: 0px;
+    margin: 0px;
+    padding: var(--space-2x) var(--space-2x);
+    background-color: white;
+    display: grid;
+    grid-template-columns: auto max-content;
+    grid-template-rows: max-content auto;
+    grid-template-areas: 'title caret'
+                         'option caret';
+    grid-column-gap: var(--space-2x);
+    text-align: left;
+    cursor: pointer;
+    border-radius: var(--space-1h);
+    border: 1px solid var(--cool-gray-200);
+    margin-bottom: var(--space-2x);
+    margin-top: var(--space-2x);
+    transition: background-color 200ms, box-shadow 200ms;
+    box-shadow: 0px 0px 0px transparent;
+  }
+
+  .dimension-button--big:active, .dimension-button--big.toggled, .dimension-button--big:hover {
+    box-shadow: 3px 3px 0px var(--blue-slate-150);
+  }
+
+  .dimension-button--big:active, .dimension-button--big.toggled {
+    /* background-color: var(--cool-gray-subtle); */
+    box-shadow: 3px 3px 0px var(--blue-slate-300);
+  }
+
+  .dimension-button--big:active div:first-child, .dimension-button--big.toggled div:first-child {
+    color: var(--cool-gray-700);
+  }
+
+  .dimension-button--big div:first-child {
+    grid-area: title;
+    font-size: var(--text-02);
+    text-transform: uppercase;
+    color: var(--cool-gray-500);
+    transition: color 200ms;
+
+  }
+
+  .dimension-button--big div:nth-child(2) {
+    grid-area: option;
+  }
+  .dimension-button--big div:nth-child(3) {
+    grid-area: caret;
+    align-self: center;
+  }
 </style>
 
 <svelte:window on:keydown={handleKeydown} />
 
+{#if variant === 'regular'}
 <div class="dimension-button" bind:this={container}>
-  <Button level="low" on:click={toggle}>
+  <Button {toggled} level="low" on:click={toggle}>
     <div class="dimension-button__content">
       <slot />
       <span
@@ -108,6 +163,21 @@
     </div>
   </Button>
 </div>
+{:else}
+  <button class:toggled class='dimension-button--{variant}' on:click={toggle} bind:this={container}>
+      <div>
+        <slot />
+      </div>
+      <div>
+        <slot name='option' />
+      </div>
+      <div
+        class="gafc"
+        style="transition: transform 75ms; transform: rotate({toggled ? -180 : 0}deg);">
+        <CaretRight color=var(--cool-gray-600) />
+      </div>
+  </button>
+{/if}
 
 <FloatingChild width={menuWidth} active={toggled} bind:element parent={container}>
   <List>

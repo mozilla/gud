@@ -14,13 +14,25 @@ nav {
   padding-right: var(--space-1h);
   align-content: stretch;
   align-items: start;
+  background-color: white;
   /* border-right: 1px solid var(--cool-gray-200); */
-  box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.05);
 }
 
 nav .gp-button {
   font-weight: normal;
   transition: background-color 200ms, color 200ms;
+}
+
+nav .gp-chip {
+  font-size: var(--text-02);
+  background-color: white;
+  color: var(--cool-gray-650);
+}
+
+nav .gp-chip:hover {
+  background-color: var(--cool-gray-100);
+  color: var(--cool-gray-700);
 }
 
 nav > div:last-child {

@@ -39,6 +39,17 @@
     };
   }
 
+  function setMenuWidth(key) {
+    if (key === 'usage') return 72;
+    if (key === 'metric') return 72;
+    return 32;
+  }
+
+  function setButtonVariant(key) {
+    if (key === 'usage') return 'big';
+    return undefined;
+  }
+
   let mounted = false;
   onMount(() => { mounted = true });
 
@@ -72,10 +83,10 @@
       <h1><GUDLogo size={32} /> Growth & Usage</h1>
     </Box>
     {#if mounted}
-    <Box pad={2}>
+    <Box padding={0}>
       <div in:fly={{duration: 500, x: -10}}>
         <!-- <h2>Filters</h2> -->
-        <Stack>
+        <Stack space={0}>
           {#each Object.values(CONFIG) as dimension, i (dimension.key)}
             {#if !dimension.notInMenu}
             <Stack space={0}>
@@ -83,12 +94,14 @@
                 on:selection={handleDimensionSelection(dimension.key)}
                 selections={selections[dimension.key]}
                 multi={dimension.type === 'multi'}
-                menuWidth={dimension.key === 'usage' ? 72 : 32}
+                menuWidth={setMenuWidth(dimension.key)}
+                variant={setButtonVariant(dimension.key)}
                 options={dimension.values}>
                 {dimension.label}
+                <span slot=option>{$store[dimension.key]}</span>
               </DimensionMenu>
               {#if selections[dimension.key].length && dimension.type === 'multi'}
-                <div transition:slide>
+                <div transition:slide style='padding-left: var(--space-2x); padding-right: var(--space-2x); padding-top: var(--space-1x);'>
                   <ChipSet>
                     {#each selections[dimension.key] as value, i (value)}
                       <Chip
@@ -99,11 +112,12 @@
                     {/each}
                   </ChipSet>
                 </div>
-              {:else if !(dimension.type === 'multi')}
+              <!-- {:else if !(dimension.type === 'multi')}
                 <div style='text-align: left; padding-right: var(--space-2x); padding-left: var(--space-4x); font-size: var(--text-02);'>
                   {selections[dimension.key]}
-                </div>
+                </div> -->
               {/if}
+              <hr style="width:100%; border: none; border-bottom: 1px solid var(--cool-gray-150); padding:0px; margin:0px;" />
             </Stack>
             {/if}
           {/each}
