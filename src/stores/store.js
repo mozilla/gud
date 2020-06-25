@@ -13,7 +13,7 @@ function getDefaultState(
   const search = `${window.location.hash.split("?")[1]}`;
   const params = new URLSearchParams(search);
   const state = Object.values(options).reduce(
-    (acc, { key: field, type, values }) => {
+    (acc, { key: field, type, values, defaultValue, dataType }) => {
       let value;
 
       if (type === "divider") {
@@ -40,9 +40,9 @@ function getDefaultState(
       } else {
         if (basedOnQueryParams && params.get(field)) {
           value = params.get(field);
-        } else {
-          value = values.find((l) => !l.itemType).key;
-        }
+          if (dataType === "boolean") value = value === "true";
+        } else if (defaultValue !== undefined) value = defaultValue;
+        else value = values.find((l) => !l.itemType).key;
         acc[field] = value;
       }
 

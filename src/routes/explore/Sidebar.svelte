@@ -84,10 +84,10 @@
                 options={dimension.values}>
                 {dimension.label}
               </DimensionMenu>
-              {#if selections[dimension.key].length && dimension.type === 'multi'}
+              {#if $store[dimension.key].length && dimension.type === 'multi'}
                 <div transition:slide class='dimension-menu--value'>
                   <ChipSet>
-                    {#each selections[dimension.key] as value, i (value)}
+                    {#each $store[dimension.key] as value, i (value)}
                       <Chip
                         cancelable
                         on:cancel={removeSelection(dimension.key, value)}>
@@ -101,7 +101,7 @@
                   {$store[dimension.key]}
                 </div>
               {/if}
-              <hr style="width:100%; border: none; border-bottom: 1px solid var(--cool-gray-150); padding:0px; margin:0px;" />
+              <!-- <hr style="width:100%; border: none; border-bottom: 1px solid var(--cool-gray-150); padding:0px; margin:0px;" /> -->
             </Stack>
             {/if}
           {/each}

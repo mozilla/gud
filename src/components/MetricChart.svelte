@@ -24,7 +24,7 @@
   export let y;
   export let mousePosition = {};
   export let xDomain;
-  export let yMin = 0;
+  export let yMin;
   export let yMax;
   export let mouseDownValue = {};
   export let mouseMoveValue = {};

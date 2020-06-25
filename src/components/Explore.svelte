@@ -40,11 +40,7 @@
 
   function changeSize(size) {
     return () => {
-      graphSize.update((state) => {
-        const newState = { ...state };
-        newState.graphSize = size;
-        return newState;
-      });
+      store.setField('graphSize', size);
     };
   }
 
@@ -157,23 +153,18 @@
     resetMouseClicks();
   };
 
-
-  //$: transform = makeTransformation(isSmoothed)
-
   let isComparing = false;
-  let smoothed = false;
-  let commonScales = true;
 
   let width = 375;
   let height = 250;
 
-  $: if ($graphSize.graphSize === "small") {
+  $: if ($store.graphSize === "small") {
     width = 375;
     height = 250;
-  } else if ($graphSize.graphSize === "medium") {
+  } else if ($store.graphSize === "medium") {
     width = 550;
     height = 325;
-  } else if ($graphSize.graphSize === "large") {
+  } else if ($store.graphSize === "large") {
     width = 1200;
     height = 400;
   }
@@ -312,11 +303,11 @@
           compact
           level="medium"
           on:click={() => {
-            commonScales = !commonScales;
+            store.setField('commonScales', !$store.commonScales)
           }}>
           <div class="gafc" style="grid-column-gap: var(--space-base);">
             common scales
-            {#if commonScales}
+            {#if $store.commonScales}
               <Checkbox size="1em" />
             {:else}
               <CheckboxBlank size="1em" />
@@ -327,11 +318,11 @@
           compact
           level="medium"
           on:click={() => {
-            smoothed = !smoothed;
+            store.setField('smoothing', !$store.smoothing)
           }}>
           <div class="gafc" style="grid-column-gap: var(--space-base);">
             7-day smoothing
-            {#if smoothed}
+            {#if $store.smoothing === true}
               <Checkbox size="1em" />
             {:else}
               <CheckboxBlank size="1em" />
@@ -352,7 +343,7 @@
       </div>
     </div>
 
-    <div class="multiples multiples--{$graphSize.graphSize}">
+    <div class="multiples multiples--{$store.graphSize}">
       {#each graphs as { name, type, key, yMax, axisFormat, hoverFormat }, i (name)}
         <div>
           <MetricChart
@@ -360,11 +351,11 @@
             {height}
             {name}
             {data}
-            transform={smoothed ? smooth : undefined}
+            transform={$store.smoothing === true ? smooth : undefined}
             y={key}
             {xDomain}
-            yMin={commonScales ? 0 : undefined}
-            yMax={commonScales ? yMax : undefined}
+            yMin={$store.commonScales === true ? 0 : undefined}
+            yMax={$store.commonScales === true ? yMax : undefined}
             caveat={(datapoint) => dataQualityReason(datapoint.date, key, true)}
             {axisFormat}
             {hoverFormat}
