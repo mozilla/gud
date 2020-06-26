@@ -51,10 +51,13 @@
 <style>
   h2 {
     font-size: var(--text-02);
-    font-weight: normal;
-    /* text-transform: uppercase; */
+    color: var(--cool-gray-600);
+    /* font-weight: normal; */
+    text-transform: uppercase;
     padding-left: var(--space-2x);
     padding-right: var(--space-2x);
+    border-bottom: 1px solid var(--cool-gray-150);
+    padding-bottom: var(--space-2x);
   }
 
   .dimension-menu--value {
@@ -65,48 +68,49 @@
     font-size: var(--text-015);
     color: var(--cool-gray-650);
     padding-right: var(--space-8x);
+    padding-left: var(--space-4x);
   }
 </style>
-
+<div class=container>
 {#if mounted}
-    <Box padding={0}>
-      <div in:fly={{duration: 500, x: -10}}>
-        <Stack space={0}>
-          <h2>Aggregation Filters</h2>
-          {#each Object.values(CONFIG) as dimension, i (dimension.key)}
-            {#if dimension.inMenu}
-            <Stack space={0}>
-              <DimensionMenu
-                on:selection={handleDimensionSelection(dimension.key)}
-                selections={selections[dimension.key]}
-                multi={dimension.type === 'multi'}
-                menuWidth={setMenuWidth(dimension.key)}
-                options={dimension.values}>
-                {dimension.label}
-              </DimensionMenu>
-              {#if $store[dimension.key].length && dimension.type === 'multi'}
-                <div transition:slide class='dimension-menu--value'>
-                  <ChipSet>
-                    {#each $store[dimension.key] as value, i (value)}
-                      <Chip
-                        cancelable
-                        on:cancel={removeSelection(dimension.key, value)}>
-                        {value}
-                      </Chip>
-                    {/each}
-                  </ChipSet>
-                </div>
-              {:else if dimension.type !== 'multi'}
-                <div class='dimension-menu--value dimension-menu--value--single'>
-                  {$store[dimension.key]}
-                </div>
-              {/if}
-              <!-- <hr style="width:100%; border: none; border-bottom: 1px solid var(--cool-gray-150); padding:0px; margin:0px;" /> -->
-            </Stack>
+  <Box padding={0}>
+    <div in:fly={{duration: 500, x: -10}}>
+      <Stack space={0}>
+        <h2>Aggregation Filters</h2>
+        {#each Object.values(CONFIG) as dimension, i (dimension.key)}
+          {#if dimension.inMenu}
+          <Stack space={0}>
+            <DimensionMenu
+              on:selection={handleDimensionSelection(dimension.key)}
+              selections={selections[dimension.key]}
+              multi={dimension.type === 'multi'}
+              menuWidth={setMenuWidth(dimension.key)}
+              options={dimension.values}>
+              {dimension.label}
+            </DimensionMenu>
+            {#if $store[dimension.key].length && dimension.type === 'multi'}
+              <div transition:slide class='dimension-menu--value'>
+                <ChipSet>
+                  {#each $store[dimension.key] as value, i (value)}
+                    <Chip
+                      cancelable
+                      on:cancel={removeSelection(dimension.key, value)}>
+                      {value}
+                    </Chip>
+                  {/each}
+                </ChipSet>
+              </div>
+            {:else if dimension.type !== 'multi'}
+              <div class='dimension-menu--value dimension-menu--value--single'>
+                {$store[dimension.key]}
+              </div>
             {/if}
-          {/each}
-        </Stack>
-      </div>
-    </Box>
-
-    {/if}
+            <!-- <hr style="width:100%; border: none; border-bottom: 1px solid var(--cool-gray-150); padding:0px; margin:0px;" /> -->
+          </Stack>
+          {/if}
+        {/each}
+      </Stack>
+    </div>
+  </Box>
+  {/if}
+</div>

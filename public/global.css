@@ -2,6 +2,12 @@
   --gafc-space: var(--space-1x);
 }
 
+main {
+  min-width: 1200px;
+  padding-left: var(--space-6x);
+  padding-right: var(--space-6x);
+}
+
 nav {
   max-height: 100vh;
   min-height: 100vh;

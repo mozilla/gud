@@ -3,7 +3,8 @@
   import { createRequestCache } from '../../stores/cache';
   import LoadingSpinner from '../../components/LoadingSpinner.svelte';
   import ErrorMessage from '../../components/ErrorMessage.svelte';
-  import Explore from "../../components/Explore.svelte";
+  import Explore from "./Explore.svelte";
+
   const cache = createRequestCache();
 
 </script>

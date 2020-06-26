@@ -12,7 +12,8 @@
     margin: 0px;
     background-color: white;
     list-style-type: none;
-    min-width: var(--spac-32x);
+    min-width: var(--space-32x);
+    width: var(--width);
     border-radius: var(--border-radius);
   }
 </style>

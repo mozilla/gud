@@ -21,6 +21,7 @@
   export let data;
   export let width = 350;
   export let height = 200;
+  export let headerSize = 'small';
   export let y;
   export let mousePosition = {};
   export let xDomain;
@@ -122,6 +123,14 @@
     justify-self: end;
   }
 
+  .big {
+    font-size: var(--text-04);
+  }
+
+  .big h2 {
+    font-size: var(--text-06);
+  }
+
   .comparison__line {
     shape-rendering: crispEdges;
     stroke: var(--digital-blue-200);
@@ -139,7 +148,7 @@
 
 <svelte:window on:keydown={keyDown} on:keyup={keyUp} />
 
-<header>
+<header class:big={headerSize === 'large'}>
   <h2>{name}</h2>
   <div class:caveat={!!caveatReason}>
     {#if caveatReason}
@@ -181,6 +190,7 @@
   <g slot="body-background">
     <Band
       data={transformedData}
+      curve=curveLinear
       x="date"
       yMin={`${y}Low`}
       yMax={`${y}High`}
@@ -240,7 +250,7 @@
   </g>
   <g slot="body">
 
-    <Line data={transformedData} x="date" {y} />
+    <Line data={transformedData} x="date" {y} curve=curveLinear />
 
   </g>
 
@@ -295,7 +305,7 @@
     {/if}
 
     {#if output.date}
-      <text use:outline x={left} y={12} font-size={12}>
+      <text fill=var(--cool-gray-550) x={left} y={12} font-size={12}>
         {dtfmt(output.date)}
       </text>
     {/if}

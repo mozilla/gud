@@ -6,12 +6,18 @@
   import { writable } from "svelte/store";
 
   import { Box } from "@graph-paper/box";
-  import CONFIG from '../stores/options.json';
-  import { store } from '../stores/store';
-  import { datesAreDefault } from '../stores/cache';
-  import MetricChart from "./MetricChart.svelte";
-  import {dataQualityReason} from '../utils/data-quality';
-  import smooth from '../utils/smoothing';
+
+  import MetricChart from "../../components/MetricChart.svelte";
+  import PageTitle from '../../components/PageTitle.svelte';
+
+  import CONFIG from '../../stores/options.json';
+  import { store } from '../../stores/store';
+  import { datesAreDefault } from '../../stores/cache';
+
+  import { dataQualityReason } from '../../utils/data-quality';
+  import smooth from '../../utils/smoothing';
+  import { metrics, graphSize } from '../../config';
+
 
   import {
     Close,
@@ -22,27 +28,17 @@
     Explore
   } from "@graph-paper/icons";
 
-  import ThreeByThree from './ThreeByThree.svelte'
 
   import { Button, ButtonGroup } from "@graph-paper/button";
   import { window1D } from "@graph-paper/core/utils/window-functions";
 
-  import DatePicker from "./DatePicker.svelte";
+  import DatePicker from "../../components/DatePicker.svelte";
+  import ShowMetrics from '../../components/controls/ShowMetrics.svelte';
+  import GraphSizeButtons from '../../components/controls/GraphSizeButtons.svelte'
+  import Key from "../../components/Key.svelte";
 
-  import Key from "./Key.svelte";
-  import Shortcuts from "./Shortcuts.svelte";
-
-  const graphSize = writable({
-    graphSize: "small", // medium, large.
-  });
 
   export let data;
-
-  function changeSize(size) {
-    return () => {
-      store.setField('graphSize', size);
-    };
-  }
 
   let dtfmt = timeFormat("%b %d, %Y");
   let dateStringFormat = timeFormat('%Y-%m-%d');
@@ -53,7 +49,7 @@
     new Date(Math.max(...d.map((di) => di.date))),
   ];
 
-  //let xDomain = generateDomain(data);
+
   $: xDomain = [parseDateString($store.startDate), parseDateString($store.endDate)];
 
   let auMax =
@@ -67,9 +63,6 @@
     store.resetDateRange();
   };
 
-  let withCommas = format(",");
-  let count = (v) => (v !== undefined ? withCommas(Math.round(v)) : "missing");
-
   const get = (d, value, dom) => {
     const w = window1D({
       value,
@@ -81,57 +74,6 @@
     if (w.current) return w.current;
     return 0;
   };
-
-  const graphs = [
-    {
-      name: "Daily Active Users",
-      key: "dau",
-      type: "count",
-      yMax: auMax,
-      axisFormat: format("~s"),
-      hoverFormat: count,
-    },
-    {
-      name: "Weekly Active Users",
-      key: "wau",
-      type: "count",
-      yMax: auMax,
-      axisFormat: format("~s"),
-      hoverFormat: count,
-    },
-    {
-      name: "Monthly Active Users",
-      key: "mau",
-      type: "count",
-      yMax: auMax,
-      axisFormat: format("~s"),
-      hoverFormat: count,
-    },
-    {
-      name: "Avg. Days / Week",
-      key: "intensity",
-      type: "rate",
-      yMax: 7,
-      axisFormat: format(".1f"),
-      hoverFormat: format(".2f"),
-    },
-    {
-      name: "1-Wk. Retention (new clients)",
-      key: "retention_1_week_new_profile",
-      type: "percentage",
-      yMax: 1,
-      axisFormat: format(".0%"),
-      hoverFormat: format(".2%"),
-    },
-    {
-      name: "1-Wk. Retention ",
-      key: "retention_1_week_active_in_week_0",
-      type: "percentage",
-      yMax: 1,
-      axisFormat: format(".0%"),
-      hoverFormat: format(".2%"),
-    },
-  ];
 
   let mousePosition = {};
   let mouseDownValue = {};
@@ -158,56 +100,13 @@
   let width = 375;
   let height = 250;
 
-  $: if ($store.graphSize === "small") {
-    width = 375;
-    height = 250;
-  } else if ($store.graphSize === "medium") {
-    width = 550;
-    height = 325;
-  } else if ($store.graphSize === "large") {
-    width = 1200;
-    height = 400;
-  }
+  $: [width, height] = graphSize($store.metric !== 'all' ? 'large' : $store.graphSize);
 
   $: description = CONFIG.usage.values.find(v=> v.key === $store.usage).shortDescription;
 
 </script>
 
 <style>
-  main {
-    min-width: 1200px;
-    padding-left: var(--space-6x);
-    padding-right: var(--space-6x);
-  }
-
-  header {
-    padding-top: var(--space-2x);
-    padding-left: var(--space-2x);
-    color: var(--cool-gray-700);
-    padding-bottom: var(--space-6x);
-    display: grid;
-    grid-template-columns: auto max-content;
-    grid-template-rows: auto auto;
-    grid-template-areas: 'title nav'
-                         'description nav'
-  }
-
-  h1 {
-    margin: 0px;
-    padding: 0px;
-    font-size: var(--text-06);
-    grid-area: title;
-  }
-
-  header .description {
-    font-size: var(--text-03);
-    max-width: calc(var(--space-1x) * 120);
-    grid-area: description;
-  }
-
-  header .nav {
-    grid-area: nav;
-  }
 
   .gafc {
     display: grid;
@@ -254,21 +153,20 @@
 </style>
 
 <main>
-    <header>
-      <h1>
-        <!-- <span style='color: var(--cool-gray-400); position: relative; z-index: 1; display: inline-block; transform: translateX(-20px) translateY(1px);'> -->
-        <span style='color: var(--cool-gray-400);'>
-          <Explore size={16} />
-        </span>
-       <span style='color: var(--cool-gray-400); font-weight: normal;'>
-        explore /
-      </span> {$store.usage}</h1>
-      <div class=description>{description}</div>
-      <div class=nav>
+
+    <PageTitle>
+      <span slot=icon>
+        <Explore size={16} />
+      </span>
+      <span slot=view>explore</span>
+      <span slot=title>{$store.usage}</span>
+      <div slot=description>
+        {description}
+      </div>
+      <div slot=controls>
         <Button level=medium>Export ...</Button>
       </div>
-    </header>
-
+    </PageTitle>
 
     <div class="main-controls">
       <div class="gafc">
@@ -296,9 +194,9 @@
             </Button>
           </div>
         {/if}
-      <!-- </div>
 
-      <div class="gafc"> -->
+
+
         <Button
           compact
           level="medium"
@@ -329,24 +227,19 @@
             {/if}
           </div>
         </Button>
-        <ButtonGroup level="medium" compact>
-          <Button on:click={changeSize('small')}>
-            <ThreeByThree size={16} />
-          </Button>
-          <Button on:click={changeSize('medium')}>
-            <Tile size={16} />
-          </Button>
-          <Button on:click={changeSize('large')}>
-            <Stack size={16} />
-          </Button>
-        </ButtonGroup>
+
+        <ShowMetrics />
+
+        <GraphSizeButtons />
       </div>
     </div>
 
     <div class="multiples multiples--{$store.graphSize}">
-      {#each graphs as { name, type, key, yMax, axisFormat, hoverFormat }, i (name)}
+      {#each metrics as { name, type, key, yMax, metricClass, axisFormat, hoverFormat }, i (name)}
+        {#if $store.metric === 'all' || $store.metric === key}
         <div>
           <MetricChart
+            headerSize={$store.metric !== 'all' ? 'large' : $store.graphSize}
             {width}
             {height}
             {name}
@@ -355,7 +248,7 @@
             y={key}
             {xDomain}
             yMin={$store.commonScales === true ? 0 : undefined}
-            yMax={$store.commonScales === true ? yMax : undefined}
+            yMax={$store.commonScales === true ? (metricClass === 'actives' ? auMax : yMax) : undefined}
             caveat={(datapoint) => dataQualityReason(datapoint.date, key, true)}
             {axisFormat}
             {hoverFormat}
@@ -366,6 +259,7 @@
             bind:mouseMoveValue
             bind:isComparing />
         </div>
+        {/if}
       {/each}
     </div>
 

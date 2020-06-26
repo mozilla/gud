@@ -6,7 +6,6 @@
     CaretRight,
     CheckboxBlank,
     Checkbox,
-    LineChart,
   } from "@graph-paper/icons";
     import { Stack } from "@graph-paper/stack";
   import { Close } from "@graph-paper/icons";
