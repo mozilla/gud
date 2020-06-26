@@ -8,13 +8,13 @@
   import { outline } from "./outline";
   import { DataGraphic } from "@graph-paper/datagraphic";
   import { Line, Band } from "@graph-paper/elements";
-  // import VerticalErrorBar from "../../../VerticalErrorBar.svelte";
   import LeftAxis from "@graph-paper/guides/LeftAxis.svelte";
   import BottomAxis from "@graph-paper/guides/BottomAxis.svelte";
   import TimeAxis from './TimeAxis.svelte';
   import { window1D } from "@graph-paper/core/utils/window-functions";
 
-  // import Window1D from "../Window1D.svelte";
+  import Scrub from './Scrub.svelte';
+  import CompareDates from './CompareDates.svelte';
 
   export let name;
 
@@ -53,7 +53,6 @@
 
   function keyDown(evt) {
     if (evt.shiftKey) isComparing = true;
-    // compareStart = xMouse;
   }
 
   function keyUp() {
@@ -131,15 +130,6 @@
     font-size: var(--text-06);
   }
 
-  .comparison__line {
-    shape-rendering: crispEdges;
-    stroke: var(--digital-blue-200);
-  }
-
-  .comparison__text {
-    font-size: 12px;
-  }
-
   .caveat {
     font-size:.8em;
     color: var(--cool-gray-500);
@@ -177,15 +167,6 @@
   let:left
   let:right
   bind:mousePosition
-  on:mousedown={() => {
-    mouseDownValue = mousePosition;
-  }}
-  on:mousemove={() => {
-    if (mouseDownValue) {
-      mouseMoveValue = mousePosition;
-    }
-  }}
-  on:mouseup={endMouseEvent}
   on:mouseleave={mouseleave}>
   <g slot="body-background">
     <Band
@@ -198,60 +179,17 @@
       alpha={0.4} />
   </g>
   <g slot="background" let:xScale let:yScale let:top let:bottom>
-    {#if isComparing}
-      <rect
-        x={Math.min(xScale(compareStart.date), xScale(compareEnd.date))}
-        y={top}
-        width={Math.abs(xScale(compareStart.date) - xScale(compareEnd.date))}
-        height={bottom - top}
-        fill="var(--digital-blue-100)"
-        opacity=".3" />
-    {/if}
     <LeftAxis tickColor="var(--cool-gray-150)" tickFormatter={axisFormat} />
     <TimeAxis />
-    <!-- <BottomAxis lineStyle="long" tickColor="var(--cool-gray-150)" /> -->
   </g>
   <g slot="body-background" let:xScale let:yScale let:top let:bottom>
-    {#if mouseDownValue.x && mouseMoveValue.x}
-      <rect
-        transition:fade={{ duration: 75 }}
-        x={Math.min(xScale(mouseDownValue.x), xScale(mouseMoveValue.x))}
-        y={top}
-        width={Math.abs(xScale(mouseDownValue.x) - xScale(mouseMoveValue.x))}
-        height={bottom - top}
-        fill="var(--pantone-red-100)" />
-      <line
-        shape-rendering=crispEdges
-        x1={xScale(mouseDownValue.x)}
-        x2={xScale(mouseDownValue.x)}
-        y1={top}
-        y2={bottom}
-        stroke="var(--pantone-red-200)"
-        stroke-width="1" />
-      <line
-        shape-rendering=crispEdges
-        x1={xScale(mouseMoveValue.x)}
-        x2={xScale(mouseMoveValue.x)}
-        y1={top}
-        y2={bottom}
-        stroke="var(--pantone-red-200)"
-        stroke-width="1" />
-      <text
-        transition:fade={{ duration: 75 }}
-        x={Math.min(xScale(mouseDownValue.x), xScale(mouseMoveValue.x)) + 5}
-        y={bottom - 5}
-        font-size="11"
-        style="text-transform: uppercase;"
-        fill="var(--cool-gray-500)">
-        {dateDiff(mouseDownValue.x, mouseMoveValue.x)} days
-      </text>
-    {/if}
-
+    <Scrub x='x' on:scrubend={(event) => {
+      const { start, end } = event.detail;
+      endMouseEvent(start.x, end.x);
+    }} {mousePosition} />
   </g>
   <g slot="body">
-
     <Line data={transformedData} x="date" {y} curve=curveLinear />
-
   </g>
 
   <!-- <g style="opacity:.6">
@@ -267,75 +205,26 @@
     let:xScale
     let:yScale>
     {#if output}
-      <!-- isComparing bg -->
+        {#if output.date}
+          <text fill=var(--cool-gray-550) x={left} y={12} font-size={12}>
+            {dtfmt(output.date)}
+          </text>
+        {/if}
+
+        {#if caveatReason}
+          <text in:fade={{duration:200}} x={right} y={12} text-anchor=end font-size={12} fill=var(--cool-gray-500)>{caveatReason}</text>
+        {/if}
+
+      <CompareDates
+        point={output} {y} x=date {hoverFormat}
+      />
 
       <g transform="translate({xScale(output.date)} 0)">
-        {#if !isComparing && !caveatReason && output[y] !== undefined}
+        {#if !caveatReason && output[y] !== undefined}
           <circle cy={yScale(output[y])} r="3" fill="var(--digital-blue-500)" />
-        {/if}
-        {#if isComparing}
-          <rect
-            y={Math.min(yScale(compareStart[y]), yScale(compareEnd[y]))}
-            height={Math.abs(yScale(compareStart[y]) - yScale(compareEnd[y]))}
-            width={5}
-            fill={compareStart.date < compareEnd.date ? 'var(--cool-gray-900)' : 'var(--pantone-red-500'} />
-          <g>
-            <text
-              use:outline
-              class="comparison__text"
-              text-anchor={compareStart.date > compareEnd.date ? 'end' : 'start' }
-              dx={compareStart.date > compareEnd.date ? '-1em' : '1em'}
-              y={yScale(output[y])}>
-              {hoverFormat(compareEnd[y])}
-            </text>
-            <text
-              use:outline
-              class="comparison__text"
-              dx={compareStart.date > compareEnd.date ? '-1em' : '1em'}
-              dy="1em"
-              text-anchor={compareStart.date > compareEnd.date ? 'end' : 'start' }
-              y={yScale(output[y])}
-              fill={compareStart[y] < compareEnd[y] ? 'var(--cool-gray-900)' : 'var(--pantone-red-500)'}>
-              {percentage(percentageDifference(compareStart[y], compareEnd[y]))}
-            </text>
-          </g>
-          <line class="comparison__line" y1={top} y2={bottom} />
         {/if}
       </g>
     {/if}
 
-    {#if output.date}
-      <text fill=var(--cool-gray-550) x={left} y={12} font-size={12}>
-        {dtfmt(output.date)}
-      </text>
-    {/if}
-    {#if caveatReason}
-      <text in:fade={{duration:200}} x={right} y={12} text-anchor=end font-size={12} fill=var(--cool-gray-500)>{caveatReason}</text>
-    {/if}
-    {#if isComparing}
-      <line
-        shape-rendering="crispEdges"
-        x1={xScale(compareStart.date)}
-        x2={xScale(compareEnd.date)}
-        y1={yScale(compareStart[y])}
-        y2={yScale(compareStart[y])}
-        stroke="var(--cool-gray-900)"
-        stroke-dasharray="1,1" />
-      <line
-        class="comparison__line"
-        x1={xScale(compareStart.date)}
-        x2={xScale(compareStart.date)}
-        y1={top}
-        y2={bottom} />
-      <text
-        use:outline
-        class="comparison__text"
-        y={yScale(compareStart[y])}
-        x={xScale(compareStart.date)}
-        text-anchor={compareStart.date < compareEnd.date ? 'end' : 'start'}
-        dx={compareStart.date < compareEnd.date ? '-1em' : '1em'}>
-        {hoverFormat(compareStart[y])}
-      </text>
-    {/if}
   </g>
 </DataGraphic>

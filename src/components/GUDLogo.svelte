@@ -5,8 +5,8 @@ import { spring } from 'svelte/motion';
 
 export let size = 148;
 
-const s = spring(0, { stiffness: 0.2, damping: 0.2 });
-$: s.set(1);
+const s = spring(1, { stiffness: 0.2, damping: 0.2 });
+$: s.set(0);
 
 let mounted = false;
 onMount(() => {

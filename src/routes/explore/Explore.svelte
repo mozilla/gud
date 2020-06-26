@@ -87,9 +87,10 @@
   };
   let isScrubbing = false;
 
-  const endMouseEvent = () => {
-    startValue = new Date(Math.min(mouseDownValue.x, mouseMoveValue.x));
-    endValue = new Date(Math.max(mouseDownValue.x, mouseMoveValue.x));
+  const endMouseEvent = (a, b) => {
+    console.log(a,b)
+    startValue = new Date(Math.min(a, b));
+    endValue = new Date(Math.max(a, b));
     store.setDateRange(dateStringFormat(startValue), dateStringFormat(endValue));
     isScrubbing = true;
     resetMouseClicks();
@@ -195,8 +196,6 @@
           </div>
         {/if}
 
-
-
         <Button
           compact
           level="medium"
@@ -229,7 +228,6 @@
         </Button>
 
         <ShowMetrics />
-
         <GraphSizeButtons />
       </div>
     </div>
@@ -237,7 +235,7 @@
     <div class="multiples multiples--{$store.graphSize}">
       {#each metrics as { name, type, key, yMax, metricClass, axisFormat, hoverFormat }, i (name)}
         {#if $store.metric === 'all' || $store.metric === key}
-        <div>
+        <div in:fly={{duration: 300, y: 5}}>
           <MetricChart
             headerSize={$store.metric !== 'all' ? 'large' : $store.graphSize}
             {width}
