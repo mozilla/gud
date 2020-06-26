@@ -7,6 +7,7 @@
 
   export let scale = getContext('xScale');
   export let secondaryOffset = '.7em';
+  export let majorLines = false;
 
   const xAxisMonth = timeFormat("%b");
   const xAxisYear = timeFormat("%Y");
@@ -62,6 +63,7 @@
 
 <AxisContainer side="bottom">
   <g slot='ticks' let:closestMargin let:farthestMargin>
+  {#if majorLines}
     {#each p as pi, i}
                 <AxisTick
       placement={pi}
@@ -69,6 +71,7 @@
       tickDirection={-1}
       length={closestMargin - farthestMargin} />
     {/each}
+    {/if}
   </g>
   <g slot='labels'>
     {#if resolution === 'days'}

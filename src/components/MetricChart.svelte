@@ -15,6 +15,7 @@
 
   import Scrub from './Scrub.svelte';
   import CompareDates from './CompareDates.svelte';
+  import FirefoxReleaseVersionMarkers from './FirefoxReleaseVersionMarkers.svelte';
 
   export let name;
 
@@ -152,7 +153,7 @@
 <DataGraphic
   {width}
   {height}
-  top={32}
+  top={36}
   bottom={32}
   left={40}
   right={24}
@@ -192,9 +193,9 @@
     <Line data={transformedData} x="date" {y} curve=curveLinear />
   </g>
 
-  <!-- <g style="opacity:.6">
+  <g style="opacity:.6">
         <FirefoxReleaseVersionMarkers />
-      </g> -->
+      </g>
 
   <g
     slot="interaction"
