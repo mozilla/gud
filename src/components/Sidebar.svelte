@@ -10,7 +10,6 @@
   import Keyboard from './Keyboard.svelte';
   import GithubLogo from './GithubLogo.svelte';
   import GUDLogo from './GUDLogo.svelte';
-  import GrowthAndUsage from './GrowthAndUsage.svelte'
 
   let showShortcuts = false;
 
@@ -25,9 +24,9 @@
 
 <nav>
     <Box padding={2}>
-      <h1><GUDLogo size={32} /> <GrowthAndUsage /></h1>
+      <h1><GUDLogo size={32} /> GUD</h1>
     </Box>
-    <div class='pages'>
+    <!-- <div class='pages'>
       <Stack>
         <Button level=low href={'/explore'}>
           <div class=gafc>
@@ -42,16 +41,16 @@
           </div>
         </Button>
       </Stack>
-    </div>
+    </div> -->
 
     <slot />
 
     <div class="bottom-element">
       <Box>
-        <Stack>
+        <div style='columns: 2;'>
             <Button compact level=low href="https://mozilla.github.io/gud/">
               <div class=gafc>
-                <Documentation color=var(--icon-color) size={14} /> Documentation
+                <Documentation color=var(--icon-color) size={14} /> Docs
               </div>
             </Button>
             <Button toggled={showShortcuts} compact level=low on:click={() => { showShortcuts = !showShortcuts; }}>
@@ -71,7 +70,7 @@
                 File an Issue
               </div>
             </Button>
-        </Stack>
+        </div>
       </Box>
     </div>
 </nav>

@@ -53,20 +53,22 @@ nav h1 {
   margin: 0px;
   /* color: var(--cool-gray-700); */
   /* color: var(--digital-blue-800); */
-  color: var(--pantone-red-300);
+  color: var(--pantone-red-350);
+  font-weight: 900;
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: var(--space-1x);
   justify-content: start;
   align-items: center;
-  font-size: var(--text-06);
+  font-size: var(--text-08);
   line-height: 1;
+  padding-bottom: var(--space-4x);
 }
 
 nav .gp-button {
   font-weight: normal;
   transition: background-color 200ms, color 200ms;
-  /* color: var(--digital-blue-100); */
+  color: var(--cool-gray-900);
 }
 
 nav .gp-chip {

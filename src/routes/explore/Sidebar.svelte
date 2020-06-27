@@ -76,7 +76,7 @@
   <Box padding={0}>
     <div in:fly={{duration: 500, x: -10}}>
       <Stack space={0}>
-        <h2>Aggregation Filters</h2>
+        <!-- <h2>Aggregation Filters</h2> -->
         {#each Object.values(CONFIG) as dimension, i (dimension.key)}
           {#if dimension.inMenu}
           <Stack space={0}>
