@@ -33,6 +33,13 @@
     } else if (removeListener) removeListener();
   }
 
+  function handleKeydown({ key }) {
+    if (key === "Escape") {
+      toggled = false;
+      if (removeListener) removeListener();
+    }
+  }
+
   function select(value) {
     return () => {
       removeListener();
@@ -46,6 +53,7 @@
 
 </script>
 
+<svelte:window on:keydown={handleKeydown} />
 
 <div class="dimension-button" bind:this={container}>
   <Button compact {toggled} level="medium" on:click={toggle}>
@@ -61,26 +69,8 @@
   </Button>
 </div>
 
-
-<FloatingChild width={60} location="bottom" alignment="center" active={toggled} bind:element parent={container}>
+<FloatingChild width={72} location="bottom" alignment="center" active={toggled} bind:element parent={container} verticalPad="var(--space-2x)">
   <List>
-    <!-- {#if multi}
-      <ListItem on:click={clearSelection}>
-        <span slot="secondary">
-          {#if selections.length}
-            clear {selections.length} selection{selections.length === 1 ? '' : 's'}
-          {:else}showing all{/if}
-
-        </span>
-        <span slot="right">
-          {#if selections.length}
-            <Close size="1em" color="var(--cool-gray-500)" />
-          {/if}
-        </span>
-
-      </ListItem>
-      <Divider />
-    {/if} -->
     {#each CONFIG.metric.values as option}
       {#if option.itemType === 'divider'}
         <Divider />
@@ -94,15 +84,6 @@
           <span slot="primary">{option.label}</span>
           <span slot="secondary">
             {#if option.shortDescription}{option.shortDescription}{/if}
-          </span>
-          <span
-            slot="right"
-           >
-            <!-- {#if selections.includes(option.key)}
-              <Checkbox size="1em" />
-            {:else}
-              <CheckboxBlank size="1em" />
-            {/if} -->
           </span>
         </ListItem>
     {/if}

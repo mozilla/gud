@@ -82,7 +82,7 @@
           <Stack space={0}>
             <DimensionMenu
               on:selection={handleDimensionSelection(dimension.key)}
-              selections={selections[dimension.key]}
+              selections={$store[dimension.key]}
               multi={dimension.type === 'multi'}
               menuWidth={setMenuWidth(dimension.key)}
               options={dimension.values}>

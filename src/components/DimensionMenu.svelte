@@ -6,6 +6,7 @@
     CaretRight,
     CheckboxBlank,
     Checkbox,
+    Check
   } from "@graph-paper/icons";
     import { Stack } from "@graph-paper/stack";
   import { Close } from "@graph-paper/icons";
@@ -20,12 +21,14 @@
   export let variant = 'regular';
   export let toggled = false;
   export let multi = true;
+
   export let menuWidth = 32;
   export let options;
 
   let container;
   let element;
   let removeListener;
+
   function toggle() {
     toggled = !toggled;
     if (toggled) {
@@ -210,10 +213,14 @@ margin:0px;
           <span
             slot="right"
             style="color: {selections.includes(option.key) ? 'blue' : 'var(--cool-gray-400)'}">
-            {#if selections.includes(option.key)}
-              <Checkbox size="1em" />
+            {#if multi}
+              {#if selections.includes(option.key)}
+                <Checkbox size="1em" />
+              {:else}
+                <CheckboxBlank size="1em" />
+              {/if}
             {:else}
-              <CheckboxBlank size="1em" />
+              <Check size="1em" color={selections === option.key ? 'currentColor' : 'transparent'} />
             {/if}
           </span>
         </ListItem>

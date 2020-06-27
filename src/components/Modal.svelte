@@ -1,7 +1,7 @@
 <script>
   import clickOutside from '../utils/click-outside'
   import { onMount, onDestroy, createEventDispatcher } from 'svelte';
-  import { fly, scale } from 'svelte/transition';
+  import { fly, fade } from 'svelte/transition';
   import { Portal } from "@graph-paper/portal"
   import { Calendar, Close } from "@graph-paper/icons";
 
@@ -45,6 +45,17 @@
 </script>
 
 <style>
+  .modal-background {
+    position:absolute;
+    left:0;
+    top:0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(160deg, #C04848, #480048);
+    opacity: .7;
+    mix-blend-mode: overlay;
+  }
+
   .container {
     --width: 600px;
     position: absolute;
@@ -118,6 +129,7 @@
 
 {#if isMounted}
   <Portal>
+  <div transition:fly={{duratioin: 125}} class=modal-background></div>
     <div class=container transition:fly={{duration: 125, y:5}} use:clickOutside={onCancel}>
       <header>
         <h4>

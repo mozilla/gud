@@ -2,18 +2,18 @@
   import { getContext } from "svelte";
 
   let borderRadius = getContext("gp:list:border-radius");
-  $: style = `${borderRadius ? `--border-radius: ${borderRadius};` : ""}`;
+  let verticalPad = getContext("gp:list:vertical-pad");
+  $: style = `${borderRadius ? `--border-radius: ${borderRadius};` : ""}${verticalPad ? `--vertical-pad: ${verticalPad}` : ""}`;
 </script>
 
 <style>
   ul {
     --border-radius: 0px;
-    padding: 0px;
+    padding: var(--vertical-pad) 0px;
     margin: 0px;
     background-color: white;
     list-style-type: none;
     min-width: var(--space-32x);
-    width: var(--width);
     border-radius: var(--border-radius);
   }
 </style>

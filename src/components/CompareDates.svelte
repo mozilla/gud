@@ -1,7 +1,7 @@
 <script>
 import { getContext } from 'svelte';
-import { format } from "d3-format";
 import { outline } from "./outline";
+import { percentage2d, percentageDifference } from '../utils/formatters'
 
 const xScale = getContext('xScale');
 const yScale = getContext('yScale');
@@ -11,7 +11,8 @@ export let point;
 export let y;
 export let x = 'date';
 export let hoverFormat = (v) => v;
-let percentage = format("+.2%");
+
+
 
 let compareStart = {};
 let compareEnd = {};
@@ -25,9 +26,7 @@ function keyUp() {
   if (isComparing) isComparing = false;
 }
 
-  function percentageDifference(start, end) {
-    return (end - start) / start;
-  }
+
 
 $: if (isComparing) {
   compareEnd = point;
@@ -97,7 +96,7 @@ $: if (isComparing) {
             text-anchor={compareStart[x] > compareEnd[x] ? 'end' : 'start' }
             y={$yScale(point[y])}
             fill={compareStart[y] < compareEnd[y] ? 'var(--cool-gray-900)' : 'var(--pantone-red-500)'}>
-            {percentage(percentageDifference(compareStart[y], compareEnd[y]))}
+            {percentage2d(percentageDifference(compareStart[y], compareEnd[y]))}
           </text>
         </g>
     </g>

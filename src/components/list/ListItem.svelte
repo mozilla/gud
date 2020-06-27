@@ -50,6 +50,10 @@
     color: var(--cool-gray-550);
   }
 
+  .list-item__right {
+    min-width: var(--space-2x);
+  }
+
   :global(.gp-list-item .list-item__right > *) {
     display: grid;
     align-items: center;

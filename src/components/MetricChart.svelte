@@ -1,5 +1,5 @@
 <script>
-  // eslint-disable-next-line import/no-extraneous-dependencies
+  import { onMount } from 'svelte';
   import { fade, fly } from "svelte/transition";
   import { timeFormat } from "d3-time-format";
   import { format } from "d3-format";
@@ -16,6 +16,7 @@
   import Scrub from './Scrub.svelte';
   import CompareDates from './CompareDates.svelte';
   import FirefoxReleaseVersionMarkers from './FirefoxReleaseVersionMarkers.svelte';
+  import YearOverYearLabel from './YearOverYearLabel.svelte';
 
   export let name;
 
@@ -28,8 +29,6 @@
   export let xDomain;
   export let yMin;
   export let yMax;
-  export let mouseDownValue = {};
-  export let mouseMoveValue = {};
   export let caveat = () => undefined;
   export let transform = undefined;
 
@@ -101,7 +100,15 @@
 
   $: caveatReason = caveat(output);
 
+
+  let options = {
+  root: document.querySelector('#scrollArea'),
+  rootMargin: '0px',
+  threshold: 1.0
+}
+
 </script>
+
 
 <style>
   header {
@@ -112,6 +119,7 @@
     padding-left: 40px;
     padding-right: 24px;
     color: var(--cool-gray-750);
+    align-items: baseline;
   }
 
   h2 {
@@ -144,7 +152,7 @@
   <div class:caveat={!!caveatReason}>
     {#if caveatReason}
       no data
-    {:else if output[y]}
+    {:else if output[y] !== undefined}
       {hoverFormat(output[y])}
     {/if}
     </div>
@@ -174,9 +182,9 @@
       data={transformedData}
       curve=curveLinear
       x="date"
-      yMin={`${y}Low`}
-      yMax={`${y}High`}
-      color="var(--cool-gray-200)"
+      yMin={`${y}_low`}
+      yMax={`${y}_high`}
+      color="var(--cool-gray-300)"
       alpha={0.4} />
   </g>
   <g slot="background" let:xScale let:yScale let:top let:bottom>
@@ -189,13 +197,14 @@
       endMouseEvent(start.x, end.x);
     }} {mousePosition} />
   </g>
+
   <g slot="body">
     <Line data={transformedData} x="date" {y} curve=curveLinear />
   </g>
 
   <g style="opacity:.6">
-        <FirefoxReleaseVersionMarkers />
-      </g>
+    <FirefoxReleaseVersionMarkers />
+  </g>
 
   <g
     slot="interaction"
@@ -211,10 +220,13 @@
             {dtfmt(output.date)}
           </text>
         {/if}
-
         {#if caveatReason}
           <text in:fade={{duration:200}} x={right} y={12} text-anchor=end font-size={12} fill=var(--cool-gray-500)>{caveatReason}</text>
         {/if}
+
+      {#if !caveatReason}
+        <YearOverYearLabel data={transformedData} focusPoint={output} {y} />
+      {/if}
 
       <CompareDates
         point={output} {y} x=date {hoverFormat}

@@ -2,7 +2,7 @@
   import { format } from "d3-format";
   import { timeFormat, timeParse } from "d3-time-format";
 
-  import { fly } from "svelte/transition";
+  import { fly, fade } from "svelte/transition";
   import { writable } from "svelte/store";
 
   import { Box } from "@graph-paper/box";
@@ -88,7 +88,6 @@
   let isScrubbing = false;
 
   const endMouseEvent = (a, b) => {
-    console.log(a,b)
     startValue = new Date(Math.min(a, b));
     endValue = new Date(Math.max(a, b));
     store.setDateRange(dateStringFormat(startValue), dateStringFormat(endValue));
@@ -235,7 +234,7 @@
     <div class="multiples multiples--{$store.graphSize}">
       {#each metrics as { name, type, key, yMax, metricClass, axisFormat, hoverFormat }, i (name)}
         {#if $store.metric === 'all' || $store.metric === key}
-        <div in:fly={{duration: 300, y: 5}}>
+        <div in:fade={{duration: 300 }}>
           <MetricChart
             headerSize={$store.metric !== 'all' ? 'large' : $store.graphSize}
             {width}

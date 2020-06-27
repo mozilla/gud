@@ -3,8 +3,8 @@ function mean(array) {
 }
 
 export default function smooth(data, key, days = 7) {
-  const hi = `${key}High`;
-  const lo = `${key}Low`;
+  const hi = `${key}_high`;
+  const lo = `${key}_low`;
   const series = data.map((di) => ({
     date: di.date,
     [key]: di[key],

@@ -9,16 +9,19 @@
   export let width = 32;
   let leftPlacement = 0;
   let topPlacement = 0;
+  export let verticalPad = '';
   export let location = "right";
   export let alignment = "top";
   let scrollY;
+  let innerHeight
 
   setContext("gp:list:border-radius", "var(--space-1x)");
+  setContext('gp:list:vertical-pad', verticalPad);
 
   let y = 0;
-  $: if (element) y = element.getBoundingClientRect().y;
-
-  $: if (element && parent) {
+  $: if (parent) y = parent.getBoundingClientRect().y;
+  $: if (parent) console.log(parent.offsetTop);
+  $: if (element && parent && active) {
     [leftPlacement, topPlacement] = placeElement({
       location,
       alignment,
@@ -26,6 +29,7 @@
       parentPosition: parent.getBoundingClientRect(),
       distance: 10,
       y: scrollY,
+      windowHeight: innerHeight
     });
   }
 </script>
@@ -39,11 +43,11 @@
       0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07),
       0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
     border-radius: var(--space-1h);
-    transition: opacity 40ms;
+    /* transition: opacity 40ms; */
     opacity: 1;
     z-index: 1;
     transform: none;
-    min-width: var(--width);
+    width: var(--width);
   }
 
   .hidden {
@@ -53,12 +57,14 @@
   }
 </style>
 
+<svelte:window bind:innerHeight />
+
 <div
   bind:this={element}
   class:hidden={!active}
   style="
     position: absolute; left: {leftPlacement}px; top: {topPlacement}px;
-    max-height: calc(100vh - {y}px - var(--space-8x));
+    max-height: calc(100vh - var(--space-8x));
     overflow-y: auto;
     --width: calc(var(--space-1x) * {width});
   ">
