@@ -10,25 +10,13 @@
   import Keyboard from './Keyboard.svelte';
   import GithubLogo from './GithubLogo.svelte';
   import GUDLogo from './GUDLogo.svelte';
+  import GrowthAndUsage from './GrowthAndUsage.svelte'
 
   let showShortcuts = false;
 
 </script>
 
 <style>
-  h1 {
-    padding: 0px;
-    margin: 0px;
-    color: var(--cool-gray-700);
-    display: grid;
-    grid-auto-flow: column;
-    grid-column-gap: var(--space-1x);
-    justify-content: start;
-    align-items: center;
-    font-size: var(--text-06);
-    line-height: 1;
-  }
-
   .pages {
     padding: var(--space-2x) var(--space-1x);
     min-height: var(--space-16x);
@@ -37,7 +25,7 @@
 
 <nav>
     <Box padding={2}>
-      <h1><GUDLogo size={32} /> Growth & Usage</h1>
+      <h1><GUDLogo size={32} /> <GrowthAndUsage /></h1>
     </Box>
     <div class='pages'>
       <Stack>

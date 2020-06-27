@@ -1,72 +1,32 @@
 <script>
-  import { onMount, createEventDispatcher } from 'svelte';
-  import { fly, scale } from 'svelte/transition';
-  import { Portal } from "@graph-paper/portal"
-  import { Calendar, Close } from "@graph-paper/icons";
+import { Calendar } from "@graph-paper/icons";
 
-  const dispatch = createEventDispatcher();
-
-  let isMounted = false;
-
-  onMount(() => {
-    isMounted = true;
-  });
-
-  function onCancel() {
-    dispatch('cancel');
-  }
-
-  function listenForEscape(event) {
-    if (event.key === 'Escape') onCancel();
-  }
+import Modal from './Modal.svelte';
 
 </script>
 
 <style>
-  .container {
-    --width: 600px;
-    position: absolute;
-    width: var(--width);
-    background-color: white;
-    left: calc(50% - var(--width) / 2);
-    top: 25%;
-    bottom: 25%;
-    border-radius: var(--space-1h);
-    min-height: 400px;
-    box-shadow:
-            0 2px 1px rgba(0,0,0,0.09),
-            0 4px 2px rgba(0,0,0,0.09),
-            0 8px 4px rgba(0,0,0,0.09),
-            0 16px 8px rgba(0,0,0,0.09),
-            0 32px 16px rgba(0,0,0,0.09);
-  }
-
-  dl {
+ dl {
+    position: relative;
     display: grid;
-    grid-template-columns: max-content max-content;
+    grid-template-columns: max-content auto;
     align-items: baseline;
+    justify-items: stretch;
     grid-column-gap: var(--space-4x);
-    grid-row-gap: var(--space-2x);
-    font-size: var(--text-015);
+    grid-row-gap: var(--space-4x);
+    font-size: var(--text-03);
     padding: 0px;
     margin: 0px;
-    padding: var(--space-4x);
-    padding-top: var(--space-2x);
+    padding: 0px var(--space-4x);
+    line-height: 1.5;
   }
 
-  dd {
-    padding: 0px;
-    margin: 0px;
+  dt {
+    font-weight: bold;
+    color: var(--cool-gray-700);
   }
 
-  h4 {
-    padding: 0px;
-    margin: 0px;
-    font-size: var(--text-05);
-    text-transform: uppercase;
-  }
-
-  span {
+  dl span {
     color: var(--cool-gray-700);
     border: 1px solid var(--cool-gray-200);
     padding: var(--space-1h) var(--space-1x);
@@ -76,65 +36,21 @@
     align-items: center;
     grid-column-gap: var(--space-1h);
   }
-
-  header {
-    padding: var(--space-2x);
-    display: grid;
-    grid-auto-flow: column;
-    justify-content: space-between;
-    align-items: center;
-    background: linear-gradient(to left, var(--digital-blue-700), var(--digital-blue-800) 36%, var(--digital-blue-900));
-    color: var(--digital-blue-100);
-    border-top-left-radius: var(--space-1h);
-    border-top-right-radius: var(--space-1h);
-  }
-
-  button {
-    background-color: var(--digital-blue-200);
-    padding: 0px;
-    margin: 0px;
-    border: none;
-    display: grid;
-    align-items: center;
-    justify-items: center;
-    border-radius: 50%;
-    padding: var(--space-1x);
-    transition: background-color 100ms, transform 500ms;
-    color: var(--digital-blue-700);
-    cursor: pointer;
-
-  }
-
-  button:hover {
-    background-color: var(--digital-blue-250);
-    transform: rotate(360deg);
-  }
 </style>
 
-<svelte:window on:keydown={listenForEscape} />
-
-{#if isMounted}
-  <Portal>
-    <div class=container transition:fly={{duration: 125, y:5}}>
-      <header>
-        <h4>Shortcuts</h4>
-        <button on:click={onCancel}>
-          <Close size={16} />
-        </button>
-      </header>
-      <dl>
-        <dt>click + drag + release</dt>
-        <dd>
-          set a new
-          <span>
-            date range
-            <Calendar size="1em" />
-          </span>
-          for all graphs
-        </dd>
-        <dt>shift + drag</dt>
-        <dd>compare whichever point was highlighted on shift to a hover point</dd>
-      </dl>
-    </div>
-  </Portal>
-{/if}
+<Modal on:cancel>
+  <span slot=title>Shortcuts</span>
+  <dl>
+    <dt>click + drag + release</dt>
+    <dd>
+      set a new
+      <span>
+        date range
+        <Calendar size="1em" />
+      </span>
+      for all graphs
+    </dd>
+    <dt>shift + drag</dt>
+    <dd>compare whichever point was highlighted on shift to a hover point on and on and on and on</dd>
+  </dl>
+</Modal>

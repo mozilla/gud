@@ -59,7 +59,7 @@
   }
 </style>
 
-<div>
+<div id='gud'>
   <Sidebar>
     <svelte:component this={sidebarComponent} />
   </Sidebar>
