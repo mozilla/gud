@@ -1,9 +1,8 @@
 <script>
-  import { onMount } from 'svelte';
   import { fade, fly } from "svelte/transition";
   import { timeFormat } from "d3-time-format";
   import { format } from "d3-format";
-  import { cubicOut as easing } from "svelte/easing";
+  import { cubicInOut as easing } from "svelte/easing";
 
   import { outline } from "./outline";
   import { DataGraphic } from "@graph-paper/datagraphic";
@@ -20,6 +19,7 @@
 
   export let name;
 
+  export let brushTransitioning = false;
   export let data;
   export let width = 350;
   export let height = 200;
@@ -100,13 +100,6 @@
 
   $: caveatReason = caveat(output);
 
-
-  let options = {
-  root: document.querySelector('#scrollArea'),
-  rootMargin: '0px',
-  threshold: 1.0
-}
-
 </script>
 
 
@@ -167,7 +160,6 @@
   right={24}
   {xDomain}
   xDomainTween={{ duration: 250, easing }}
-  yDomainTween={{ duration: 200, easing }}
   yDomain={[yMin, yMax]}
   xType="time"
   yType="linear"
@@ -177,7 +169,9 @@
   let:right
   bind:mousePosition
   on:mouseleave={mouseleave}>
+
   <g slot="body-background">
+    {#if !brushTransitioning}
     <Band
       data={transformedData}
       curve=curveLinear
@@ -186,10 +180,14 @@
       yMax={`${y}_high`}
       color="var(--cool-gray-300)"
       alpha={0.4} />
+    {/if}
   </g>
   <g slot="background" let:xScale let:yScale let:top let:bottom>
     <LeftAxis tickColor="var(--cool-gray-150)" tickFormatter={axisFormat} />
-    <TimeAxis />
+
+    {#if !brushTransitioning}
+      <TimeAxis />
+    {/if}
   </g>
   <g slot="body-background" let:xScale let:yScale let:top let:bottom>
     <Scrub x='x' on:scrubend={(event) => {
@@ -202,9 +200,11 @@
     <Line data={transformedData} x="date" {y} curve=curveLinear />
   </g>
 
-  <g style="opacity:.6">
-    <FirefoxReleaseVersionMarkers />
-  </g>
+  {#if !brushTransitioning}
+    <g style="opacity:.6" in:fade={{duration: 260}}>
+      <FirefoxReleaseVersionMarkers />
+    </g>
+  {/if}
 
   <g
     slot="interaction"

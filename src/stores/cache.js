@@ -24,7 +24,9 @@ export const removeLocalParams = (obj) => {
 
 function toQueryStringParts(key, val) {
   const opt = Object.values(options).find((o) => o.key === key);
+  if (!opt) return "";
   if (opt.type === "multi") {
+    if (val.length === 0) return "";
     return `${opt.key}=${encodeURIComponent(JSON.stringify([...val].sort()))}`;
   }
   return `${opt.key}=${encodeURIComponent(val)}`;
@@ -37,6 +39,7 @@ function filterUnusedState(localState = true) {
       "minStartDate",
       "maxEndDate",
       "disabledDimensions",
+      "brushTransitioning",
       !localState ? "startDate" : "",
       !localState ? "endDate" : "",
     ].includes(key);
@@ -47,6 +50,7 @@ export const storeToQuery = ($store, localState = true) => {
   return Object.entries($store)
     .filter(filterUnusedState(localState))
     .map(([key, val]) => toQueryStringParts(key, val))
+    .filter((q) => q !== "")
     .join("&");
 };
 

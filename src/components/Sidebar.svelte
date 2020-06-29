@@ -17,8 +17,15 @@
 
 <style>
   .pages {
-    padding: var(--space-2x) var(--space-1x);
     min-height: var(--space-16x);
+  }
+
+  :global(.pages .gp-button) {
+    color: var(--pantone-red-500);
+  }
+
+  :global(.pages svg) {
+    color: var(--pantone-red-700);
   }
 </style>
 
@@ -26,7 +33,7 @@
     <Box padding={2}>
       <h1><GUDLogo size={32} /> GUD</h1>
     </Box>
-    <!-- <div class='pages'>
+    <div class='pages'>
       <Stack>
         <Button level=low href={'/explore'}>
           <div class=gafc>
@@ -41,7 +48,7 @@
           </div>
         </Button>
       </Stack>
-    </div> -->
+    </div>
 
     <slot />
 

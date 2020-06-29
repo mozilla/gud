@@ -12,11 +12,14 @@
 
   import CONFIG from '../../stores/options.json';
   import { store } from '../../stores/store';
-  import { datesAreDefault } from '../../stores/cache';
+  import { datesAreDefault, storeToQuery } from '../../stores/cache';
 
   import { dataQualityReason } from '../../utils/data-quality';
   import smooth from '../../utils/smoothing';
+  import { exportData } from '../../utils/download-string'
   import { metrics, graphSize } from '../../config';
+
+  import Export from '../../components/Export.svelte';
 
 
   import {
@@ -32,9 +35,11 @@
   import { Button, ButtonGroup } from "@graph-paper/button";
   import { window1D } from "@graph-paper/core/utils/window-functions";
 
-  import DatePicker from "../../components/DatePicker.svelte";
+  import DatePicker from "../../components/controls/DatePicker.svelte";
   import ShowMetrics from '../../components/controls/ShowMetrics.svelte';
-  import GraphSizeButtons from '../../components/controls/GraphSizeButtons.svelte'
+  import GraphSizeButtons from '../../components/controls/GraphSizeButtons.svelte';
+  import CommonScalesButton from '../../components/controls/CommonScalesButton.svelte';
+  import SmoothingButton from '../../components/controls/SmoothingButton.svelte';
   import Key from "../../components/Key.svelte";
 
 
@@ -104,16 +109,20 @@
 
   $: description = CONFIG.usage.values.find(v=> v.key === $store.usage).shortDescription;
 
+
+  // export modal;
+  let isExporting = false;
+
 </script>
 
 <style>
 
-  .gafc {
+  /* .gafc {
     display: grid;
     grid-auto-flow: column;
     align-items: center;
     grid-column-gap: var(--space-2x);
-  }
+  } */
 
   .multiples {
     display: grid;
@@ -144,11 +153,25 @@
     justify-content: start;
     justify-items: start;
     align-items: center;
-    margin-bottom: var(--space-4x);
+    margin-bottom: var(--space-6x);
   }
 
   .bottom {
     margin: auto;
+  }
+
+  :global(.top-right-controls .gp-button) {
+    background-color: transparent;
+    color: var(--digital-blue-400);
+    border-color: var(--digital-blue-300);
+    border-width: 2px;
+    transition: color 100ms, background-color 100ms, transform 100ms;
+  }
+
+  :global(.top-right-controls .gp-button:hover) {
+    background-color: var(--digital-blue-100);
+    color: var(--digital-blue-500);
+    transform: translateY(2px);
   }
 </style>
 
@@ -163,13 +186,15 @@
       <div slot=description>
         {description}
       </div>
-      <div slot=controls>
-        <Button level=medium>Export ...</Button>
+      <div slot=controls class="top-right-controls">
+        <Button level=medium on:click={() => { exportData(data, $store); }}>
+          <div class=gafc style="--gafc-space: var(--space-1x);"> <Export size=1em /> Export</div>
+          </Button>
       </div>
     </PageTitle>
 
     <div class="main-controls">
-      <div class="gafc">
+      <div class="gafc" style="--gafc-space: var(--space-2x);">
         <DatePicker
           startDate={xDomain[0]}
           endDate={xDomain[1]}
@@ -195,36 +220,8 @@
           </div>
         {/if}
 
-        <Button
-          compact
-          level="medium"
-          on:click={() => {
-            store.setField('commonScales', !$store.commonScales)
-          }}>
-          <div class="gafc" style="grid-column-gap: var(--space-base);">
-            common scales
-            {#if $store.commonScales}
-              <Checkbox size="1em" />
-            {:else}
-              <CheckboxBlank size="1em" />
-            {/if}
-          </div>
-        </Button>
-        <Button
-          compact
-          level="medium"
-          on:click={() => {
-            store.setField('smoothing', !$store.smoothing)
-          }}>
-          <div class="gafc" style="grid-column-gap: var(--space-base);">
-            7-day smoothing
-            {#if $store.smoothing === true}
-              <Checkbox size="1em" />
-            {:else}
-              <CheckboxBlank size="1em" />
-            {/if}
-          </div>
-        </Button>
+        <CommonScalesButton />
+        <SmoothingButton />
 
         <ShowMetrics />
         <GraphSizeButtons />
@@ -236,6 +233,7 @@
         {#if $store.metric === 'all' || $store.metric === key}
         <div in:fade={{duration: 300 }}>
           <MetricChart
+            brushTransitioning={$store.metric !== 'all' ? false : $store.brushTransitioning}
             headerSize={$store.metric !== 'all' ? 'large' : $store.graphSize}
             {width}
             {height}

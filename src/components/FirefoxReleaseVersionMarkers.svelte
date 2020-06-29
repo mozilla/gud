@@ -1,5 +1,5 @@
 <script>
-  import { getContext, onDestroy } from 'svelte';
+  import { getContext } from 'svelte';
   import { Marker } from '@graph-paper/guides';
   import { store } from '../stores/store';
   import { firefoxVersionMarkers } from './product-versions';
@@ -20,14 +20,11 @@
 
 </script>
 
-<g class="firefox-release-version-markers">
+<g id="firefox-release-version-markers" class="firefox-release-version-markers">
   {#await firefoxVersionMarkers then markers}
   {#each markers
     .filter(d => filterMarkers(d, ...$xScale.domain(), $store.metric))
   as {label, date}, i (date)}
-  <!-- <Marker location="{date}">
-    {label}
-  </Marker> -->
   <text text-anchor=middle x={$xScale(date)} y={$top - 3} font-size=11 fill=var(--cool-gray-600)>
     {label}
   </text>

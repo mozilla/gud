@@ -20,7 +20,6 @@
 
   let y = 0;
   $: if (parent) y = parent.getBoundingClientRect().y;
-  $: if (parent) console.log(parent.offsetTop);
   $: if (element && parent && active) {
     [leftPlacement, topPlacement] = placeElement({
       location,

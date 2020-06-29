@@ -18,13 +18,19 @@ import { store } from '../../stores/store';
 </script>
 
 <ButtonGroup level="medium" compact>
-  <Button toggled={$store.graphSize === 'small'} on:click={changeSize('small')}>
+  <Button
+      tooltip={'Render graphs in a smaller size'}
+      toggled={$store.graphSize === 'small'} on:click={changeSize('small')}>
     <ThreeByThree size={16} />
   </Button>
-  <Button toggled={$store.graphSize === 'medium'}  on:click={changeSize('medium')}>
+  <Button
+    tooltip={'Render graphs in a larger size'}
+    toggled={$store.graphSize === 'medium'}  on:click={changeSize('medium')}>
     <Tile size={16} />
   </Button>
-  <Button  toggled={$store.graphSize === 'large'}  on:click={changeSize('large')}>
+  <Button
+    tooltip={'Render graphs as one big graph per row'}
+    toggled={$store.graphSize === 'large'}  on:click={changeSize('large')}>
     <Stack size={16} />
   </Button>
 </ButtonGroup>

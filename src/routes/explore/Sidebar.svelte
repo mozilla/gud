@@ -81,6 +81,7 @@
           {#if dimension.inMenu}
           <Stack space={0}>
             <DimensionMenu
+              tooltip={dimension.description}
               on:selection={handleDimensionSelection(dimension.key)}
               selections={$store[dimension.key]}
               multi={dimension.type === 'multi'}

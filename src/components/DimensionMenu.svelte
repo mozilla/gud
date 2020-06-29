@@ -21,6 +21,7 @@
   export let variant = 'regular';
   export let toggled = false;
   export let multi = true;
+  export let tooltip = undefined;
 
   export let menuWidth = 32;
   export let options;
@@ -151,9 +152,10 @@ margin:0px;
 
 <svelte:window on:keydown={handleKeydown} />
 
-{#if variant === 'regular'}
 <div class="dimension-button" bind:this={container}>
-  <Button {toggled} level="low" on:click={toggle}>
+  <Button
+    {tooltip}
+  {toggled} level="low" on:click={toggle}>
     <div class="dimension-button__content">
       <slot />
       <span
@@ -164,21 +166,6 @@ margin:0px;
     </div>
   </Button>
 </div>
-{:else}
-  <button class:toggled class='dimension-button--{variant}' on:click={toggle} bind:this={container}>
-      <div>
-        <slot />
-      </div>
-      <div>
-        <slot name='option' />
-      </div>
-      <div
-        class="gafc"
-        style="transition: transform 75ms; transform: rotate({toggled ? -180 : 0}deg);">
-        <CaretRight color=var(--cool-gray-600) />
-      </div>
-  </button>
-{/if}
 
 <FloatingChild width={menuWidth} active={toggled} bind:element parent={container}>
   <List>

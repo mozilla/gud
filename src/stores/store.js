@@ -77,21 +77,38 @@ export const store = {
       })
     );
   },
+  // FIXME: simplify this!
   setDateRange(startDate, endDate) {
     internalStore.update(
       produce((draftState) => {
         draftState.startDate = startDate;
         draftState.endDate = endDate;
+        draftState.brushTransitioning = true;
       })
     );
+    setTimeout(() => {
+      internalStore.update(
+        produce((draftState) => {
+          draftState.brushTransitioning = false;
+        })
+      );
+    }, 300);
   },
   resetDateRange() {
     internalStore.update(
       produce((draftState) => {
         draftState.startDate = draftState.minStartDate;
         draftState.endDate = draftState.maxEndDate;
+        draftState.brushTransitioning = true;
       })
     );
+    setTimeout(() => {
+      internalStore.update(
+        produce((draftState) => {
+          draftState.brushTransitioning = false;
+        })
+      );
+    }, 300);
   },
   resetQuery() {
     internalStore.set(getDefaultState());

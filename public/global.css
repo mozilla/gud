@@ -28,7 +28,8 @@ main {
 }
 
 nav {
-  background-color: white;
+  /* background-color: white; */
+  background: white;
   max-height: 100vh;
   min-height: 100vh;
   position: sticky;
@@ -38,12 +39,13 @@ nav {
   grid-template-rows: max-content max-content auto;
   align-content: stretch;
   align-items: start;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.05);
+  border-right: 1px solid var(--cool-gray-150);
+  /* box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.05); */
 }
 
 nav h1 {
   border-radius: var(--space-1x);
-  background-color: var(--pantone-red-100);
+  /* background-color: var(--pantone-red-100); */
   padding: 0px;
   margin: 0px;
   color: var(--pantone-red-450);

@@ -295,6 +295,7 @@
     "label": "Attribution",
     "key": "attributed",
     "type": "multi",
+    "description": "indicates that the browser was installed using an installer from our web properties. See the documentation for important details. Available for Windows only.",
     "whereStyle": "boolean",
     "inMenu": true,
     "values": [

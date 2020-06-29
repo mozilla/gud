@@ -34,12 +34,17 @@
   let r = getRange($scale);
   $: r = getRange($scale);
 
+  // let years = [];
+  // let quarters = [];
+  // let months = [];
+  // let weeks = [];
+  // let days = [];
   $: years = timeYear.range(...$scale.domain());
-  $: halves = timeMonth.range(...$scale.domain(), 6);
   $: quarters = timeMonth.range(...$scale.domain(), 3);
   $: months = timeMonth.range(...$scale.domain());
   $: weeks = timeWeek.range(...$scale.domain(), 2);
   $: days = timeDay.range(...$scale.domain());
+
 
   let p;
   $: if (r >= 365 * 1.5) {
@@ -61,7 +66,7 @@
 
 </script>
 
-<AxisContainer side="bottom">
+<AxisContainer fadeValues={{duration: 50}} side="bottom">
   <g slot='ticks' let:closestMargin let:farthestMargin>
   {#if majorLines}
     {#each p as pi, i}

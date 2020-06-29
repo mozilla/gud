@@ -242,7 +242,9 @@
   })} />
 
 <div bind:this={parent}>
-  <Button compact level="medium" on:click={setActive}>
+  <Button
+    tooltip="Select a date range for the graphs"
+    compact level="medium" on:click={setActive}>
     <div class="gafc col-gap-1x">
       <Calendar size={12} />
       {formatLabel(startDate)} - {formatLabel(endDate)}

@@ -52,8 +52,8 @@
     width: 100vw;
     height: 100vh;
     background: linear-gradient(160deg, #C04848, #480048);
-    opacity: .7;
-    mix-blend-mode: overlay;
+    opacity: .5;
+    /* mix-blend-mode: overlay; */
   }
 
   .container {

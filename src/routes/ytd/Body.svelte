@@ -1,7 +1,7 @@
 <script>
 import { store } from '../../stores/store'
 import PageTitle from '../../components/PageTitle.svelte';
-import { Calendar } from '@graph-paper/icons'
+import { Calendar } from '@graph-paper/icons';
 
 </script>
 
@@ -13,11 +13,9 @@ import { Calendar } from '@graph-paper/icons'
     </span>
     <span slot=view>year-to-date</span>
     <span slot=title>{$store.usage}</span>
-    <div slot=description>
-      This is a test.
-    </div>
+
   </PageTitle>
 
-
+  <div>Coming soon.</div>
 
 </main>

@@ -56,8 +56,10 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <div class="dimension-button" bind:this={container}>
-  <Button compact {toggled} level="medium" on:click={toggle}>
-    <div class="dimension-button__content gafc">
+  <Button
+    tooltip="Display all metrics or pick a single metric to display"
+    compact {toggled} level="medium" on:click={toggle}>
+    <div class="dimension-button__content gafc" style="--gafc-space: var(--space-1x);">
       <BarChart size={14} />
       {metric.label}
       <span
