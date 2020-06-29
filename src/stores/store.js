@@ -7,6 +7,31 @@ import options from "./options.json";
 const timeFormatter = timeFormat("%Y-%m-%d");
 const maxEndDate = timeFormatter(new Date());
 
+function getUsageCriterion(usage) {
+  return options.usage.values.find((v) => v.key === usage);
+}
+
+function setDisabledDimensions(draft, usage) {
+  const criterion = getUsageCriterion(usage);
+  if (criterion.disabledDimensions) {
+    draft.disabledDimensions = criterion.disabledDimensions;
+  } else {
+    draft.disabledDimensions = [];
+  }
+}
+
+function setDisabledMetrics(draft, usage) {
+  const criterion = getUsageCriterion(usage);
+  if (criterion.disabledMetrics) {
+    draft.disabledMetrics = criterion.disabledMetrics;
+    if (criterion.disabledMetrics.includes(draft.metric)) {
+      draft.metric = "all"; // eslint-disable-line
+    }
+  } else {
+    draft.disabledMetrics = [];
+  }
+}
+
 function getDefaultState(
   { basedOnQueryParams } = { basedOnQueryParams: false }
 ) {
@@ -46,20 +71,14 @@ function getDefaultState(
         acc[field] = value;
       }
 
-      // If the default usage criteria has disabled dimensions, record them
-      if (field === "usage") {
-        const selected = values.find((v) => v.key === value);
-        if (selected.disabledDimensions) {
-          acc.disabledDimensions = [...selected.disabledDimensions];
-        } else {
-          acc.disabledDimensions = [];
-        }
-      }
-
       return acc;
     },
     {}
   );
+  // set defaults for state.
+  setDisabledDimensions(state, state.usage);
+  setDisabledMetrics(state, state.usage);
+
   state.mode = "explore";
   state.maxEndDate = maxEndDate;
 
@@ -73,6 +92,10 @@ export const store = {
   setField(field, value) {
     internalStore.update(
       produce((draftState) => {
+        if (field === "usage") {
+          setDisabledMetrics(draftState, value);
+          setDisabledDimensions(draftState, value);
+        }
         draftState[field] = value;
       })
     );

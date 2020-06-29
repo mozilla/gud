@@ -154,7 +154,7 @@ margin:0px;
 
 <div class="dimension-button" bind:this={container}>
   <Button
-    {tooltip}
+    tooltip={!toggled ? tooltip : undefined}
   {toggled} level="low" on:click={toggle}>
     <div class="dimension-button__content">
       <slot />

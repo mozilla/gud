@@ -112,6 +112,12 @@
 </script>
 
 <style>
+  :global(.gp-date-picker__container > .gp-button) {
+    /* border-width: 3px; */
+    background-color: hsl(217, 70%, 98%);
+    border-color: var(--digital-blue-200);
+  }
+
   .date-picker {
     --header-bg: var(--cool-gray-150);
     width: var(--space-40x);
@@ -241,7 +247,7 @@
     if (active) active = false;
   })} />
 
-<div bind:this={parent}>
+<div class='gp-date-picker__container' bind:this={parent}>
   <Button
     tooltip="Select a date range for the graphs"
     compact level="medium" on:click={setActive}>

@@ -12,7 +12,7 @@ import { fly } from 'svelte/transition';
 
 .loading-message {
   opacity: 0.8;
-  margin-bottom: var(--pad);
+  margin-bottom: var(--space-4x);
 }
 
 .loading-data svg {

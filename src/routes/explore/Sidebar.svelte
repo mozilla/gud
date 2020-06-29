@@ -77,7 +77,15 @@
     <div in:fly={{duration: 500, x: -10}}>
       <Stack space={0}>
         <!-- <h2>Aggregation Filters</h2> -->
-        {#each Object.values(CONFIG) as dimension, i (dimension.key)}
+        {#each Object.values(CONFIG).map(di => {
+          // deal with menus that are not standard.
+          let dim = {...di};
+          const usage = CONFIG.usage.values.find(u=> u.key === $store.usage);
+          if (usage.channels && di.key === 'channel') {
+            dim.values = usage.channels;
+          }
+          return dim;
+        }) as dimension, i (dimension.key)}
           {#if dimension.inMenu}
           <Stack space={0}>
             <DimensionMenu

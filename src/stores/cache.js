@@ -40,6 +40,7 @@ function filterUnusedState(localState = true) {
       "maxEndDate",
       "disabledDimensions",
       "brushTransitioning",
+      "disabledMetrics",
       !localState ? "startDate" : "",
       !localState ? "endDate" : "",
     ].includes(key);

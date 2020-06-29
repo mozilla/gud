@@ -21,7 +21,6 @@
 
   import Export from '../../components/Export.svelte';
 
-
   import {
     Close,
     Stack,
@@ -30,7 +29,6 @@
     CheckboxBlank,
     Explore
   } from "@graph-paper/icons";
-
 
   import { Button, ButtonGroup } from "@graph-paper/button";
   import { window1D } from "@graph-paper/core/utils/window-functions";
@@ -54,14 +52,13 @@
     new Date(Math.max(...d.map((di) => di.date))),
   ];
 
-
   $: xDomain = [parseDateString($store.startDate), parseDateString($store.endDate)];
 
   let auMax =
     Math.max(
-      ...data.map((d) => d.dau_high || 0),
-      ...data.map((d) => d.wau_high || 0),
-      ...data.map((d) => d.mau_high || 0)
+      ...data.map((d) => $store.disabledMetrics.includes('dau') ? 0 : (d.dau_high || 0)),
+      ...data.map((d) => $store.disabledMetrics.includes('wau') ? 0 : (d.wau_high || 0)),
+      ...data.map((d) => $store.disabledMetrics.includes('mau') ? 0 : (d.mau_high || 0))
     ) * 1.1;
 
   const resetDomain = () => {
@@ -116,13 +113,6 @@
 </script>
 
 <style>
-
-  /* .gafc {
-    display: grid;
-    grid-auto-flow: column;
-    align-items: center;
-    grid-column-gap: var(--space-2x);
-  } */
 
   .multiples {
     display: grid;
@@ -229,7 +219,7 @@
     </div>
 
     <div class="multiples multiples--{$store.graphSize}">
-      {#each metrics as { name, type, key, yMax, metricClass, axisFormat, hoverFormat }, i (name)}
+      {#each metrics.filter(m => !$store.disabledMetrics.includes(m.key)) as { name, type, key, yMax, metricClass, axisFormat, hoverFormat }, i (name)}
         {#if $store.metric === 'all' || $store.metric === key}
         <div in:fade={{duration: 300 }}>
           <MetricChart
@@ -243,7 +233,7 @@
             y={key}
             {xDomain}
             yMin={$store.commonScales === true ? 0 : undefined}
-            yMax={$store.commonScales === true ? (metricClass === 'actives' ? auMax : yMax) : undefined}
+            yMax={$store.commonScales === true ? (metricClass === 'actives' && $store.metric === 'all' ? auMax : yMax) : undefined}
             caveat={(datapoint) => dataQualityReason(datapoint.date, key, true)}
             {axisFormat}
             {hoverFormat}
