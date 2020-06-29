@@ -16,12 +16,11 @@ function claimFocus() {
   focus.set(key);
 };
 
-
 onMount(() => {
-    keys.update(current => {
-      return [...current, key]
-    });
-    itemNumber = $keys.length - 1;
+  keys.update(current => {
+    return [...current, key]
+  });
+  itemNumber = $keys.length - 1;
 })
 
   function select() {

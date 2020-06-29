@@ -30,11 +30,21 @@
 </style>
 
 <nav>
-    <Box padding={2}>
-      <h1><GUDLogo size={32} /> GUD</h1>
-    </Box>
+    <div style="padding: var(--space-2x) var(--space-1x);">
+      <h1>
+        <GUDLogo size={40} />
+                  <div class=title-container>
+          <div class=title>Growth & Usage</div>
+          <div class="view gafc justify-content-start" style="
+            color: var(--cool-gray-600);
+            --gafc-space: var(--space-1h);
+          "><Explore size=.9em /> explore</div>
+        </div>
+        </h1>
+
+    </div>
     <div class='pages'>
-      <Stack>
+      <!-- <Stack>
         <Button level=low href={'/explore'}>
           <div class=gafc>
             <Explore size=1em />
@@ -47,7 +57,7 @@
             Year to date
           </div>
         </Button>
-      </Stack>
+      </Stack> -->
     </div>
 
     <slot />
@@ -74,7 +84,7 @@
             <Button compact level=low href="https://github.com/mozilla/gud/issues/new/choose">
               <div class=gafc>
                 <GithubLogo color=var(--icon-color) size={14} />
-                File an Issue
+                Code
               </div>
             </Button>
         </div>

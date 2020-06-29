@@ -47,8 +47,29 @@ svg {
         <stop offset="5%"  stop-color="var(--pantone-red-600)" />
         <stop offset="95%" stop-color="var(--pantone-red-700)" />
       </linearGradient>
+
+      <!-- <linearGradient id="leftSide" gradientTransform="rotate(90)">
+        <stop offset="5%"  stop-color="var(--cool-gray-400)" />
+        <stop offset="95%" stop-color="var(--cool-gray-600)" />
+      </linearGradient>
+      <linearGradient id="rightSide" gradientTransform="rotate(70)">
+        <stop offset="5%"  stop-color="var(--cool-gray-400)" />
+        <stop offset="95%" stop-color="var(--cool-gray-600)" />
+      </linearGradient>
+      <linearGradient id="topSide" gradientTransform="rotate(90)">
+        <stop offset="5%"  stop-color="var(--cool-gray-200)" />
+        <stop offset="95%" stop-color="var(--cool-gray-300)" />
+      </linearGradient>
+      <linearGradient id="insideLight" gradientTransform="rotate(90)">
+        <stop offset="5%"  stop-color="var(--cool-gray-400)" />
+        <stop offset="95%" stop-color="var(--cool-gray-500)" />
+      </linearGradient>
+      <linearGradient id="insideDark" gradientTransform="rotate(90)">
+        <stop offset="5%"  stop-color="var(--cool-gray-500)" />
+        <stop offset="95%" stop-color="var(--cool-gray-600)" />
+      </linearGradient> -->
     </defs>
-    <g style="transform: rotate({$s * 4}deg); transform-origin: center center;">
+    <g  style="transform: rotate({$s * 4}deg); transform-origin: center center;">
       <g transform="matrix(1,0,0,1,-1377.18,-880.217)">
         <g transform="matrix(0.866025,0.5,-0.5,0.866025,1249.18,492.238)">
             <g transform="matrix(3,0,0,3,-942.236,-736)">

@@ -54,7 +54,7 @@
 <style>
   div {
     display: grid;
-    grid-template-columns: calc(var(--space-1x) * 36) auto;
+    grid-template-columns: calc(var(--space-1x) * 32) auto;
     min-width: calc(100vw - var(--space-4x)) !important;
   }
 </style>

@@ -34,7 +34,9 @@
   const handleKeypress = (event) => {
     if (!active) return undefined;
     const { key } = event;
-    if (key !== "Tab") event.preventDefault();
+    if (key !== "Tab" && active) {
+      event.preventDefault();
+    }
     if (key === "ArrowUp") previous();
     if (key === "ArrowDown") next();
   };

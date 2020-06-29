@@ -61,7 +61,7 @@
   }
 
   .dimension-menu--value {
-    padding: var(--space-1x) var(--space-2x);
+    padding: 0px var(--space-2x);
   }
 
   .dimension-menu--value--single {
@@ -71,11 +71,11 @@
     padding-left: var(--space-4x);
   }
 </style>
-<div class=container>
+<div class="sidebar__filters">
 {#if mounted}
-  <Box padding={0}>
-    <div in:fly={{duration: 500, x: -10}}>
-      <Stack space={0}>
+  <Box padding={1}>
+    <div>
+      <Stack space={2}>
         <!-- <h2>Aggregation Filters</h2> -->
         {#each Object.values(CONFIG).map(di => {
           // deal with menus that are not standard.

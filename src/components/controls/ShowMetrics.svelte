@@ -72,7 +72,7 @@
 </div>
 
 <FloatingChild width={72} location="bottom" alignment="center" active={toggled} bind:element parent={container} verticalPad="var(--space-2x)">
-  <List>
+  <List active={toggled}>
     {#each CONFIG.metric.values.filter(m => !$store.disabledMetrics.includes(m.key)) as option}
       {#if option.itemType === 'divider'}
         <Divider />

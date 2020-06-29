@@ -117,7 +117,7 @@
   .multiples {
     display: grid;
     grid-column-gap: var(--space-4x);
-    grid-row-gap: var(--space-6x);
+    grid-row-gap: var(--space-4x);
     justify-content: start;
     justify-items: start;
 
