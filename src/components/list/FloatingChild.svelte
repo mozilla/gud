@@ -42,7 +42,6 @@
       0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07),
       0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
     border-radius: var(--space-1h);
-    /* transition: opacity 40ms; */
     opacity: 1;
     z-index: 1;
     transform: none;

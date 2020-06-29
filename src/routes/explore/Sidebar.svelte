@@ -35,7 +35,7 @@
   function setMenuWidth(key) {
     if (key === 'usage') return 72;
     if (key === 'metric') return 72;
-    return 32;
+    return 36;
   }
 
   function setButtonVariant(key) {

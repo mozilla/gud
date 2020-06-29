@@ -1,3 +1,39 @@
+<script>
+import { getContext, onMount, onDestroy, createEventDispatcher } from 'svelte';
+
+const dispatch = createEventDispatcher();
+
+export let key;
+
+const focus = getContext('gp:list:focus');
+const keys = getContext('gp:list:keys');
+
+let bt;
+let itemNumber;
+
+function claimFocus() {
+  bt.focus();
+  focus.set(key);
+};
+
+
+onMount(() => {
+    keys.update(current => {
+      return [...current, key]
+    });
+    itemNumber = $keys.length - 1;
+})
+
+  function select() {
+    dispatch('click');
+  }
+
+  const handleKeypress = (event) => {
+    if (event.key === "Enter" && key === $focus) select();
+  };
+
+</script>
+
 <style>
   li {
     cursor: pointer;
@@ -15,7 +51,8 @@
   }
 
   button:focus,
-  button:hover {
+  button:hover,
+  button.focus {
     background-color: var(--cool-gray-100);
   }
 
@@ -61,8 +98,10 @@
   }
 </style>
 
-<li class="gp-list-item">
-  <button on:click>
+<svelte:window on:keydown={handleKeypress} />
+
+<li class="gp-list-item" role="menuitem" on:mouseover={claimFocus}>
+  <button bind:this={bt} class:focus={key === $focus} on:click on:focus={claimFocus}>
     <div class="list-item__left list-item--centered">
       <slot name="left" />
     </div>

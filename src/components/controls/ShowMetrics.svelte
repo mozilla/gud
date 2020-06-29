@@ -79,7 +79,7 @@
       {:else if option.itemType === 'section'}
         <ListHeader>{option.label}</ListHeader>
       {:else}
-        <ListItem on:click={select(option)}>
+        <ListItem key={option.key} on:click={select(option)}>
           <span slot='left' style="visibility: {option.key === metric.key ? 'visible' : 'hidden'}">
               <Check size=".8em" />
           </span>
