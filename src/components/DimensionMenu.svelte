@@ -125,7 +125,7 @@ margin:0px;
           {:else}showing all{/if}
 
         </span>
-        <span slot="right">
+        <span slot="left">
           {#if selections.length}
             <Close size="1em" color="var(--cool-gray-500)" />
           {/if}

@@ -118,6 +118,10 @@
     border-color: var(--digital-blue-200);
   }
 
+  .caret {
+    transition: transform 100ms;
+  }
+
   .date-picker {
     --header-bg: var(--cool-gray-150);
     width: var(--space-40x);
@@ -249,12 +253,14 @@
 
 <div class='gp-date-picker__container' bind:this={parent}>
   <Button
-    tooltip="Select a date range for the graphs"
+    tooltip={!active && "Select a date range for the graphs. You can also set the date range by clicking and dragging horizontally on any graph."}
     compact level="medium" on:click={setActive}>
     <div class="gafc col-gap-1x">
       <Calendar size={12} />
       {formatLabel(startDate)} - {formatLabel(endDate)}
-      <CaretDown size={14} />
+      <span class="gafc caret" style="transform: rotate({active ? 180 : 0}deg);">
+        <CaretDown size={14} />
+      </span>
     </div>
   </Button>
 </div>

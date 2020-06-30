@@ -96,7 +96,7 @@
         "label": "Any Mobile Activity",
         "key": "Any Firefox Non-desktop Activity",
         "disabledDimensions": ["os", "attributed"],
-        "shortDescription": "The profile has sent a telemetry ping from any of apps considered for the 2019 Mobile Reach KPI (Fenix, Fennec Android, Fennec iOS, Firefox Lite (excluding CN), FirefoxConnect, Focus Android, Focus iOS, and Lockwise) on the day in question.",
+        "shortDescription": "The profile has sent a telemetry ping from any of apps considered for the 2019 Mobile Reach KPI (Fenix, Fennec Android, Fennec iOS, Firefox Lite (excluding CN), Firefox for Echo Show, Focus Android, Focus iOS, and Lockwise) on the day in question.",
         "channels": [
           { "label": "Release", "key": "release" },
           { "label": "Beta", "key": "beta" },
@@ -276,9 +276,9 @@
         "disabledDimensions": ["os", "channel", "attributed"]
       },
       {
-        "label": "Any FirefoxConnect Activity",
+        "label": "Any Firefox for Echo Show Activity",
         "key": "Any FirefoxConnect Activity",
-        "shortDescription": "The profile has sent a telemetry 'core' ping from FirefoxConnect on the day in question",
+        "shortDescription": "The profile has sent a telemetry 'core' ping from Firefox for Echo Show on the day in question",
         "disabledDimensions": ["os", "channel", "attributed"]
       },
       {
