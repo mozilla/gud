@@ -5,7 +5,6 @@
 
   export let parent;
   export let element;
-  export let active = false;
   export let width = 32;
   let leftPlacement = 0;
   let topPlacement = 0;
@@ -20,7 +19,7 @@
 
   let y = 0;
   $: if (parent) y = parent.getBoundingClientRect().y;
-  $: if (element && parent && active) {
+  $: if (element && parent) {
     [leftPlacement, topPlacement] = placeElement({
       location,
       alignment,
@@ -43,15 +42,9 @@
       0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
     border-radius: var(--space-1h);
     opacity: 1;
-    z-index: 1;
+    z-index: 10;
     transform: none;
     width: var(--width);
-  }
-
-  .hidden {
-    opacity: 0;
-    z-index: -5;
-    transform: translateX(-10000px);
   }
 </style>
 
@@ -59,7 +52,6 @@
 
 <div
   bind:this={element}
-  class:hidden={!active}
   style="
     position: absolute; left: {leftPlacement}px; top: {topPlacement}px;
     max-height: calc(100vh - var(--space-8x));

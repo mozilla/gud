@@ -43,6 +43,7 @@ const getParamInfo = (paramKey) => {
 };
 
 const getDefault = (paramKey) => {
+  console.log(paramKey);
   const paramInfo = getParamInfo(paramKey);
   if (paramInfo.type === "multi") return [];
   return paramInfo.values[0];
@@ -51,7 +52,7 @@ const getDefault = (paramKey) => {
 const isDefaultValue = (paramKey, value) => {
   const paramInfo = getParamInfo(paramKey);
   if (paramInfo.type === "multi") return value.length === 0;
-  return (value.length = paramInfo.values[0]);
+  return value.length === paramInfo.values[0];
 };
 
 async function query(q) {
@@ -62,7 +63,7 @@ async function query(q) {
   };
   const [job] = await bigqueryClient.createQueryJob(options);
   console.log(`Job ${job.id} started.`);
-  console.log(q);
+  // console.log(q);
 
   // Wait for the query to finish
   const [rows] = await job.getQueryResults();
@@ -86,6 +87,7 @@ const exploreQuery = (params) => {
           "disabledDimensions",
           "disabledMetrics",
           "activeUsersYMax",
+          "brushTransitioning",
         ].includes(k)
       ) {
         return false;

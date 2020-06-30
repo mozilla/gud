@@ -2,8 +2,6 @@
   import { getContext, setContext } from "svelte";
   import { writable } from 'svelte/store';
 
-  export let active = true;
-
   const focus = writable(undefined);
   const keys = writable([]);
   setContext("gp:list:focus", focus);
@@ -32,21 +30,13 @@
   }
 
   const handleKeypress = (event) => {
-    if (!active) return undefined;
     const { key } = event;
-    if (key !== "Tab" && active) {
+    if (key !== "Tab") {
       event.preventDefault();
     }
     if (key === "ArrowUp") previous();
     if (key === "ArrowDown") next();
   };
-
-  $: if (!active) {
-    focus.set(undefined)
-    } else {
-    focus.set($keys[0])
-  };
-
 
 </script>
 

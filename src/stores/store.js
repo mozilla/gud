@@ -95,6 +95,8 @@ export const store = {
         if (field === "usage") {
           setDisabledMetrics(draftState, value);
           setDisabledDimensions(draftState, value);
+          draftState.startDate = draftState.minStartDate;
+          draftState.endDate = draftState.maxEndDate;
         }
         draftState[field] = value;
       })

@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher, tick } from "svelte";
   import { Button } from "@graph-paper/button";
-  import { onClickOutside } from "@graph-paper/core/utils";
+  import clickOutside from "../utils/click-outside";
   import {
     CaretRight,
     CheckboxBlank,
@@ -31,17 +31,12 @@
 
   function toggle() {
     toggled = !toggled;
-    if (toggled) {
-      removeListener = onClickOutside(() => {
-        toggled = false;
-      }, element);
-    } else if (removeListener) removeListener();
+    //if (toggled) toggled = false;
   }
 
   function handleKeydown({ key }) {
     if (key === "Escape") {
       toggled = false;
-      if (removeListener) removeListener();
     }
   }
 
@@ -115,8 +110,14 @@ margin:0px;
   </Button>
 </div>
 
-<FloatingChild width={menuWidth} active={toggled} bind:element parent={container}>
-  <List active={toggled}>
+{#if toggled}
+<FloatingChild width={menuWidth} active={true} bind:element parent={container}>
+  <div use:clickOutside={() => {
+    if (toggled)  {
+      toggled = false;
+    }
+    }}>
+  <List active={true}>
     {#if multi}
       <ListItem key="clearSelection" on:click={clearSelection}>
         <span slot="secondary">
@@ -126,9 +127,7 @@ margin:0px;
 
         </span>
         <span slot="left">
-          {#if selections.length}
-            <Close size="1em" color="var(--cool-gray-500)" />
-          {/if}
+            <Close size="1em" color={selections.length ? "var(--cool-gray-500)" : "transparent"} />
         </span>
 
       </ListItem>
@@ -162,4 +161,6 @@ margin:0px;
     {/if}
     {/each}
   </List>
+  </div>
 </FloatingChild>
+{/if}

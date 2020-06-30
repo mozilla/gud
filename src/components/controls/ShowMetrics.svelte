@@ -1,7 +1,6 @@
 <script>
   import { createEventDispatcher, tick } from "svelte";
   import { Button } from "@graph-paper/button";
-  import { onClickOutside } from "@graph-paper/core/utils";
   import {
     CaretDown,
     CheckboxBlank,
@@ -11,6 +10,7 @@
   } from "@graph-paper/icons";
     import { Stack } from "@graph-paper/stack";
   import { Close } from "@graph-paper/icons";
+  import clickOutside from "../../utils/click-outside";
   import FloatingChild from "../list/FloatingChild.svelte";
   import List from "../list/List.svelte";
   import ListItem from "../list/ListItem.svelte";
@@ -26,27 +26,19 @@
 
   function toggle() {
     toggled = !toggled;
-    if (toggled) {
-      removeListener = onClickOutside(() => {
-        toggled = false;
-      }, element);
-    } else if (removeListener) removeListener();
   }
 
   function handleKeydown({ key }) {
     if (key === "Escape") {
       toggled = false;
-      if (removeListener) removeListener();
     }
   }
 
   function select(value) {
     return () => {
-      removeListener();
       toggled = false;
       store.setField('metric', value.key);
     }
-
   }
 
   $: metric = CONFIG.metric.values.find(di=> di.key === $store.metric);
@@ -57,7 +49,7 @@
 
 <div class="dimension-button" bind:this={container}>
   <Button
-    tooltip="Display all metrics or pick a single metric to display"
+    tooltip={!toggled && "Display all metrics or pick a single metric to display"}
     compact {toggled} level="medium" on:click={toggle}>
     <div class="dimension-button__content gafc" style="--gafc-space: var(--space-1x);">
       <BarChart size={14} />
@@ -71,24 +63,30 @@
   </Button>
 </div>
 
-<FloatingChild width={72} location="bottom" alignment="center" active={toggled} bind:element parent={container} verticalPad="var(--space-2x)">
-  <List active={toggled}>
-    {#each CONFIG.metric.values.filter(m => !$store.disabledMetrics.includes(m.key)) as option}
-      {#if option.itemType === 'divider'}
-        <Divider />
-      {:else if option.itemType === 'section'}
-        <ListHeader>{option.label}</ListHeader>
-      {:else}
-        <ListItem key={option.key} on:click={select(option)}>
-          <span slot='left' style="visibility: {option.key === metric.key ? 'visible' : 'hidden'}">
-              <Check size=".8em" />
-          </span>
-          <span slot="primary">{option.label}</span>
-          <span slot="secondary">
-            {#if option.shortDescription}{option.shortDescription}{/if}
-          </span>
-        </ListItem>
-    {/if}
-    {/each}
-  </List>
+{#if toggled}
+<FloatingChild width={72} location="bottom" alignment="center" active={true} bind:element parent={container} verticalPad="var(--space-2x)">
+  <div use:clickOutside={() => {
+    if (toggled) toggled = false;
+  }}>
+    <List>
+      {#each CONFIG.metric.values.filter(m => !$store.disabledMetrics.includes(m.key)) as option}
+        {#if option.itemType === 'divider'}
+          <Divider />
+        {:else if option.itemType === 'section'}
+          <ListHeader>{option.label}</ListHeader>
+        {:else}
+          <ListItem key={option.key} on:click={select(option)}>
+            <span slot='left' style="visibility: {option.key === metric.key ? 'visible' : 'hidden'}">
+                <Check size=".8em" />
+            </span>
+            <span slot="primary">{option.label}</span>
+            <span slot="secondary">
+              {#if option.shortDescription}{option.shortDescription}{/if}
+            </span>
+          </ListItem>
+      {/if}
+      {/each}
+    </List>
+  </div>
 </FloatingChild>
+{/if}
