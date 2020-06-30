@@ -75,22 +75,12 @@
     return (end - start) / start;
   }
 
-  function latestValidPoint(d, ya) {
-    let di;
-    for (let i = d.length-1; i > 0; i -= 1) {
-      di = d[i];
-      const dt = di.date;
-      if (di[y] !== undefined) break
-    }
-    return di || d[d.length-1]
-  }
-
   function mouseleave(event) {
     resetMouseClicks(event);
   }
   // update the xMouse shared value.
   $: transformedData = transform ? transform(data, y) : data;
-  $: output = (xScale && transformedData) ? get(transformedData, mousePosition.x || latestValidPoint(transformedData, y).date, "date", xScale.domain()) : transformedData[transformedData.length -1];
+  $: output = (xScale && transformedData) ? get(transformedData, mousePosition.x || transformedData[transformedData.length-1].date, "date", xScale.domain()) : transformedData[transformedData.length -1];
 
   $: if (isComparing) {
     compareEnd = output;
