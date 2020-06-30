@@ -8,6 +8,7 @@
 
   import { Button } from "@graph-paper/button";
   import { CaretDown, Calendar } from "@graph-paper/icons";
+  import clickOutside from '../../utils/click-outside'
 
   const dispatch = createEventDispatcher();
 
@@ -269,6 +270,7 @@
   <!-- <FloatingMenu offset={16} {parent}> -->
   <div
     bind:this={element}
+    use:clickOutside={() => { if (active) active = false; }}
     class="date-picker"
     transition:fly={{ duration: 65, y: -5 }}
     style=" position: absolute; left: {leftPlacement}px; top: {topPlacement}px;">

@@ -92,7 +92,7 @@
   $: transformedData = transform ? transform(data, y) : data;
   $: output = getNearest(transformedData, mousePosition.x, xScale ? xScale.domain() : undefined);
 
-  $: if (isComparing) {
+$: if (isComparing) {
     compareEnd = output;
   } else {
     compareStart = output;
