@@ -108,6 +108,10 @@
 
   $: criterion = CONFIG.usage.values.find(v=> v.key === $store.usage);
 
+  function getMetricMetadata(metric) {
+    return CONFIG.metric.values.find(v => v.key === metric);
+  }
+
 
   // export modal;
   let isExporting = false;
@@ -230,13 +234,14 @@
             {width}
             {height}
             {name}
+            description={getMetricMetadata(key).shortDescription}
             {data}
             transform={$store.smoothing === true ? smooth : undefined}
             y={key}
             {xDomain}
             yMin={$store.commonScales === true ? 0 : undefined}
             yMax={$store.commonScales === true ? (metricClass === 'actives' && $store.metric === 'all' ? auMax : yMax) : undefined}
-            caveat={(datapoint) => dataQualityReason(datapoint.date, key, criterion.product === 'Firefox Desktop')}
+            caveat={(datapoint) => datapoint ? dataQualityReason(datapoint.date, key, criterion.product === 'Firefox Desktop') : () => undefined}
             markers={criterion.product === 'Firefox Desktop' ? FirefoxReleaseVersionMarkers : undefined}
             {axisFormat}
             {hoverFormat}

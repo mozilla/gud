@@ -52,25 +52,42 @@ nav h1 {
   color: var(--cool-gray-600);
   /* color: white; */
   /* font-weight: 900; */
+  line-height: 1;
+
+  /* padding: var(--space-1x) var(--space-1x); */
+}
+
+nav h1 button {
   display: grid;
   grid-template-columns: max-content auto;
   grid-column-gap: var(--space-1x);
-  justify-content: stretch;
+  justify-content: start;
   align-items: center;
-  line-height: 1;
-  padding: var(--space-1x) var(--space-1x);
-}
-
-nav h1 .title-container {
   width: 100%;
+  background-color: transparent;
+  border: none;
+  padding: 0px;
+  margin: 0px;
+  border: 1px solid transparent;
+  padding: var(--space-1x) var(--space-1x);
+  border-radius: var(--space-1h);
 }
 
-nav h1 .title {
+nav h1 button:hover {
+  border: 1px solid var(--cool-gray-200);
+}
+
+nav h1 button .title-container {
+  /* width: 100%; */
+}
+
+nav h1 button .title {
+  text-align: left;
   font-size: var(--text-04);
   padding-bottom: var(--space-1q);
 }
 
-nav h1 .view {
+nav h1 button .view {
   font-size: var(--text-02);
   font-weight: normal;
 }

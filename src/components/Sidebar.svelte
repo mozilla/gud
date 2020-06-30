@@ -1,8 +1,9 @@
 <script>
+  import { tooltip as tooltipAction } from '@graph-paper/core/actions/tooltip'
   import { Button } from "@graph-paper/button";
   import { Stack } from "@graph-paper/stack";
   import { Box } from "@graph-paper/box";
-  import { Documentation, Explore, Calendar } from "@graph-paper/icons";
+  import { Documentation, Explore, Calendar, CaretDown } from "@graph-paper/icons";
 
   import Shortcuts from './Shortcuts.svelte';
 
@@ -12,6 +13,7 @@
   import GUDLogo from './GUDLogo.svelte';
 
   let showShortcuts = false;
+  let showView = false;
 
 </script>
 
@@ -32,14 +34,16 @@
 <nav>
     <div style="padding: var(--space-2x) var(--space-1x);">
       <h1>
-        <GUDLogo size={40} />
-                  <div class=title-container>
-          <div class=title>Growth & Usage</div>
-          <div class="view gafc justify-content-start" style="
-            color: var(--cool-gray-600);
-            --gafc-space: var(--space-1h);
-          "><Explore size=.9em /> explore</div>
-        </div>
+        <button use:tooltipAction={{text: !showView && "Select another view"}}>
+          <GUDLogo size={40} />
+                    <div class=title-container>
+            <div class="title gafc" style="--gafc-space: var(--space-1h);">Growth & Usage <CaretDown size=.9em /></div>
+            <div class="view gafc justify-content-start" style="
+              color: var(--cool-gray-600);
+              --gafc-space: var(--space-1h);
+            "><Explore size=.9em /> explore</div>
+          </div>
+        </button>
         </h1>
 
     </div>

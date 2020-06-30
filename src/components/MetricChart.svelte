@@ -3,12 +3,13 @@
   import { timeFormat } from "d3-time-format";
   import { format } from "d3-format";
   import { cubicInOut as easing } from "svelte/easing";
-
-  import { outline } from "./outline";
   import { DataGraphic } from "@graph-paper/datagraphic";
   import { Line, Band } from "@graph-paper/elements";
+  import { Help } from "@graph-paper/icons";
   import LeftAxis from "@graph-paper/guides/LeftAxis.svelte";
   import BottomAxis from "@graph-paper/guides/BottomAxis.svelte";
+  import { tooltip as tooltipAction } from '@graph-paper/core/actions/tooltip'
+  import { outline } from "./outline";
   import TimeAxis from './TimeAxis.svelte';
 
   import Scrub from './Scrub.svelte';
@@ -16,7 +17,7 @@
   import YearOverYearLabel from './YearOverYearLabel.svelte';
 
   export let name;
-
+  export let description;
   export let brushTransitioning = false;
   export let data;
   export let width = 350;
@@ -118,6 +119,7 @@ $: if (isComparing) {
   h2 {
     margin: 0;
     font-size: 16px;
+    cursor: pointer;
   }
 
   header div {
@@ -141,7 +143,14 @@ $: if (isComparing) {
 <svelte:window on:keydown={keyDown} on:keyup={keyUp} />
 
 <header class:big={headerSize === 'large'}>
-  <h2>{name}</h2>
+  <h2 use:tooltipAction={{text: description, location: "top"}}>
+    {name}
+    {#if description}
+      <span style="transform: translateY(1px); display: inline-block; color: var(--cool-gray-500);" >
+        <Help size=.9em />
+      </span>
+    {/if}
+  </h2>
   <div class:caveat={!!caveatReason}>
     {#if caveatReason}
       no data
