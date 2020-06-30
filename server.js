@@ -43,7 +43,6 @@ const getParamInfo = (paramKey) => {
 };
 
 const getDefault = (paramKey) => {
-  console.log(paramKey);
   const paramInfo = getParamInfo(paramKey);
   if (paramInfo.type === "multi") return [];
   return paramInfo.values[0];
