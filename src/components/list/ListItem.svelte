@@ -76,6 +76,12 @@ onMount(() => {
     grid-auto-flow: column;
   }
 
+  :global(.list-item__left > *, list-item__right > *) {
+    display: grid;
+    align-items: baseline;
+    grid-auto-flow: column;
+  }
+
   .list-item__body__primary-text {
     font-size: var(--text-03);
     color: var(--cool-gray-750);

@@ -13,7 +13,6 @@
 
   import Scrub from './Scrub.svelte';
   import CompareDates from './CompareDates.svelte';
-  import FirefoxReleaseVersionMarkers from './FirefoxReleaseVersionMarkers.svelte';
   import YearOverYearLabel from './YearOverYearLabel.svelte';
 
   export let name;
@@ -30,6 +29,7 @@
   export let yMax;
   export let caveat = () => undefined;
   export let transform = undefined;
+  export let markers;
 
   export let axisFormat = (v) => v;
   export let hoverFormat = (v) => v;
@@ -66,8 +66,8 @@
     resetMouseClicks(event);
   }
 
-  function inDomain(di, xdom) {
-    return di <= xdom[1] && di >= xdom[0];
+  function inDomain(di, dom) {
+    return di <= dom[1] && di >= dom[0];
   }
 
   const toDateString = timeFormat('%Y-%m-%d')
@@ -80,14 +80,11 @@
       return pt;
     }
     let dt = new Date(xv);
-
     if (dt.getHours() > 12) {
       dt.setDate(dt.getDate() + 1);
     }
-
-    dt = toDateString(dt)
-
-    const matches = (di) => di.datestring === dt
+    dt = toDateString(dt);
+    const matches = (di) => di.datestring === dt;
     return d.find(di=> matches(di) && inDomain(di.date, xdom));
   }
 
@@ -205,7 +202,7 @@
 
   {#if !brushTransitioning}
     <g style="opacity:.6" in:fade={{duration: 260}}>
-      <FirefoxReleaseVersionMarkers />
+        <svelte:component this={markers} />
     </g>
   {/if}
 

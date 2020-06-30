@@ -39,6 +39,8 @@
   import CommonScalesButton from '../../components/controls/CommonScalesButton.svelte';
   import SmoothingButton from '../../components/controls/SmoothingButton.svelte';
   import Key from "../../components/Key.svelte";
+  import FirefoxReleaseVersionMarkers from '../../components/FirefoxReleaseVersionMarkers.svelte';
+
 
 
   export let data;
@@ -104,7 +106,7 @@
 
   $: [width, height] = graphSize($store.metric !== 'all' ? 'large' : $store.graphSize);
 
-  $: description = CONFIG.usage.values.find(v=> v.key === $store.usage).shortDescription;
+  $: criterion = CONFIG.usage.values.find(v=> v.key === $store.usage);
 
 
   // export modal;
@@ -174,7 +176,7 @@
       <span slot=view>explore</span>
       <span slot=title>{$store.usage}</span>
       <div slot=description>
-        {description}
+        {criterion.shortDescription}
       </div>
       <div slot=controls class="top-right-controls">
         <Button level=medium on:click={() => { exportData(data, $store); }}>
@@ -234,7 +236,8 @@
             {xDomain}
             yMin={$store.commonScales === true ? 0 : undefined}
             yMax={$store.commonScales === true ? (metricClass === 'actives' && $store.metric === 'all' ? auMax : yMax) : undefined}
-            caveat={(datapoint) => dataQualityReason(datapoint.date, key, true)}
+            caveat={(datapoint) => dataQualityReason(datapoint.date, key, criterion.product === 'Firefox Desktop')}
+            markers={criterion.product === 'Firefox Desktop' ? FirefoxReleaseVersionMarkers : undefined}
             {axisFormat}
             {hoverFormat}
             {endMouseEvent}

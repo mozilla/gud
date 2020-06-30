@@ -146,7 +146,7 @@ margin:0px;
             {#if option.shortDescription}{option.shortDescription}{/if}
           </span>
           <span
-            slot="right"
+            slot="left"
             style="color: {selections.includes(option.key) ? 'blue' : 'var(--cool-gray-400)'}">
             {#if multi}
               {#if selections.includes(option.key)}

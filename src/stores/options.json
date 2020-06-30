@@ -54,12 +54,14 @@
       {
         "label": "Any Firefox Desktop Activity",
         "key": "Any Firefox Desktop Activity",
+        "product": "Firefox Desktop",
         "shortDescription": "The profile has sent a telemetry 'main' ping from Firefox Desktop on the day in question",
         "markerSet": "firefoxDesktopVersions"
       },
       {
         "label": "New Firefox Desktop Profile Created",
         "key": "New Firefox Desktop Profile Created",
+        "product": "Firefox Desktop",
         "shortDescription": "The count of the number of new profiles created on the day in question",
         "markerSet": "firefoxDesktopVersions",
         "disabledMetrics": [
@@ -72,12 +74,14 @@
       {
         "label": "Visited 5 URIs",
         "key": "Firefox Desktop Visited 5 URI",
+        "product": "Firefox Desktop",
         "shortDescription": "The profile sent a main ping on the day in question that indicates that the profile opened at least 5 URIs",
         "markerSet": "firefoxDesktopVersions"
       },
       {
         "label": "Opened DevTools",
         "key": "Firefox Desktop Opened Dev Tools",
+        "product": "Firefox Desktop",
         "shortDescription": "The profile sent a main ping on the day in question that indicates that the developer tools feature was activated at least once",
         "markerSet": "firefoxDesktopVersions"
       },
