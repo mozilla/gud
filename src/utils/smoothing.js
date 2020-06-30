@@ -7,6 +7,7 @@ export default function smooth(data, key, days = 7) {
   const lo = `${key}_low`;
   const series = data.map((di) => ({
     date: di.date,
+    datestring: di.datestring,
     [key]: di[key],
     [lo]: di[lo],
     [hi]: di[hi],

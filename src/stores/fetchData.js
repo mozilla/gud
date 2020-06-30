@@ -54,7 +54,7 @@ function convertExploreData(inputs, isDesktop = false, dateKey = "date") {
   const output = Object.entries(byDate).map(([date, points], i) => {
     const dt = toDate(date);
 
-    const pt = { date: dt };
+    const pt = { date: dt, datestring: date };
     metrics.forEach((m) => {
       const info = getMetricInformation(m);
       let metricPoints = [];

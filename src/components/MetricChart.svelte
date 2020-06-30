@@ -10,7 +10,6 @@
   import LeftAxis from "@graph-paper/guides/LeftAxis.svelte";
   import BottomAxis from "@graph-paper/guides/BottomAxis.svelte";
   import TimeAxis from './TimeAxis.svelte';
-  import { window1D } from "@graph-paper/core/utils/window-functions";
 
   import Scrub from './Scrub.svelte';
   import CompareDates from './CompareDates.svelte';
@@ -59,18 +58,6 @@
     if (isComparing) isComparing = false;
   }
 
-  const get = (d, v, k, dom) => {
-    const w = window1D({
-      value: v,
-      data: d,
-      key: k,
-      lowestValue: dom[0],
-      highestValue: dom[1],
-    });
-    if (w.current) return w.current;
-    return 0;
-  };
-
   function percentageDifference(start, end) {
     return (end - start) / start;
   }
@@ -78,9 +65,35 @@
   function mouseleave(event) {
     resetMouseClicks(event);
   }
+
+  function inDomain(di, xdom) {
+    return di <= xdom[1] && di >= xdom[0];
+  }
+
+  const toDateString = timeFormat('%Y-%m-%d')
+
+  function getNearest(d, xv, xdom) {
+    if (!xdom) return d[d.length -1];
+    if (!xv || !inDomain(xv, xdom)) {
+      // get latest non-undefined point.
+      let pt = d.slice(0).reverse().find(di=> di.date <= xdom[1] && di[y] !== undefined);
+      return pt;
+    }
+    let dt = new Date(xv);
+
+    if (dt.getHours() > 12) {
+      dt.setDate(dt.getDate() + 1);
+    }
+
+    dt = toDateString(dt)
+
+    const matches = (di) => di.datestring === dt
+    return d.find(di=> matches(di) && inDomain(di.date, xdom));
+  }
+
   // update the xMouse shared value.
   $: transformedData = transform ? transform(data, y) : data;
-  $: output = (xScale && transformedData) ? get(transformedData, mousePosition.x || transformedData[transformedData.length-1].date, "date", xScale.domain()) : transformedData[transformedData.length -1];
+  $: output = getNearest(transformedData, mousePosition.x, xScale ? xScale.domain() : undefined);
 
   $: if (isComparing) {
     compareEnd = output;
