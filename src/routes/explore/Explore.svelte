@@ -41,8 +41,6 @@
   import Key from "../../components/Key.svelte";
   import FirefoxReleaseVersionMarkers from '../../components/FirefoxReleaseVersionMarkers.svelte';
 
-
-
   export let data;
 
   let dtfmt = timeFormat("%b %d, %Y");
@@ -131,6 +129,12 @@
 
   .multiples--small {
     grid-template-columns: auto auto auto;
+  }
+
+  @media (max-width: 1400px) {
+    .multiples--small {
+      grid-template-columns: auto auto;
+    }
   }
 
   .multiples--medium {

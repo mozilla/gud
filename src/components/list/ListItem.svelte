@@ -4,6 +4,7 @@ import { getContext, onMount, onDestroy, createEventDispatcher } from 'svelte';
 const dispatch = createEventDispatcher();
 
 export let key;
+export let href = undefined;
 
 const focus = getContext('gp:list:focus');
 const keys = getContext('gp:list:keys');
@@ -34,8 +35,13 @@ onMount(() => {
 </script>
 
 <style>
+
   li {
     cursor: pointer;
+  }
+
+  a {
+    text-decoration: none;
   }
 
   button {
@@ -106,23 +112,25 @@ onMount(() => {
 <svelte:window on:keydown={handleKeypress} />
 
 <li class="gp-list-item" role="menuitem" on:mouseover={claimFocus}>
-  <button bind:this={bt} class:focus={key === $focus} on:click on:focus={claimFocus}>
-    <div class="list-item__left list-item--centered">
-      <slot name="left" />
-    </div>
-    <div class="list-item__body list-item--centered">
-      <div>
-        <div class="list-item__body__primary-text">
-          <slot name="primary" />
-          <slot />
-        </div>
-        <div class="list-item__body__secondary-text">
-          <slot name="secondary" />
+<a href={href}>
+    <button bind:this={bt} class:focus={key === $focus} on:click on:focus={claimFocus}>
+      <div class="list-item__left list-item--centered">
+        <slot name="left" />
+      </div>
+      <div class="list-item__body list-item--centered">
+        <div>
+          <div class="list-item__body__primary-text">
+            <slot name="primary" />
+            <slot />
+          </div>
+          <div class="list-item__body__secondary-text">
+            <slot name="secondary" />
+          </div>
         </div>
       </div>
-    </div>
-    <div class="list-item__right list-item--centered">
-      <slot name="right" />
-    </div>
-  </button>
+      <div class="list-item__right list-item--centered">
+        <slot name="right" />
+      </div>
+    </button>
+  </a>
 </li>

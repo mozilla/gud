@@ -53,7 +53,7 @@ export const metrics = [
     hoverFormat: format(".2f"),
   },
   {
-    name: "1-Wk. Retention (new clients)",
+    name: "1-Wk. New Profile Retention",
     key: "retention_1_week_new_profile",
     type: "percentage",
     yMax: 1,

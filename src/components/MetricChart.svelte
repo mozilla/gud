@@ -100,7 +100,6 @@ $: if (isComparing) {
   }
 
   $: caveatReason = caveat(output);
-
 </script>
 
 
@@ -143,10 +142,10 @@ $: if (isComparing) {
 <svelte:window on:keydown={keyDown} on:keyup={keyUp} />
 
 <header class:big={headerSize === 'large'}>
-  <h2 use:tooltipAction={{text: description, location: "top"}}>
+  <h2 class="gafc justify-content-start" use:tooltipAction={{text: description, location: "top"}}>
     {name}
     {#if description}
-      <span style="transform: translateY(1px); display: inline-block; color: var(--cool-gray-500);" >
+      <span class=gafc style="display: inline-block; color: var(--cool-gray-500);" >
         <Help size=.9em />
       </span>
     {/if}
@@ -232,7 +231,6 @@ $: if (isComparing) {
         {#if caveatReason}
           <text in:fade={{duration:200}} x={right} y={12} text-anchor=end font-size={12} fill=var(--cool-gray-500)>{caveatReason}</text>
         {/if}
-
       {#if !caveatReason}
         <YearOverYearLabel data={transformedData} focusPoint={output} {y} />
       {/if}

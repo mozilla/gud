@@ -10,10 +10,10 @@
   import Slack from './Slack.svelte';
   import Keyboard from './Keyboard.svelte';
   import GithubLogo from './GithubLogo.svelte';
-  import GUDLogo from './GUDLogo.svelte';
+
+  import TitleMenu from './TitleMenu.svelte';
 
   let showShortcuts = false;
-  let showView = false;
 
 </script>
 
@@ -33,18 +33,8 @@
 
 <nav>
     <div style="padding: var(--space-2x) var(--space-1x);">
-      <h1>
-        <button use:tooltipAction={{text: !showView && "Select another view"}}>
-          <GUDLogo size={40} />
-                    <div class=title-container>
-            <div class="title gafc" style="--gafc-space: var(--space-1h);">Growth & Usage <CaretDown size=.9em /></div>
-            <div class="view gafc justify-content-start" style="
-              color: var(--cool-gray-600);
-              --gafc-space: var(--space-1h);
-            "><Explore size=.9em /> explore</div>
-          </div>
-        </button>
-        </h1>
+
+    <TitleMenu />
 
     </div>
     <div class='pages'>

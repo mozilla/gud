@@ -20,7 +20,7 @@
   $: yoy = data.find(di=> getYoYComparison(focusPoint.date, di.date));
 </script>
 
-{#if yoy && yoy[y] !== undefined}
+{#if yoy && yoy[y] !== undefined && focusPoint[y] !== undefined}
   <text
     font-size=12
     x={$right}
