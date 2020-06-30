@@ -20,7 +20,6 @@ export default function downloadString(text, fileType = "text", fileName) {
 }
 
 export function exportData(dataset, store) {
-  // console.log(dataset, filename, storeValue, metric);
   const storeValue = { ...store };
   delete storeValue.graphSize;
   delete storeValue.commonScales;

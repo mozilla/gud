@@ -113,11 +113,6 @@
 </script>
 
 <style>
-  :global(.gp-date-picker__container > .gp-button) {
-    /* border-width: 3px; */
-    background-color: hsl(217, 70%, 98%);
-    border-color: var(--digital-blue-200);
-  }
 
   .caret {
     transition: transform 100ms;
@@ -259,7 +254,7 @@
     <div class="gafc col-gap-1x">
       <Calendar size={12} />
       {formatLabel(startDate)} - {formatLabel(endDate)}
-      <span class="gafc caret" style="transform: rotate({active ? 180 : 0}deg);">
+      <span class="gafc caret" style="transform: {active? `rotate(180deg)` : 'none'};">
         <CaretDown size={14} />
       </span>
     </div>

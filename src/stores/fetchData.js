@@ -78,7 +78,6 @@ function convertExploreData(inputs, isDesktop = false, dateKey = "date") {
       // check for retention
 
       // if date in last 7 days ...
-      // console.log(dt);
       pt[m] = !(armagaddon || invalidRetention) ? metricValue : undefined;
       pt[`${m}_low`] = !(armagaddon || invalidRetention)
         ? metricValue - CIs.margin

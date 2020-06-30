@@ -13,14 +13,6 @@ const productDetails = readable(undefined, async (set) => {
   return () => undefined;
 });
 
-// filter
-// const productDetails = derived([usage, rawProductDetails], ([$usage, $productDetails]) => {
-//     const thisCriterion = optionSet.usageCriteriaOptions.values.find(opt => opt.key===$usage)
-//     console.log('...', thisCriterion)
-//     if (!thisCriterion || thisCriterion.markerSet !== 'productDetails') return undefined
-//     return $productDetails
-// })
-
 export const showFirefoxDesktopDetails = derived(store, ($store) => {
   const thisCriterion = optionSet.usageCriteriaOptions.values.find(
     (opt) => opt.key === $store.usage
