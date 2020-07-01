@@ -1,4 +1,5 @@
 <script>
+import { store } from '../stores/store'
 import { tooltip as tooltipAction } from '@graph-paper/core/actions/tooltip';
 import { CaretDown, Explore, Calendar } from '@graph-paper/icons';
 import clickOutside from '../utils/click-outside';
@@ -6,6 +7,8 @@ import GUDLogo from './GUDLogo.svelte';
 import FloatingChild from './list/FloatingChild.svelte';
 import List from './list/List.svelte';
 import ListItem from './list/ListItem.svelte';
+
+import routes from "../routes/routes";
 
 let toggled = false;
 let element;
@@ -15,6 +18,12 @@ let iconSize = 24;
 
 function toggle() {
   toggled = !toggled;
+}
+
+function handleKeydown({ key }) {
+  if (key === "Escape") {
+    toggled = false;
+  }
 }
 
 </script>
@@ -56,10 +65,6 @@ h1 button:hover {
   border: 1px solid var(--cool-gray-200);
 }
 
-h1 button .title-container {
-  /* width: 100%; */
-}
-
 h1 button .title {
   text-align: left;
   font-size: var(--text-04);
@@ -77,6 +82,8 @@ h1 button .view {
 }
 </style>
 
+<svelte:window on:keydown={handleKeydown} />
+
 <h1 bind:this={container}>
   <button on:click={() => { toggled = !toggled; }} use:tooltipAction={{text: !toggled && "Select another view"}}>
     <GUDLogo size={40} />
@@ -85,7 +92,12 @@ h1 button .view {
         <div class="view gafc justify-content-start" style="
           color: var(--cool-gray-600);
           --gafc-space: var(--space-1h);
-        "><Explore size=.9em /> explore</div>
+        ">
+          {#if routes[$store.mode].icon}
+            <svelte:component this={routes[$store.mode].icon} size=.9em />
+          {/if}
+          {routes[$store.mode].label}
+        </div>
     </div>
   </button>
 </h1>
@@ -98,20 +110,15 @@ h1 button .view {
     }
     }}>
   <List>
-    <ListItem key=explore href={'/explore'} on:click={toggle}>
-      <div class='large-icon' slot=left>
-        <Explore size={iconSize} />
-      </div>
-      <div slot=primary>Explore</div>
-      <div slot=secondary>Slice growth metrics by various dimensions</div>
-    </ListItem>
-    <ListItem key=ytd href={'/ytd'} on:click={toggle}>
-      <div class='large-icon' slot=left>
-        <Calendar size={iconSize} />
-      </div>
-      <div slot=primary>Year-To-Date</div>
-      <div slot=secondary>Compare a product usage criterion to previous years</div>
-    </ListItem>
+    {#each Object.values(routes) as route, i}
+      <ListItem key={route.path} href={`/${route.path}`} on:click={toggle}>
+        <div class='large-icon' slot=left>
+          <svelte:component this={route.icon} size={iconSize} />
+        </div>
+        <div slot=primary>{route.label}</div>
+        <div slot=secondary>{#if route.description}{route.description}{/if}</div>
+      </ListItem>
+    {/each}
   </List>
   </div>
 </FloatingChild>

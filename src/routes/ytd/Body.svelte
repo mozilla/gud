@@ -11,7 +11,7 @@ import { Calendar } from '@graph-paper/icons';
     <span slot=icon>
       <Calendar size={16} />
     </span>
-    <span slot=view>year-to-date</span>
+    <span slot=view>Year-To-Date</span>
     <span slot=title>{$store.usage}</span>
 
   </PageTitle>

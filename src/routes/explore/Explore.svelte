@@ -181,14 +181,17 @@
       <span slot=icon>
         <Explore size={16} />
       </span>
-      <span slot=view>explore</span>
+      <span slot=view>Explore</span>
       <span slot=title>{$store.usage}</span>
       <div slot=description>
         {criterion.shortDescription}
       </div>
       <div slot=controls class="top-right-controls">
-        <Button level=medium on:click={() => { exportData(data, $store); }}>
-          <div class=gafc style="--gafc-space: var(--space-1x);"> <Export size=1em /> Export</div>
+        <Button
+          level=medium on:click={() => { exportData(data, $store); }}
+          tooltip="Download the dataset in this view as a CSV file"
+        >
+          <div class=gafc style="--gafc-space: var(--space-1x);"> <Export size=1em /> Export as CSV</div>
           </Button>
       </div>
     </PageTitle>

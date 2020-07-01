@@ -146,7 +146,7 @@ margin:0px;
           </span>
           <span
             slot="left"
-            style="color: {selections.includes(option.key) ? 'blue' : 'var(--cool-gray-400)'}">
+            style="align-self: start; display: inline-block; transform: translateY(2px); color: {selections.includes(option.key) ? 'blue' : 'var(--cool-gray-400)'}">
             {#if multi}
               {#if selections.includes(option.key)}
                 <Checkbox size="1em" />
