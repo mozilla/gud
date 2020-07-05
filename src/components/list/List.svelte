@@ -17,6 +17,7 @@
       focus.set(0);
     } else if (index > 0) {
       focus.set($keys[index - 1].key);
+      $keys[index+1].scrollIntoView(false);
     }
   }
 
@@ -26,6 +27,7 @@
       focus.set(0);
     } else if (index < $keys.length - 1) {
       focus.set($keys[index + 1].key);
+      $keys[index+1].scrollIntoView(false);
     }
   }
 

@@ -10,8 +10,13 @@ export let disabled = false;
 const focus = getContext('gp:list:focus');
 const keys = getContext('gp:list:keys');
 
+let container;
 let bt;
 let itemNumber;
+
+function scrollIntoView(align = true) {
+  container.scrollIntoView({alignToTop: align, block: 'nearest' });
+}
 
 function claimFocus() {
   if (!disabled) {
@@ -22,7 +27,7 @@ function claimFocus() {
 
 onMount(() => {
   keys.update(current => {
-    return [...current.map(k=> ({ ...k })), { key, disabled }]
+    return [...current.map(k=> ({ ...k })), { key, disabled, scrollIntoView }]
   });
   itemNumber = $keys.length - 1;
 })
@@ -129,7 +134,7 @@ const handleKeypress = (event) => {
 
 <svelte:window on:keydown={handleKeypress} />
 
-<li class="gp-list-item" class:disabled role="menuitem" on:mouseover={claimFocus}>
+<li bind:this={container} class="gp-list-item" class:disabled role="menuitem" on:mouseover={claimFocus}>
 <a href={disabled ? '#' : href}>
     <button disabled={disabled} bind:this={bt} class:focus={key === $focus} on:click on:focus={claimFocus}>
       <div class="list-item__left list-item--centered">

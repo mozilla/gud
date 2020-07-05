@@ -5,8 +5,6 @@ li {
   text-transform: uppercase;
   padding: var(--space-2x);
   background-color: white;
-  position: sticky;
-  top:0;
 }
 
 </style>
