@@ -5,6 +5,7 @@ const dispatch = createEventDispatcher();
 
 export let key;
 export let href = undefined;
+export let disabled = false;
 
 const focus = getContext('gp:list:focus');
 const keys = getContext('gp:list:keys');
@@ -13,24 +14,26 @@ let bt;
 let itemNumber;
 
 function claimFocus() {
-  bt.focus();
-  focus.set(key);
+  if (!disabled) {
+    bt.focus();
+    focus.set(key);
+  }
 };
 
 onMount(() => {
   keys.update(current => {
-    return [...current, key]
+    return [...current.map(k=> ({ ...k })), { key, disabled }]
   });
   itemNumber = $keys.length - 1;
 })
 
-  function select() {
-    dispatch('click');
-  }
+function select() {
+  dispatch('click');
+}
 
-  const handleKeypress = (event) => {
-    if (event.key === "Enter" && key === $focus) select();
-  };
+const handleKeypress = (event) => {
+  if (event.key === "Enter" && key === $focus) select();
+};
 
 </script>
 
@@ -38,6 +41,15 @@ onMount(() => {
 
   li {
     cursor: pointer;
+    --primary-text-color: var(--cool-gray-750);
+    --primary-text-size: var(--text-03);
+    --secondary-text-color: var(--cool-gray-550);
+    --secondary-text-size: var(--text-02);
+  }
+
+  li.disabled {
+    --primary-text-color: var(--cool-gray-550);
+    --secondary-text-color: var(--cool-gray-550);
   }
 
   a {
@@ -59,6 +71,12 @@ onMount(() => {
   button:hover,
   button.focus {
     background-color: var(--cool-gray-100);
+  }
+
+  .disabled button:focus,
+  .disabled button:hover,
+  .disabled button.focus {
+    background-color: transparent;
   }
 
   .list-item__body {
@@ -89,13 +107,13 @@ onMount(() => {
   }
 
   .list-item__body__primary-text {
-    font-size: var(--text-03);
-    color: var(--cool-gray-750);
+    font-size: var(--primary-text-size);
+    color: var(--primary-text-color);
   }
 
   .list-item__body__secondary-text {
-    font-size: var(--text-02);
-    color: var(--cool-gray-550);
+    font-size: var(--secondary-text-size);
+    color: var(--secondary-text-color);
   }
 
   .list-item__right {
@@ -111,9 +129,9 @@ onMount(() => {
 
 <svelte:window on:keydown={handleKeypress} />
 
-<li class="gp-list-item" role="menuitem" on:mouseover={claimFocus}>
-<a href={href}>
-    <button bind:this={bt} class:focus={key === $focus} on:click on:focus={claimFocus}>
+<li class="gp-list-item" class:disabled role="menuitem" on:mouseover={claimFocus}>
+<a href={disabled ? '#' : href}>
+    <button disabled={disabled} bind:this={bt} class:focus={key === $focus} on:click on:focus={claimFocus}>
       <div class="list-item__left list-item--centered">
         <slot name="left" />
       </div>

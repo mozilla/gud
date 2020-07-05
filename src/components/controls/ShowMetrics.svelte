@@ -69,19 +69,34 @@
     if (toggled) toggled = false;
   }}>
     <List>
-      {#each CONFIG.metric.values.filter(m => !$store.disabledMetrics.includes(m.key)) as option}
+      {#each CONFIG.metric.values as option}
         {#if option.itemType === 'divider'}
           <Divider />
         {:else if option.itemType === 'section'}
           <ListHeader>{option.label}</ListHeader>
         {:else}
-          <ListItem key={option.key} on:click={select(option)}>
-            <span slot='left' style="visibility: {option.key === metric.key ? 'visible' : 'hidden'}">
-                <Check size=".8em" />
+          <ListItem
+            key={option.key}
+            on:click={select(option)}
+            disabled={$store.disabledMetrics.includes(option.key)}
+          >
+            <span slot='left'
+              style="
+                align-self: start;
+                padding-top: .1em;
+                color: {option.key === metric.key ? 'blue' : 'transparent'};
+                visibility: {option.key === metric.key ? 'visible' : 'hidden'}">
+                <Check size="1em" />
             </span>
             <span slot="primary">{option.label}</span>
             <span slot="secondary">
-              {#if option.shortDescription}{option.shortDescription}{/if}
+              {#if option.shortDescription}
+                {#if $store.disabledMetrics.includes(option.key)}
+                  <span style='font-style: italic;'>Metric not available for this usage criterion.</span>
+                {:else}
+                  {option.shortDescription}
+                {/if}
+              {/if}
             </span>
           </ListItem>
       {/if}

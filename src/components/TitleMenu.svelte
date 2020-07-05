@@ -111,7 +111,7 @@ h1 button .view {
     }}>
   <List>
     {#each Object.values(routes) as route, i}
-      <ListItem key={route.path} href={`/${route.path}`} on:click={toggle}>
+      <ListItem disabled={route.disabled} key={route.path} href={`/${route.path}`} on:click={toggle}>
         <div class='large-icon' slot=left>
           <svelte:component this={route.icon} size={iconSize} />
         </div>

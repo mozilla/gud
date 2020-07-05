@@ -12,20 +12,20 @@
   $: style = `${borderRadius ? `--border-radius: ${borderRadius};` : ""}${verticalPad ? `--vertical-pad: ${verticalPad}` : ""}`;
 
   function previous() {
-    let index = $keys.findIndex(key => key === $focus);
+    let index = $keys.findIndex(k => k.key === $focus && !k.disabled);
     if (index === undefined) {
       focus.set(0);
     } else if (index > 0) {
-      focus.set($keys[index - 1]);
+      focus.set($keys[index - 1].key);
     }
   }
 
   function next() {
-    let index = $keys.findIndex(key => key === $focus);
+    let index = $keys.findIndex(k => k.key === $focus && !k.disabled);
     if (index === undefined) {
       focus.set(0);
     } else if (index < $keys.length - 1) {
-      focus.set($keys[index + 1]);
+      focus.set($keys[index + 1].key);
     }
   }
 

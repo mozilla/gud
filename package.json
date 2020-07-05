@@ -13,6 +13,7 @@
     "@graph-paper/guides": "0.0.0-alpha.14",
     "@graph-paper/portal": "0.0.0-alpha.14",
     "@graph-paper/stack": "0.0.0-alpha.14",
+    "@graph-paper/icons": "0.0.0-alpha.14",
     "@rollup/plugin-commonjs": "^13.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "8.1.0",

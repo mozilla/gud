@@ -7,7 +7,15 @@ import YTDBody from "./ytd/Body.svelte";
 
 const routes = {};
 
-function add({ path, label, sidebar, body, icon, description }) {
+function add({
+  path,
+  label,
+  sidebar,
+  body,
+  icon,
+  description,
+  disabled = false,
+}) {
   routes[path] = {
     path,
     label,
@@ -15,6 +23,7 @@ function add({ path, label, sidebar, body, icon, description }) {
     body,
     icon,
     description,
+    disabled,
   };
 }
 
@@ -32,7 +41,8 @@ add({
   sidebar: ExploreSidebar,
   body: YTDBody,
   icon: YTDIcon,
-  description: "View growth metric performance in 2020",
+  description: "Coming soon",
+  disabled: true,
 });
 
 export default routes;
