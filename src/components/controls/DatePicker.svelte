@@ -70,6 +70,7 @@
         start: toDate(formattedStartDate),
         end: toDate(formattedEndDate),
       });
+      active = false;
     }
 
     // await tick();
