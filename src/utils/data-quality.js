@@ -22,3 +22,10 @@ export function inArmagaddon(dt, m, isDesktop = false) {
   }
   return false;
 }
+
+export function dataQualityReason(dt, m, isDesktop = false) {
+  if (!isDesktop) return undefined;
+  const armagaddon = inArmagaddon(dt, m, isDesktop);
+  if (armagaddon) return "Armagaddon";
+  return undefined;
+}
