@@ -61,10 +61,6 @@
       ...data.map((d) => $store.disabledMetrics.includes('mau') ? 0 : (d.mau_high || 0))
     ) * 1.1;
 
-  const resetDomain = () => {
-    store.resetDateRange();
-  };
-
   const get = (d, value, dom) => {
     const w = window1D({
       value,
@@ -206,7 +202,7 @@
             let { start, end } = evt.detail;
             endMouseEvent(start, end);
           }}
-          on:resetDates={resetDomain} />
+          on:resetDates={store.resetDateRange} />
 
         {#if !$datesAreDefault}
           <div in:fly={{ duration: 400, y: -10 }}>
@@ -215,7 +211,7 @@
               compact
               on:click={() => {
                 isScrubbing = false;
-                resetDomain();
+                store.resetDateRange();
               }}>
               clear zoom
               <Close size={16} />

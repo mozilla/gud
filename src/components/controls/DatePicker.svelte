@@ -81,6 +81,7 @@
     await tick();
     boundStart = fromDate(startDate);
     boundEnd = fromDate(endDate);
+    active = false;
   }
 
   function withKey(keybinding, callback) {
