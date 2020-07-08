@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher, tick } from "svelte";
   import { Button } from "@graph-paper/button";
-  import clickOutside from "../utils/click-outside";
+  import clickOutside from "../../utils/click-outside";
   import {
     CaretRight,
     CheckboxBlank,
@@ -10,11 +10,11 @@
   } from "@graph-paper/icons";
     import { Stack } from "@graph-paper/stack";
   import { Close } from "@graph-paper/icons";
-  import FloatingChild from "./list/FloatingChild.svelte";
-  import List from "./list/List.svelte";
-  import ListItem from "./list/ListItem.svelte";
-  import Divider from "./list/Divider.svelte";
-  import ListHeader from './list/ListHeader.svelte';
+  import FloatingChild from "../list/FloatingChild.svelte";
+  import List from "../list/List.svelte";
+  import ListItem from "../list/ListItem.svelte";
+  import Divider from "../list/Divider.svelte";
+  import ListHeader from '../list/ListHeader.svelte';
 
   const dispatch = createEventDispatcher();
 

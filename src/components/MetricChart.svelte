@@ -12,9 +12,9 @@
   import { outline } from "./outline";
   import TimeAxis from './TimeAxis.svelte';
 
-  import Scrub from './Scrub.svelte';
-  import CompareDates from './CompareDates.svelte';
-  import YearOverYearLabel from './YearOverYearLabel.svelte';
+  import Scrub from './interactions/Scrub.svelte';
+  import CompareDates from './interactions/CompareDates.svelte';
+  import YearOverYearLabel from './interactions/YearOverYearLabel.svelte';
 
   export let name;
   export let description;

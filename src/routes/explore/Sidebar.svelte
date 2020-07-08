@@ -5,7 +5,7 @@
   import { Stack } from "@graph-paper/stack";
   import { Box } from "@graph-paper/box";
   import { Chip, ChipSet } from "@graph-paper/chip";
-  import DimensionMenu from "../../components/DimensionMenu.svelte";
+  import DimensionMenu from "../../components/controls/DimensionMenu.svelte";
   import { store } from '../../stores/store';
 
   import CONFIG from '../../stores/options.json';

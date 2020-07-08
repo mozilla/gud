@@ -1,9 +1,9 @@
 <script>
   import { getContext } from 'svelte';
+  import { percentage2d, percentageDifference } from '../../utils/formatters';
   export let data;
   export let focusPoint;
   export let y;
-  import { percentage2d, percentageDifference } from '../utils/formatters';
 
   const top = getContext('topPlot');
   const bottom = getContext('bottomPlot');

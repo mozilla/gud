@@ -61,10 +61,6 @@
       ...data.map((d) => $store.disabledMetrics.includes('mau') ? 0 : (d.mau_high || 0))
     ) * 1.1;
 
-  const resetDomain = () => {
-    store.resetDateRange();
-  };
-
   const get = (d, value, dom) => {
     const w = window1D({
       value,
@@ -204,9 +200,9 @@
           on:applyDates={(evt) => {
             isScrubbing = true;
             let { start, end } = evt.detail;
-            xDomain = [start, end];
+            endMouseEvent(start, end);
           }}
-          on:resetDates={resetDomain} />
+          on:resetDates={store.resetDateRange} />
 
         {#if !$datesAreDefault}
           <div in:fly={{ duration: 400, y: -10 }}>
@@ -215,7 +211,7 @@
               compact
               on:click={() => {
                 isScrubbing = false;
-                resetDomain();
+                store.resetDateRange();
               }}>
               clear zoom
               <Close size={16} />
@@ -227,7 +223,9 @@
         <SmoothingButton />
 
         <ShowMetrics />
-        <GraphSizeButtons />
+        {#if $store.metric !== 'all'}
+          <GraphSizeButtons />
+        {/if}
       </div>
     </div>
 
