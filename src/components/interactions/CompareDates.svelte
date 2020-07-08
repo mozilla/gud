@@ -1,7 +1,7 @@
 <script>
 import { getContext } from 'svelte';
-import { outline } from "./outline";
-import { percentage2d, percentageDifference } from '../utils/formatters'
+import { outline } from "../outline";
+import { percentage2d, percentageDifference } from '../../utils/formatters'
 
 const xScale = getContext('xScale');
 const yScale = getContext('yScale');

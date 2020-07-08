@@ -9,7 +9,7 @@
     grid-template-columns: auto max-content;
     grid-template-rows: auto auto;
     grid-template-areas: 'title nav'
-                         'description nav'
+                         'description nav';
   }
 
   .view {
@@ -42,16 +42,16 @@
 </style>
 
 
-    <header>
-      <h1>
-        <span style='color: var(--cool-gray-400);'>
-          <slot name='icon' />
-        </span>
-       <span class=view>
-        <slot name=view></slot>
-      </span> <slot name=title></slot></h1>
-      <div class=description><slot name=description /></div>
-      <div class=nav>
-        <slot name=controls />
-      </div>
-    </header>
+<header>
+  <h1>
+    <span style='color: var(--cool-gray-400);'>
+      <slot name='icon' />
+    </span>
+    <span class=view>
+    <slot name=view></slot>
+  </span> <slot name=title></slot></h1>
+  <div class=description><slot name=description /></div>
+  <div class=nav>
+    <slot name=controls />
+  </div>
+</header>

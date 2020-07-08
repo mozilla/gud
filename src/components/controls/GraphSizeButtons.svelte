@@ -3,10 +3,9 @@ import { Button, ButtonGroup } from '@graph-paper/button';
   import {
     Stack,
     Tile,
-
   } from "@graph-paper/icons";
 
-    import ThreeByThree from '../ThreeByThree.svelte'
+    import ThreeByThree from '../icons/ThreeByThree.svelte'
 import { store } from '../../stores/store';
 
 

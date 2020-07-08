@@ -204,7 +204,7 @@
           on:applyDates={(evt) => {
             isScrubbing = true;
             let { start, end } = evt.detail;
-            xDomain = [start, end];
+            endMouseEvent(start, end);
           }}
           on:resetDates={resetDomain} />
 

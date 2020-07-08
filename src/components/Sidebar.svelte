@@ -7,9 +7,9 @@
 
   import Shortcuts from './Shortcuts.svelte';
 
-  import Slack from './Slack.svelte';
-  import Keyboard from './Keyboard.svelte';
-  import GithubLogo from './GithubLogo.svelte';
+  import Slack from './icons/Slack.svelte';
+  import Keyboard from './icons/Keyboard.svelte';
+  import GithubLogo from './icons/GithubLogo.svelte';
 
   import TitleMenu from './TitleMenu.svelte';
 
@@ -75,7 +75,7 @@
                 <Slack color=var(--icon-color) size={14} /> Feedback
               </div>
             </Button>
-            <Button compact level=low href="https://github.com/mozilla/gud/issues/new/choose">
+            <Button compact level=low href="https://github.com/mozilla/gud">
               <div class=gafc>
                 <GithubLogo color=var(--icon-color) size={14} />
                 Code
