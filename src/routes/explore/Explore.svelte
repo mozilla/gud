@@ -223,7 +223,9 @@
         <SmoothingButton />
 
         <ShowMetrics />
-        <GraphSizeButtons />
+        {#if $store.metric !== 'all'}
+          <GraphSizeButtons />
+        {/if}
       </div>
     </div>
 
