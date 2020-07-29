@@ -1,14 +1,10 @@
-const { BigQuery } = require("@google-cloud/bigquery");
-const allOptions = require("./src/stores/options.json");
-const { timeDay } = require("d3-time");
+const path = require("path");
 const express = require("express");
+const { BigQuery } = require("@google-cloud/bigquery");
+
+const allOptions = require("./src/stores/options.json");
 
 const app = express();
-const metrics = ["MAU", "DAU", "Retention", "Revenue", "etc."];
-const timeRange = timeDay.range(new Date("2018-12-01"), new Date("2019-03-25"));
-const path = require("path");
-
-// var sqlite3 = require('sqlite3').verbose();
 
 function getDateString(dt) {
   return dt.toISOString().slice(0, 10);
@@ -42,12 +38,6 @@ const getParamInfo = (paramKey) => {
   return allOptions[k];
 };
 
-const getDefault = (paramKey) => {
-  const paramInfo = getParamInfo(paramKey);
-  if (paramInfo.type === "multi") return [];
-  return paramInfo.values[0];
-};
-
 const isDefaultValue = (paramKey, value) => {
   const paramInfo = getParamInfo(paramKey);
   if (paramInfo.type === "multi") return value.length === 0;
@@ -61,8 +51,9 @@ async function query(q) {
     location: "US",
   };
   const [job] = await bigqueryClient.createQueryJob(options);
+
+  // eslint-disable-next-line no-console
   console.log(`Job ${job.id} started.`);
-  // console.log(q);
 
   // Wait for the query to finish
   const [rows] = await job.getQueryResults();
@@ -91,7 +82,6 @@ const exploreQuery = (params) => {
       ) {
         return false;
       }
-      const defaultValue = getDefault(k).key;
       return (k !== "mode" && !isDefaultValue(k, params[k])) || k === "usage"; // params[k] !== defaultValue
     })
     .map((paramKey) => {
@@ -311,6 +301,7 @@ app.post("/fetch-data", async (req, res) => {
         return data;
       });
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
       return reportError(res, err.message);
     }
@@ -323,4 +314,5 @@ app.post("/fetch-data", async (req, res) => {
   res.json(JSON.stringify(out));
 });
 
+// eslint-disable-next-line no-console
 app.listen(3000, () => console.log("app listening on port 3000"));
