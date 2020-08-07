@@ -19,7 +19,7 @@ jobs:
           paths:
             - ./node_modules
       - run: npm run build
-      - run: scripts/eslint-health
+      - run: node scripts/eslint-health.js
 
 workflows:
   version: 2
