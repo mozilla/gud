@@ -25,7 +25,9 @@
  *                        will be run against all files in or below the
  *                        "config.runFrom" directory which end with a .js
  *                        extension or which match a pattern listed in the
- *                        "overrides" section of the ESLint config
+ *                        "overrides" section of the ESLint config. These should
+ *                        probably be the same targets that you specify in your
+ *                        "lint" npm script, if you have one.
  *
  * This is a copy of the following Gist:
  * https://gist.github.com/openjck/043e198f5e0988634793ced4359f8710
@@ -46,7 +48,7 @@ const config = {
 };
 
 (async function main() {
-  console.log("Running...");
+  console.log("Running johnbot...");
   console.log();
 
   const eslint = new ESLint();
