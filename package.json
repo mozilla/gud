@@ -47,7 +47,7 @@
     "build": "rollup -c",
     "autobuild": "rollup -c -w",
     "test": "jest test --no-cache",
-    "lint": "eslint --ext=.js .",
+    "lint": "eslint .",
     "dev": "run-p start:dev autobuild",
     "start": "sirv public",
     "start:dev": "sirv public --dev"
