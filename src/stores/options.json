@@ -120,18 +120,15 @@
         "channels": [
           {
             "label": "Release",
-            "key": "release",
-            "shortDescription": "org.mozilla.firefox"
+            "key": "release"
           },
           {
             "label": "Beta",
-            "key": "beta",
-            "shortDescription": "org.mozilla.firefox_beta and org.mozilla.fenix"
+            "key": "beta"
           },
           {
             "label": "Nightly",
-            "key": "nightly",
-            "shortDescription": "org.mozilla.fennec_aurora and org.mozilla.fenix.nightly"
+            "key": "nightly"
           }
         ]
       },
@@ -143,18 +140,15 @@
         "channels": [
           {
             "label": "Release",
-            "key": "release",
-            "shortDescription": "org.mozilla.firefox"
+            "key": "release"
           },
           {
             "label": "Beta",
-            "key": "beta",
-            "shortDescription": "org.mozilla.firefox_beta"
+            "key": "beta"
           },
           {
             "label": "Nightly",
-            "key": "nightly",
-            "shortDescription": "org.mozilla.fennec_aurora"
+            "key": "nightly"
           }
         ]
       },
@@ -166,13 +160,11 @@
         "channels": [
           {
             "label": "Beta",
-            "key": "beta",
-            "shortDescription": "org.mozilla.fenix"
+            "key": "beta"
           },
           {
             "label": "Nightly",
-            "key": "nightly",
-            "shortDescription": "org.mozilla.fenix.nightly"
+            "key": "nightly"
           }
         ]
       },
