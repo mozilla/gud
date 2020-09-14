@@ -41,7 +41,7 @@ import Modal from './Modal.svelte';
 <Modal on:cancel>
   <span slot=title>Shortcuts</span>
   <dl>
-    <dt>click + drag + release</dt>
+    <!-- <dt>click + drag + release</dt>
     <dd>
       set a new
       <span>
@@ -49,7 +49,7 @@ import Modal from './Modal.svelte';
         <Calendar size="1em" />
       </span>
       for all graphs
-    </dd>
+    </dd> -->
     <dt>shift + drag</dt>
     <dd>compare whichever point was highlighted on shift to a hover point on and on and on and on</dd>
   </dl>
