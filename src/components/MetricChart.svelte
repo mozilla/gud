@@ -29,7 +29,7 @@
   export let yMin;
   export let yMax;
   export let caveat = () => undefined;
-  export let transform = undefined;
+  export let transform;
   export let markers;
 
   export let axisFormat = (v) => v;
@@ -197,12 +197,12 @@ $: if (isComparing) {
       <TimeAxis />
     {/if}
   </g>
-  <g slot="body-background" let:xScale let:yScale let:top let:bottom>
+  <!-- <g slot="body-background" let:xScale let:yScale let:top let:bottom>
     <Scrub x='x' on:scrubend={(event) => {
       const { start, end } = event.detail;
       endMouseEvent(start.x, end.x);
     }} {mousePosition} />
-  </g>
+  </g> -->
 
   <g slot="body">
     <Line data={transformedData} x="date" {y} curve=curveLinear />

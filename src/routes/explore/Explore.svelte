@@ -7,6 +7,18 @@
 
   import { Box } from "@graph-paper/box";
 
+  import {
+    Close,
+    Stack,
+    Tile,
+    Checkbox,
+    CheckboxBlank,
+    Explore
+  } from "@graph-paper/icons";
+
+  import { Button, ButtonGroup } from "@graph-paper/button";
+  import { window1D } from "@graph-paper/core/utils/window-functions";
+
   import MetricChart from "../../components/MetricChart.svelte";
   import PageTitle from '../../components/PageTitle.svelte';
 
@@ -21,17 +33,6 @@
 
   import Export from '../../components/Export.svelte';
 
-  import {
-    Close,
-    Stack,
-    Tile,
-    Checkbox,
-    CheckboxBlank,
-    Explore
-  } from "@graph-paper/icons";
-
-  import { Button, ButtonGroup } from "@graph-paper/button";
-  import { window1D } from "@graph-paper/core/utils/window-functions";
 
   import DatePicker from "../../components/controls/DatePicker.svelte";
   import ShowMetrics from '../../components/controls/ShowMetrics.svelte';
@@ -223,7 +224,7 @@
         <SmoothingButton />
 
         <ShowMetrics />
-        {#if $store.metric !== 'all'}
+        {#if $store.metric === 'all'}
           <GraphSizeButtons />
         {/if}
       </div>
