@@ -451,6 +451,7 @@
       { "label": "Canada", "key": "CA" },
       { "label": "Spain", "key": "ES" },
       { "label": "Indonesia", "key": "ID" },
+      { "label": "Japan", "key": "JP" },
       { "label": "Kenya", "key": "KE" }
     ]
   },
