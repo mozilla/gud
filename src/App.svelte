@@ -26,7 +26,7 @@
 
   function useComponent(thisView = undefined) {
     return (ctx, next) => {
-      const params = ctx.params;
+      const {params} = ctx;
       const urlView = params.view;
       currentView = thisView || urlView;
       store.setField('mode', currentView);
@@ -37,11 +37,11 @@
   }
 
   function updateAfterMoving(ctx, next) {
-    ctx.path += '?' + storeToQuery($store);
+    ctx.path += `?${  storeToQuery($store)}`;
     ctx.save();
   }
 
-  page('/', useComponent('explore'), updateAfterMoving);
+  page.redirect('/', '/explore')
   page('/:view', useComponent(), updateAfterMoving);
   page({ hashbang: true });
 
