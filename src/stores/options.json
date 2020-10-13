@@ -96,7 +96,7 @@
         "label": "Any Mobile Activity",
         "key": "Any Firefox Non-desktop Activity",
         "disabledDimensions": ["os", "attributed"],
-        "shortDescription": "The profile has sent a telemetry ping from any of apps considered for the 2019 Mobile Reach KPI (Fenix, Fennec Android, Fennec iOS, Firefox Lite (excluding CN), Firefox for Echo Show, Focus Android, Focus iOS, and Lockwise) on the day in question.",
+        "shortDescription": "The profile has sent a telemetry ping from any of apps considered for the 2020 Mobile Reach KPI (Fenix, Fennec Android, Fennec iOS, Firefox Lite (excluding CN), Firefox for Echo Show, Focus Android, Focus iOS, and Lockwise) on the day in question.",
         "channels": [
           { "label": "Release", "key": "release" },
           { "label": "Beta", "key": "beta" },
@@ -110,7 +110,7 @@
       },
       {
         "itemType": "section",
-        "label": "Fenix"
+        "label": "Firefox for Android"
       },
       {
         "label": "Any Fenix or Firefox Preview Activity",
@@ -169,6 +169,39 @@
         ]
       },
       {
+        "label": "Any Fennec Activity",
+        "key": "Any Fennec Android Activity",
+        "shortDescription": "The profile has sent a telemetry 'core' ping from Fennec (legacy Firefox for Android) on the day in question",
+        "disabledDimensions": ["os", "attributed"],
+        "markerSet": "productDetails",
+        "channels": [
+          { "label": "Release", "key": "release" },
+          { "label": "Beta", "key": "beta" },
+          { "label": "Aurora", "key": "aurora" },
+          { "label": "Nightly", "key": "nightly" },
+          { "label": "Other", "key": "Other" }
+        ]
+      },
+      {
+        "itemType": "divider"
+      },
+      {
+        "itemType": "section",
+        "label": "Firefox for iOS"
+      },
+      {
+        "label": "Any Firefox for iOS Activity",
+        "key": "Any Fennec iOS Activity",
+        "shortDescription": "The profile has sent a telemetry 'core' ping from Firefox for iOS on the day in question",
+        "disabledDimensions": ["os", "attributed"],
+        "markerSet": "productDetails",
+        "channels": [
+          { "label": "Release", "key": "release" },
+          { "label": "Beta", "key": "beta" },
+          { "label": "Other", "key": "Other" }
+        ]
+      },
+      {
         "itemType": "divider"
       },
       {
@@ -193,39 +226,6 @@
         "key": "Any Lockwise Android Activity",
         "shortDescription": "The profile has sent a telemetry 'core' ping from Lockwise Android on the day in question",
         "disabledDimensions": ["os", "channel", "attributed"]
-      },
-      {
-        "itemType": "divider"
-      },
-      {
-        "itemType": "section",
-        "label": "Fennec"
-      },
-      {
-        "label": "Any Fennec Android Activity",
-        "key": "Any Fennec Android Activity",
-        "shortDescription": "The profile has sent a telemetry 'core' ping from Fennec Android on the day in question",
-        "disabledDimensions": ["os", "attributed"],
-        "markerSet": "productDetails",
-        "channels": [
-          { "label": "Release", "key": "release" },
-          { "label": "Beta", "key": "beta" },
-          { "label": "Aurora", "key": "aurora" },
-          { "label": "Nightly", "key": "nightly" },
-          { "label": "Other", "key": "Other" }
-        ]
-      },
-      {
-        "label": "Any Fennec iOS Activity",
-        "key": "Any Fennec iOS Activity",
-        "shortDescription": "The profile has sent a telemetry 'core' ping from Fennec iOS on the day in question",
-        "disabledDimensions": ["os", "attributed"],
-        "markerSet": "productDetails",
-        "channels": [
-          { "label": "Release", "key": "release" },
-          { "label": "Beta", "key": "beta" },
-          { "label": "Other", "key": "Other" }
-        ]
       },
       {
         "itemType": "divider"
