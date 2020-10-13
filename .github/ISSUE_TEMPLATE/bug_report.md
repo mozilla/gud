@@ -24,4 +24,4 @@ A clear and concise description of what you expected to happen.
 Add any other context about the problem here.
 
 **Mentions**
-Add mentions for anybody you'd like to make aware of this issue; likely @hamilton, @jmccrosky, @klukas, and @openjck.
+Add mentions for anybody you'd like to make aware of this issue; likely @hamilton and @jklukas.

@@ -2,7 +2,7 @@
 title: Mozilla Growth & Usage Dashboard
 ---
 
-#### _overall: jmccrosky@ | data: jklukas@ | front end: hulmer@ (updated 2020-01-15)_
+#### _data: jklukas@ | front end: hulmer@ (updated 2020-10-13)_
 
 The Mozilla Growth & Usage Dashboard (GUD) is a tool to visualize growth metrics in a standard way across Mozilla’s products. It is intended to be quite intuitive to use, but we provide some brief documentation here. Please reach out (`#gud` on slack) if anything is unclear or you are unsure how to use GUD for your purposes.
 
