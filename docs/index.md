@@ -70,71 +70,6 @@ Among new profiles created on the day specified, what proportion (out of 1) meet
 
 Among profiles that were active in the specified usage criterion at least once in the week starting on the specified day, what proportion (out of 1) meet the usage criterion during the following week.
 
-## Usage Criteria
-
-### Firefox (Desktop)
-
-#### Any Firefox Activity
-
-The profile has sent a telemetry ping from Firefox Desktop on the day in question.
-
-#### New Firefox Desktop Profile Created
-
-The count of the number of new profiles created on the day in question. Note this uses a main ping methodology for support for our entire history, rather than the newer `new-profile` ping.
-
-#### Visited 5 URIs
-
-The profile sent a main ping on the day in question that indicates that the profile opened at least 5 URIs.
-
-#### Opened DevTools
-
-The profile sent a main ping on the day in question that indicates that the developer tools feature was activated at least once.
-
-### Fenix
-
-#### Any Fenix Activity
-
-The profile has sent a telemetry ping from Fenix on the day in question.
-Firefox Accounts
-
-#### Any Firefox Account Activity
-
-The profile has sent a telemetry ping from Firefox Account on the day in question. This corresponds to “active” events in Amplitude.
-
-### Fennec
-
-#### Any Fennec Android Activity
-
-The profile has sent a telemetry ping from Fennec Android on the day in question.
-
-#### Any Fennec iOS Activity
-
-The profile has sent a telemetry ping from Fennec iOS on the day in question.
-
-### Focus
-
-#### Any Focus Android Activity
-
-The profile has sent a telemetry ping from Focus Android on the day in question.
-
-#### Any Focus iOS Activity
-
-The profile has sent a telemetry ping from Focus iOS on the day in question.
-
-### Other Products
-
-#### Any Firefox Lite Activity
-
-The profile has sent a telemetry ping from Firefox Lite on the day in question.
-
-#### Any Firefox for FireTV Activity
-
-The profile has sent a telemetry ping from Firefox for FireTV on the day in question.
-
-#### Any `FirefoxConnect` Activity
-
-The profile has sent a telemetry ping from `FirefoxConnect` on the day in question.
-
 ## Dimensions
 
 During a period of time, a particular profile may take on more than one value within a dimension. For example, a profile may use release channel and beta channel browsers in a single day, resulting in two pings for the day with different values of channel. Similarly, a profile may be used in one country one day and another country the next day, resulting in two pings for two consecutive days that have different values of country. Generally, for a metric, we need to assign a profile to one particular value for each dimension. As such we define the value for each dimension within a day by taking the most frequent value seen in that day, breaking ties by taking the value that occurs last. We then use the values from the last day within the data that the metric examines. This is documented in more detail [in the exact MAU reference](https://docs.telemetry.mozilla.org/datasets/bigquery/exact_mau/reference.html).
@@ -172,8 +107,6 @@ Please direct all feedback to `#gud` on slack.
 - There is more information on the design, definitions and data model in the [Engineering Design Doc](https://docs.google.com/document/d/1L8tWDUjccutGGAldhpypRtPCaw3kkXboPUTtTZb02OA/), although some information there may be out of date.
 
 - The underlying tables are closely related to the [Exact MAU tables].
-
-- There is a [prototype tool](https://github.com/mozilla/dscontrib/tree/master/src/dscontrib/jmccrosky/gudnightly) in Databricks on which GUD was based. It still exists and has been branded `“gudnightly”` as it has many features that do not yet exist in GUD, including smoothing, year-over-year comparisons, plotting multiple slices on a single axis, etc. However, it is very slow, less user-friendly, and as of this writing only supports desktop data.
 
 - Tables can be queried directly from BigQuery for programmatic access; see an example in [https://sql.telemetry.mozilla.org/queries/65337/source](https://sql.telemetry.mozilla.org/queries/65337/source).
 
