@@ -111,7 +111,7 @@
               </div>
             {:else if dimension.type !== 'multi'}
               <div class='dimension-menu--value dimension-menu--value--single'>
-                {$store[dimension.key]}
+                {CONFIG.usage.values.find(u=> u.key === $store.usage).label}
               </div>
             {/if}
             <!-- <hr style="width:100%; border: none; border-bottom: 1px solid var(--cool-gray-150); padding:0px; margin:0px;" /> -->

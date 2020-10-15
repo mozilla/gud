@@ -179,7 +179,7 @@
         <Explore size={16} />
       </span>
       <span slot=view>Explore</span>
-      <span slot=title>{$store.usage}</span>
+      <span slot=title>{CONFIG.usage.values.find(opt => opt.key === $store.usage).label}</span>
       <div slot=description>
         {criterion.shortDescription}
       </div>
