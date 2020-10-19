@@ -96,7 +96,7 @@
         "label": "Any Mobile Activity",
         "key": "Any Firefox Non-desktop Activity",
         "disabledDimensions": ["os", "attributed"],
-        "shortDescription": "The profile has sent a telemetry ping from any of apps considered for the 2020 Mobile Reach KPI (Fenix, Fennec Android, Fennec iOS, Firefox Lite (excluding CN), Firefox for Echo Show, Focus Android, Focus iOS, and Lockwise) on the day in question.",
+        "shortDescription": "The profile has sent a telemetry ping from any of apps considered for the 2020 Mobile Reach KPI (Fenix, Fennec, Firefox iOS, Firefox Lite (excluding CN), Firefox for Echo Show, Focus Android, Focus iOS, Lockwise Android, and Lockwise iOS) on the day in question.",
         "channels": [
           { "label": "Release", "key": "release" },
           { "label": "Beta", "key": "beta" },
@@ -170,7 +170,7 @@
       },
       {
         "label": "Any Fennec Activity",
-        "key": "Any Fennec Android Activity",
+        "key": "Any Fennec Activity",
         "shortDescription": "The profile has sent a telemetry 'core' ping from Fennec (legacy Firefox for Android) on the day in question",
         "disabledDimensions": ["os", "attributed"],
         "markerSet": "productDetails",
@@ -191,7 +191,7 @@
       },
       {
         "label": "Any Firefox for iOS Activity",
-        "key": "Any Fennec iOS Activity",
+        "key": "Any Firefox iOS Activity",
         "shortDescription": "The profile has sent a telemetry 'core' ping from Firefox for iOS on the day in question",
         "disabledDimensions": ["os", "attributed"],
         "markerSet": "productDetails",
@@ -263,26 +263,20 @@
       },
       {
         "label": "Any Firefox for FireTV Activity",
-        "key": "Any FirefoxForFireTV Activity",
+        "key": "Any Firefox Fire TV Activity",
         "shortDescription": "The profile has sent a telemetry 'core' ping from Firefox for FireTV on the day in question",
         "disabledDimensions": ["os", "channel", "attributed"]
       },
       {
         "label": "Any Firefox for Echo Show Activity",
-        "key": "Any FirefoxConnect Activity",
+        "key": "Any Firefox Echo Activity",
         "shortDescription": "The profile has sent a telemetry 'core' ping from Firefox for Echo Show on the day in question",
         "disabledDimensions": ["os", "channel", "attributed"]
       },
       {
-        "label": "Any Reference Browser Activity",
-        "key": "Any Reference Browser Baseline Activity",
-        "shortDescription": "The profile has sent a Glean 'baseline' ping from Reference Browser on the day in question",
-        "disabledDimensions": ["os", "channel", "attributed"]
-      },
-      {
-        "label": "Any VR Browser Activity",
-        "key": "Any VR Browser Baseline Activity",
-        "shortDescription": "The profile has sent a Glean 'baseline' ping from Firefox Reality (VR Browser) on the day in question",
+        "label": "Any Firefox Reality Activity",
+        "key": "Any Firefox Reality Activity",
+        "shortDescription": "The profile has sent a 'core' ping from Firefox Reality (VR Browser) on the day in question",
         "disabledDimensions": ["os", "channel", "attributed"]
       }
     ]
