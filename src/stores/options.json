@@ -1,29 +1,45 @@
 {
-  "startOptions": {
-    "label": "Start",
-    "type": "date",
-    "key": "startDate",
-    "onlyLocal": true,
-    "inMenu": true
-  },
-  "endOptions": {
-    "label": "End",
-    "type": "date",
-    "key": "endDate",
-    "onlyLocal": true,
-    "inMenu": true
-  },
-  "modeOptions": {
-    "label": "Mode",
-    "key": "mode",
-    "type": "single",
+  "graphSize": {
+    "key": "graphSize",
     "inMenu": false,
+    "onlyLocal": true,
+    "defaultValue": "small"
+  },
+  "commonScales": {
+    "key": "commonScales",
+    "inMenu": false,
+    "onlyLocal": true,
+    "defaultValue": true,
+    "dataType": "boolean"
+  },
+  "smoothing": {
+    "key": "smoothing",
+    "inMenu": false,
+    "onlyLocal": true,
+    "defaultValue": false,
+    "dataType": "boolean"
+  },
+  "mode": {
+    "inMenu": false,
+    "key": "mode",
     "values": [
-      { "label": "Explore", "key": "explore" },
-      { "label": "Table", "key": "table" }
+      { "key": "explore", "label": "Explore" },
+      { "key": "compare", "label": "Compare" }
     ]
   },
-  "usageCriteriaOptions": {
+  "startDate": {
+    "key": "startDate",
+    "inMenu": false,
+    "values": [],
+    "onlyLocal": true
+  },
+  "endDate": {
+    "key": "endDate",
+    "inMenu": false,
+    "values": [],
+    "onlyLocal": true
+  },
+  "usage": {
     "label": "Product / Usage Criteria",
     "description": "any product, feature, or population subset for which we wish to calculate growth metrics",
     "key": "usage",
@@ -33,17 +49,19 @@
     "values": [
       {
         "itemType": "section",
-        "label": "Firefox (Desktop)"
+        "label": "Firefox Desktop"
       },
       {
-        "label": "Any Firefox Activity",
+        "label": "Any Firefox Desktop Activity",
         "key": "Any Firefox Desktop Activity",
+        "product": "Firefox Desktop",
         "shortDescription": "The profile has sent a telemetry 'main' ping from Firefox Desktop on the day in question",
         "markerSet": "firefoxDesktopVersions"
       },
       {
         "label": "New Firefox Desktop Profile Created",
         "key": "New Firefox Desktop Profile Created",
+        "product": "Firefox Desktop",
         "shortDescription": "The count of the number of new profiles created on the day in question",
         "markerSet": "firefoxDesktopVersions",
         "disabledMetrics": [
@@ -56,12 +74,14 @@
       {
         "label": "Visited 5 URIs",
         "key": "Firefox Desktop Visited 5 URI",
+        "product": "Firefox Desktop",
         "shortDescription": "The profile sent a main ping on the day in question that indicates that the profile opened at least 5 URIs",
         "markerSet": "firefoxDesktopVersions"
       },
       {
         "label": "Opened DevTools",
         "key": "Firefox Desktop Opened Dev Tools",
+        "product": "Firefox Desktop",
         "shortDescription": "The profile sent a main ping on the day in question that indicates that the developer tools feature was activated at least once",
         "markerSet": "firefoxDesktopVersions"
       },
@@ -265,6 +285,7 @@
     "label": "Attribution",
     "key": "attributed",
     "type": "multi",
+    "description": "indicates that the browser was installed using an installer from our web properties. See the documentation for important details. Available for Windows only.",
     "whereStyle": "boolean",
     "inMenu": true,
     "values": [
@@ -272,12 +293,12 @@
       { "label": "Unattributed", "key": "FALSE" }
     ]
   },
-  "metricOptions": {
+  "metric": {
     "label": "Metric",
     "type": "single",
     "key": "metric",
     "onlyLocal": true,
-    "inMenu": true,
+    "inMenu": false,
     "values": [
       {
         "label": "All Available Metrics",
@@ -360,7 +381,7 @@
       }
     ]
   },
-  "platformOptions": {
+  "platform": {
     "label": "OS",
     "key": "os",
     "description": "available operating systems",
@@ -372,7 +393,7 @@
       { "label": "Linux", "key": "Linux" }
     ]
   },
-  "languageOptions": {
+  "language": {
     "label": "Language",
     "key": "language",
     "description": "available languages",
@@ -405,7 +426,7 @@
       { "label": "Italian", "key": "it", "shortDescription": "it" }
     ]
   },
-  "countryOptions": {
+  "country": {
     "label": "Country",
     "key": "country",
     "type": "multi",
@@ -428,7 +449,7 @@
       { "label": "Kenya", "key": "KE" }
     ]
   },
-  "channelOptions": {
+  "channel": {
     "label": "Channel",
     "key": "channel",
     "type": "multi",
