@@ -20,4 +20,4 @@ A clear and concise description of any alternative solutions or features you've 
 Add any other context or screenshots about the feature request here.
 
 **Mentions**
-Add mentions for anybody you'd like to make aware of this issue; likely @hamilton, @jmccrosky, @klukas, and @openjck.
+Add mentions for anybody you'd like to make aware of this issue; likely @hamilton and @jklukas.

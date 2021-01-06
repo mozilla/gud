@@ -1,3 +1,4 @@
 !.eslintrc.js
 
 public/bundle.*
+docs/js/jquery*.js
