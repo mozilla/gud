@@ -6,8 +6,8 @@
 body {
   background: linear-gradient(
     to left,
-    var(--cool-gray-800),
-    var(--cool-gray-500)
+    var(--pantone-red-400),
+    var(--pantone-red-300)
   );
 }
 #gud {
